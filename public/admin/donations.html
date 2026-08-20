@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donations Management | Admin Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-brand">
+        <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+        <div>
+          <div class="fw-bold fs-6">KAMADHENU</div>
+          <small class="text-gold" style="font-size: 0.7rem; letter-spacing: 1px;">GOUSHALA ADMIN</small>
+        </div>
+      </a>
+
+      <div class="sidebar-heading">DASHBOARD</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      </ul>
+
+      <div class="sidebar-heading">GOUSHALA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/cows.html" class="sidebar-link"><i class="bi bi-heart"></i> Resident Cows</a></li>
+        <li><a href="/admin/breeds.html" class="sidebar-link"><i class="bi bi-bookmark-star"></i> Indigenous Breeds</a></li>
+        <li><a href="/admin/seva.html" class="sidebar-link"><i class="bi bi-flower1"></i> Seva Packages</a></li>
+        <li><a href="/admin/testimonials.html" class="sidebar-link"><i class="bi bi-chat-quote"></i> Testimonials</a></li>
+        <li><a href="/admin/timeline.html" class="sidebar-link"><i class="bi bi-hourglass-split"></i> Journey / Timeline</a></li>
+      </ul>
+
+      <div class="sidebar-heading">DONATIONS & SPONSORS</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/donations.html" class="sidebar-link active"><i class="bi bi-cash-stack"></i> All Donations</a></li>
+        <li><a href="/admin/sponsors.html" class="sidebar-link"><i class="bi bi-award"></i> Sponsors & Adoptions</a></li>
+      </ul>
+
+      <div class="sidebar-heading">COMMERCE</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/products.html" class="sidebar-link"><i class="bi bi-box-seam"></i> Products & Store</a></li>
+        <li><a href="/admin/orders.html" class="sidebar-link"><i class="bi bi-cart-check"></i> Orders Management</a></li>
+      </ul>
+
+      <div class="sidebar-heading">CONTENT & MEDIA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/blogs.html" class="sidebar-link"><i class="bi bi-journal-text"></i> Vedic Blogs</a></li>
+        <li><a href="/admin/events.html" class="sidebar-link"><i class="bi bi-calendar-event"></i> Events & Festivals</a></li>
+        <li><a href="/admin/gallery.html" class="sidebar-link"><i class="bi bi-images"></i> Photo Gallery</a></li>
+      </ul>
+
+      <div class="sidebar-heading">COMMUNICATION</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/messages.html" class="sidebar-link"><i class="bi bi-envelope"></i> Contact Messages</a></li>
+        <li><a href="/admin/newsletter.html" class="sidebar-link"><i class="bi bi-send"></i> Newsletter Subscribers</a></li>
+      </ul>
+
+      <div class="sidebar-heading">SETTINGS</div>
+      <ul class="sidebar-menu mb-4">
+        <li><a href="/admin/settings.html" class="sidebar-link"><i class="bi bi-gear"></i> Website Settings</a></li>
+        <li><a href="/admin/profile.html" class="sidebar-link"><i class="bi bi-person-circle"></i> Admin Profile</a></li>
+        <li><a href="#" class="sidebar-link btn-admin-logout text-danger"><i class="bi bi-box-arrow-right text-danger"></i> Logout</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="admin-main">
+      <header class="admin-navbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggleBtn"><i class="bi bi-list fs-5"></i></button>
+          <h4 class="fw-bold mb-0 text-forest">Donations & Seva Contributions</h4>
+        </div>
+        <button class="btn btn-forest" id="btnExportDonationsCSV">
+          <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export to CSV
+        </button>
+      </header>
+
+      <main class="p-4">
+        
+        <!-- Summary Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="p-3 bg-white rounded-3 shadow-sm border">
+              <span class="text-muted small">Total Collections</span>
+              <div class="fs-4 fw-bold text-forest" id="donSummaryCompleted">₹0.00</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-white rounded-3 shadow-sm border">
+              <span class="text-muted small">Total Donation Records</span>
+              <div class="fs-4 fw-bold text-dark" id="donSummaryTotalCount">0</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-white rounded-3 shadow-sm border">
+              <span class="text-muted small">Average Donation</span>
+              <div class="fs-4 fw-bold text-warning" id="donSummaryAvg">₹0.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="admin-card p-3 mb-4">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-3">
+              <label class="form-label small text-muted mb-1">Search Donor/Receipt</label>
+              <input type="text" id="donSearchInput" class="form-control" placeholder="Name, email, or ref...">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small text-muted mb-1">Payment Status</label>
+              <select id="donStatusFilter" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="Completed">Completed</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label small text-muted mb-1">Start Date</label>
+              <input type="date" id="donStartDate" class="form-control">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label small text-muted mb-1">End Date</label>
+              <input type="date" id="donEndDate" class="form-control">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-forest w-100" id="btnFilterDonations"><i class="bi bi-funnel"></i> Filter</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="admin-card">
+          <div class="table-responsive">
+            <table class="table table-custom">
+              <thead>
+                <tr>
+                  <th>Receipt No</th>
+                  <th>Donor Details</th>
+                  <th>Amount</th>
+                  <th>Seva Type</th>
+                  <th>Payment Status</th>
+                  <th>Payment Ref</th>
+                  <th>Date & Time</th>
+                </tr>
+              </thead>
+              <tbody id="donationsTableBody">
+                <tr><td colspan="7" class="text-center text-muted py-4">Loading donations...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    let donationRecords = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      async function loadDonations() {
+        const tbody = document.getElementById('donationsTableBody');
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2"></span>Loading donations...</td></tr>`;
+
+        const params = {};
+        const search = document.getElementById('donSearchInput').value.trim();
+        const status = document.getElementById('donStatusFilter').value;
+        const start = document.getElementById('donStartDate').value;
+        const end = document.getElementById('donEndDate').value;
+
+        if (search) params.search = search;
+        if (status) params.payment_status = status;
+        if (start) params.start_date = start;
+        if (end) params.end_date = end;
+
+        try {
+          const res = await API.get('/admin/donations', params);
+          if (res && res.data) {
+            donationRecords = res.data;
+
+            // Update Summary
+            const completedSum = res.summary ? res.summary.completed_amount : 0;
+            const totalCount = res.summary ? res.summary.total_records : donationRecords.length;
+            const avg = totalCount > 0 ? (completedSum / totalCount) : 0;
+
+            document.getElementById('donSummaryCompleted').textContent = `₹${completedSum.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            document.getElementById('donSummaryTotalCount').textContent = totalCount;
+            document.getElementById('donSummaryAvg').textContent = `₹${avg.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+
+            if (donationRecords.length > 0) {
+              tbody.innerHTML = donationRecords.map(d => `
+                <tr>
+                  <td><span class="fw-bold small">${d.donation_number}</span></td>
+                  <td>
+                    <div class="fw-bold">${d.donor_name}</div>
+                    <div class="small text-muted">${d.donor_email} ${d.donor_phone ? '• ' + d.donor_phone : ''}</div>
+                  </td>
+                  <td><span class="fw-bold fs-6 text-forest">₹${parseFloat(d.amount).toFixed(2)}</span></td>
+                  <td><span class="badge bg-light text-dark border">${d.seva_name || 'General Donation'}</span></td>
+                  <td><span class="badge-status badge-${d.payment_status.toLowerCase()}">${d.payment_status}</span></td>
+                  <td><small class="text-muted font-monospace">${d.razorpay_payment_id || d.razorpay_order_id || '-'}</small></td>
+                  <td><small class="text-muted">${new Date(d.created_at).toLocaleString('en-IN')}</small></td>
+                </tr>
+              `).join('');
+            } else {
+              tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">No donation records found.</td></tr>`;
+            }
+          }
+        } catch (e) {
+          tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">Failed to load donations.</td></tr>`;
+        }
+      }
+
+      loadDonations();
+
+      document.getElementById('btnFilterDonations').addEventListener('click', loadDonations);
+
+      document.getElementById('btnExportDonationsCSV').addEventListener('click', () => {
+        Admin.exportToCSV('kamadhenu_donations', donationRecords);
+      });
+    });
+  </script>
+</body>
+</html>

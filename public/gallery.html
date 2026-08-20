@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Gallery | Kamadhenu Goushala</title>
+  <meta name="description" content="Explore photos of our resident cows, lush grazing pastures, Gau Puja celebrations, and volunteer activities.">
+  <link rel="canonical" href="http://localhost:3000/gallery.html">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-infobar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span><i class="bi bi-telephone-fill"></i> <a href="tel:+919845088990" class="site-phone">+91 98450 88990</a></span>
+        <span><i class="bi bi-envelope-fill"></i> <a href="mailto:info@kamadhenugoushala.org" class="site-email">info@kamadhenugoushala.org</a></span>
+        <span><i class="bi bi-geo-alt-fill"></i> <span class="site-address">Bengaluru, Karnataka, India</span></span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <a href="https://wa.me/919845088990" target="_blank" class="whatsapp-link text-white"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+        <a href="/admin/index.html" class="text-white opacity-75 small"><i class="bi bi-shield-lock"></i> Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">
+          <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+          <div>
+            <div class="fw-bold lh-1" style="font-size: 1.35rem; color: var(--primary-dark);">KAMADHENU</div>
+            <div style="font-size: 0.75rem; letter-spacing: 2px; color: var(--sacred-gold-dark); font-weight: 700;">GOUSHALA</div>
+          </div>
+        </a>
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+          <a href="/donation.html" class="btn btn-gold btn-sm px-3 py-2">DONATE</a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="desktopNav">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+            <li class="nav-item"><a class="nav-link" href="/index.html">HOME</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">ABOUT</a></li>
+            <li class="nav-item"><a class="nav-link" href="/cows.html">OUR COWS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/breeds.html">BREEDS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/seva.html">GAU SEVA</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/gallery.html">GALLERY</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products.html">PRODUCTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">BLOG</a></li>
+            <li class="nav-item"><a class="nav-link" href="/events.html">EVENTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/contact.html">CONTACT</a></li>
+          </ul>
+          <a href="/donation.html" class="btn btn-gold"><i class="bi bi-heart-fill"></i> DONATE NOW</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Banner -->
+  <section class="py-5" style="background: var(--green-gradient); color: white;">
+    <div class="container py-4 text-center">
+      <span class="badge bg-warning text-dark px-3 py-2 fw-bold mb-2">Sanctuary Gallery</span>
+      <h1 class="display-5 fw-bold text-white mb-2">Moments of Devotion & Joy</h1>
+      <p class="lead text-white-50 mx-auto" style="max-width: 650px;">
+        Visual glimpses of our cows, volunteer seva, organic fodder harvest, and sacred Vedic festivals.
+      </p>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="section-padding">
+    <div class="container">
+      
+      <!-- Category Filter Tabs -->
+      <div class="gallery-nav-tabs" id="galleryTabsContainer">
+        <button class="gallery-nav-btn active" data-cat="">All Photos</button>
+        <!-- Categories loaded dynamically from API -->
+      </div>
+
+      <!-- Photo Grid -->
+      <div class="row g-4" id="galleryGridContainer">
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-forest" role="status"></div>
+          <p class="mt-2 text-muted">Loading sanctuary photographs...</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Lightbox Modal -->
+  <div class="modal fade" id="lightboxModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content bg-transparent border-0">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center p-0">
+          <img id="lightboxImage" src="" alt="" class="img-fluid rounded-4 shadow-lg" style="max-height: 80vh; object-fit: contain;">
+          <div class="text-white mt-3 fs-5 fw-bold" id="lightboxCaption"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+            <span class="fs-4 fw-bold text-white">KAMADHENU GOUSHALA</span>
+          </div>
+          <p class="small text-white-50 mb-3">
+            Dedicated to the protection, preservation, and ethical healthcare of sacred indigenous cows.
+          </p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Pages</h5>
+          <ul class="footer-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/cows.html">Our Cows</a></li>
+            <li><a href="/breeds.html">Breeds</a></li>
+            <li><a href="/seva.html">Gau Seva</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Involvement</h5>
+          <ul class="footer-links">
+            <li><a href="/donation.html">Donate</a></li>
+            <li><a href="/adopt.html">Adopt a Cow</a></li>
+            <li><a href="/products.html">Organic Store</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5 class="footer-title">Sanctuary Address</h5>
+          <p class="small text-white-50 mb-2 site-address">Survey No. 48/2, Kanakapura Road, Bengaluru 560082</p>
+          <p class="small text-white-50 mb-3">Phone: <span class="site-phone">+91 98450 88990</span></p>
+        </div>
+      </div>
+      <div class="footer-bottom text-center">
+        <p class="mb-0">© 2026 Kamadhenu Goushala Trust. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const tabsContainer = document.getElementById('galleryTabsContainer');
+      const gridContainer = document.getElementById('galleryGridContainer');
+      const lightboxModal = new bootstrap.Modal(document.getElementById('lightboxModal'));
+      const lightboxImg = document.getElementById('lightboxImage');
+      const lightboxCaption = document.getElementById('lightboxCaption');
+
+      // 1. Fetch Categories
+      try {
+        const catRes = await API.get('/gallery-categories');
+        if (catRes && catRes.data) {
+          catRes.data.forEach(c => {
+            const btn = document.createElement('button');
+            btn.className = 'gallery-nav-btn';
+            btn.textContent = c.name;
+            btn.dataset.cat = c.id;
+            tabsContainer.appendChild(btn);
+          });
+        }
+      } catch (e) {
+        console.warn('Error fetching gallery categories:', e);
+      }
+
+      // 2. Fetch Photos Function
+      async function loadGallery(catId = '') {
+        gridContainer.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <div class="spinner-border text-forest" role="status"></div>
+            <p class="mt-2 text-muted">Loading photos...</p>
+          </div>
+        `;
+
+        try {
+          const params = catId ? { category_id: catId } : {};
+          const res = await API.get('/gallery', params);
+
+          if (res && res.data && res.data.length > 0) {
+            gridContainer.innerHTML = res.data.map(item => `
+              <div class="col-6 col-md-4 col-lg-3">
+                <div class="gallery-card" onclick="openLightbox('${item.image_url}', '${item.title.replace(/'/g, "\\'")}')">
+                  <img src="${item.image_url}" alt="${item.title}" loading="lazy">
+                  <div class="gallery-overlay">
+                    <div>
+                      <div class="small text-warning fw-bold">${item.category_name || 'Sanctuary'}</div>
+                      <div class="fw-bold fs-6">${item.title}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `).join('');
+          } else {
+            gridContainer.innerHTML = `
+              <div class="col-12 text-center py-5">
+                <i class="bi bi-images fs-1 text-muted"></i>
+                <h5 class="mt-2 text-muted">No photographs found in this category.</h5>
+              </div>
+            `;
+          }
+        } catch (e) {
+          gridContainer.innerHTML = `<div class="col-12 text-center text-danger py-5">Failed to load gallery items.</div>`;
+        }
+      }
+
+      // Lightbox Trigger
+      window.openLightbox = (url, caption) => {
+        lightboxImg.src = url;
+        lightboxCaption.textContent = caption;
+        lightboxModal.show();
+      };
+
+      // Initial Load
+      loadGallery();
+
+      // Tab clicks
+      tabsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('gallery-nav-btn')) {
+          tabsContainer.querySelectorAll('.gallery-nav-btn').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          loadGallery(e.target.dataset.cat);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

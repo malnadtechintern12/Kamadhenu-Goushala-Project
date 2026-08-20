@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Kamadhenu Goushala</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    
+    <!-- 1. Sidebar -->
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-brand">
+        <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+        <div>
+          <div class="fw-bold fs-6">KAMADHENU</div>
+          <small class="text-gold" style="font-size: 0.7rem; letter-spacing: 1px;">GOUSHALA ADMIN</small>
+        </div>
+      </a>
+
+      <div class="sidebar-heading">DASHBOARD</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard.html" class="sidebar-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      </ul>
+
+      <div class="sidebar-heading">GOUSHALA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/cows.html" class="sidebar-link"><i class="bi bi-heart"></i> Resident Cows</a></li>
+        <li><a href="/admin/breeds.html" class="sidebar-link"><i class="bi bi-bookmark-star"></i> Indigenous Breeds</a></li>
+        <li><a href="/admin/seva.html" class="sidebar-link"><i class="bi bi-flower1"></i> Seva Packages</a></li>
+        <li><a href="/admin/testimonials.html" class="sidebar-link"><i class="bi bi-chat-quote"></i> Testimonials</a></li>
+        <li><a href="/admin/timeline.html" class="sidebar-link"><i class="bi bi-hourglass-split"></i> Journey / Timeline</a></li>
+      </ul>
+
+      <div class="sidebar-heading">DONATIONS & SPONSORS</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/donations.html" class="sidebar-link"><i class="bi bi-cash-stack"></i> All Donations</a></li>
+        <li><a href="/admin/sponsors.html" class="sidebar-link"><i class="bi bi-award"></i> Sponsors & Adoptions</a></li>
+      </ul>
+
+      <div class="sidebar-heading">COMMERCE</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/products.html" class="sidebar-link"><i class="bi bi-box-seam"></i> Products & Store</a></li>
+        <li><a href="/admin/orders.html" class="sidebar-link"><i class="bi bi-cart-check"></i> Orders Management</a></li>
+      </ul>
+
+      <div class="sidebar-heading">CONTENT & MEDIA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/blogs.html" class="sidebar-link"><i class="bi bi-journal-text"></i> Vedic Blogs</a></li>
+        <li><a href="/admin/events.html" class="sidebar-link"><i class="bi bi-calendar-event"></i> Events & Festivals</a></li>
+        <li><a href="/admin/gallery.html" class="sidebar-link"><i class="bi bi-images"></i> Photo Gallery</a></li>
+      </ul>
+
+      <div class="sidebar-heading">COMMUNICATION</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/messages.html" class="sidebar-link"><i class="bi bi-envelope"></i> Contact Messages</a></li>
+        <li><a href="/admin/newsletter.html" class="sidebar-link"><i class="bi bi-send"></i> Newsletter Subscribers</a></li>
+      </ul>
+
+      <div class="sidebar-heading">SETTINGS</div>
+      <ul class="sidebar-menu mb-4">
+        <li><a href="/admin/settings.html" class="sidebar-link"><i class="bi bi-gear"></i> Website Settings</a></li>
+        <li><a href="/admin/profile.html" class="sidebar-link"><i class="bi bi-person-circle"></i> Admin Profile</a></li>
+        <li><a href="#" class="sidebar-link btn-admin-logout text-danger"><i class="bi bi-box-arrow-right text-danger"></i> Logout</a></li>
+      </ul>
+    </aside>
+
+    <!-- 2. Main Content Area -->
+    <div class="admin-main">
+      
+      <!-- Top Navbar -->
+      <header class="admin-navbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggleBtn">
+            <i class="bi bi-list fs-5"></i>
+          </button>
+          <h4 class="fw-bold mb-0 text-forest">Executive Dashboard</h4>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <a href="/index.html" target="_blank" class="btn btn-outline-forest btn-sm rounded-pill">
+            <i class="bi bi-box-arrow-up-right me-1"></i> Live Site
+          </a>
+          <div class="dropdown">
+            <button class="btn btn-light d-flex align-items-center gap-2 border rounded-pill py-1 px-3" data-bs-toggle="dropdown">
+              <i class="bi bi-person-circle fs-5 text-forest"></i>
+              <span class="admin-display-name fw-semibold small">Admin</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+              <li><a class="dropdown-menu-item dropdown-item" href="/admin/profile.html"><i class="bi bi-person me-2"></i> Profile Settings</a></li>
+              <li><a class="dropdown-menu-item dropdown-item" href="/admin/settings.html"><i class="bi bi-gear me-2"></i> Site Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-menu-item dropdown-item text-danger btn-admin-logout" href="#"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="p-4">
+        
+        <!-- KPI Cards Grid -->
+        <div class="row g-4 mb-4">
+          
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small fw-bold">TOTAL COWS</span>
+                <div class="kpi-icon bg-success bg-opacity-10 text-success"><i class="bi bi-heart-fill"></i></div>
+              </div>
+              <div class="kpi-val" id="statTotalCows">--</div>
+              <small class="text-muted"><span class="text-success fw-bold" id="statActiveCows">--</span> Active Residents</small>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small fw-bold">TOTAL DONATIONS</span>
+                <div class="kpi-icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-cash-stack"></i></div>
+              </div>
+              <div class="kpi-val text-forest" id="statTotalDonations">₹--</div>
+              <small class="text-muted"><span id="statDonationsCount">--</span> Successful Payments</small>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small fw-bold">THIS MONTH SEVA</span>
+                <div class="kpi-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-calendar-check-fill"></i></div>
+              </div>
+              <div class="kpi-val text-primary" id="statMonthDonations">₹--</div>
+              <small class="text-muted">Current Month Collections</small>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small fw-bold">ACTIVE SPONSORS</span>
+                <div class="kpi-icon bg-info bg-opacity-10 text-info"><i class="bi bi-award-fill"></i></div>
+              </div>
+              <div class="kpi-val text-info" id="statTotalSponsors">--</div>
+              <small class="text-muted">Dedicated Cow Guardians</small>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small fw-bold">STORE PRODUCTS</span>
+                <div class="kpi-icon bg-secondary bg-opacity-10 text-dark"><i class="bi bi-box-seam-fill"></i></div>
+              </div>
+              <div class="kpi-val" id="statTotalProducts">--</div>
+              <small class="text-muted"><span id="statTotalOrders">--</span> Total Customer Orders</small>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted small fw-bold">UNREAD MESSAGES</span>
+                <div class="kpi-icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-envelope-exclamation-fill"></i></div>
+              </div>
+              <div class="kpi-val text-danger" id="statUnreadMessages">--</div>
+              <small class="text-muted">New Inquiries Pending</small>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Monthly Chart & Quick Links -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-8">
+            <div class="admin-card h-100">
+              <div class="admin-card-header">
+                <h5 class="fw-bold mb-0 text-forest"><i class="bi bi-graph-up text-warning me-2"></i> Monthly Donation Trends (INR)</h5>
+                <span class="badge bg-light text-muted border">Last 6 Months</span>
+              </div>
+              <div class="p-4" style="height: 320px;">
+                <canvas id="monthlyDonationChart"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="admin-card h-100">
+              <div class="admin-card-header">
+                <h5 class="fw-bold mb-0 text-forest"><i class="bi bi-lightning-charge text-warning me-2"></i> Quick Actions</h5>
+              </div>
+              <div class="p-4 d-flex flex-column gap-2">
+                <a href="/admin/cows.html#addCowModal" class="btn btn-outline-forest text-start py-2">
+                  <i class="bi bi-plus-circle me-2"></i> Add New Resident Cow
+                </a>
+                <a href="/admin/donations.html" class="btn btn-outline-forest text-start py-2">
+                  <i class="bi bi-file-earmark-spreadsheet me-2"></i> Export Donations CSV
+                </a>
+                <a href="/admin/blogs.html" class="btn btn-outline-forest text-start py-2">
+                  <i class="bi bi-pencil-square me-2"></i> Write New Vedic Blog
+                </a>
+                <a href="/admin/gallery.html" class="btn btn-outline-forest text-start py-2">
+                  <i class="bi bi-cloud-arrow-up me-2"></i> Upload Gallery Photos
+                </a>
+                <a href="/admin/settings.html" class="btn btn-outline-forest text-start py-2">
+                  <i class="bi bi-sliders me-2"></i> Update Website Settings
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Donations & Recent Messages Tables -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-6">
+            <div class="admin-card h-100">
+              <div class="admin-card-header">
+                <h5 class="fw-bold mb-0 text-forest"><i class="bi bi-cash me-2"></i> Recent Donations</h5>
+                <a href="/admin/donations.html" class="btn btn-sm btn-outline-forest">View All</a>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-custom">
+                  <thead>
+                    <tr>
+                      <th>Ref No</th>
+                      <th>Donor</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentDonationsTableBody">
+                    <tr><td colspan="4" class="text-center text-muted">Loading donations...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="admin-card h-100">
+              <div class="admin-card-header">
+                <h5 class="fw-bold mb-0 text-forest"><i class="bi bi-chat-dots me-2"></i> Recent Inquiries</h5>
+                <a href="/admin/messages.html" class="btn btn-sm btn-outline-forest">View Inbox</a>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-custom">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Subject</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentMessagesTableBody">
+                    <tr><td colspan="4" class="text-center text-muted">Loading messages...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Logs -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h5 class="fw-bold mb-0 text-forest"><i class="bi bi-clock-history me-2"></i> Recent Admin Audit Activity</h5>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-custom">
+              <thead>
+                <tr>
+                  <th>Admin</th>
+                  <th>Action</th>
+                  <th>Entity</th>
+                  <th>Details</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="activityLogsTableBody">
+                <tr><td colspan="5" class="text-center text-muted">Loading activity history...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await API.get('/admin/stats');
+        if (res && res.success && res.data) {
+          const d = res.data;
+
+          document.getElementById('statTotalCows').textContent = d.total_cows;
+          document.getElementById('statActiveCows').textContent = d.active_cows;
+          document.getElementById('statTotalDonations').textContent = `₹${parseFloat(d.total_donations_amount).toLocaleString('en-IN')}`;
+          document.getElementById('statDonationsCount').textContent = d.total_donations_count;
+          document.getElementById('statMonthDonations').textContent = `₹${parseFloat(d.this_month_donations).toLocaleString('en-IN')}`;
+          document.getElementById('statTotalSponsors').textContent = d.total_sponsors;
+          document.getElementById('statTotalProducts').textContent = d.total_products;
+          document.getElementById('statTotalOrders').textContent = d.total_orders;
+          document.getElementById('statUnreadMessages').textContent = d.unread_messages;
+
+          // Recent Donations Table
+          const donBody = document.getElementById('recentDonationsTableBody');
+          if (d.recent_donations && d.recent_donations.length > 0) {
+            donBody.innerHTML = d.recent_donations.map(don => `
+              <tr>
+                <td><span class="fw-bold small">${don.donation_number}</span></td>
+                <td>${don.donor_name}</td>
+                <td class="fw-bold text-success">₹${parseFloat(don.amount).toFixed(2)}</td>
+                <td><span class="badge-status badge-${don.payment_status.toLowerCase()}">${don.payment_status}</span></td>
+              </tr>
+            `).join('');
+          } else {
+            donBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No donations recorded yet.</td></tr>`;
+          }
+
+          // Recent Messages Table
+          const msgBody = document.getElementById('recentMessagesTableBody');
+          if (d.recent_messages && d.recent_messages.length > 0) {
+            msgBody.innerHTML = d.recent_messages.map(msg => `
+              <tr>
+                <td>${msg.name}</td>
+                <td>${msg.subject}</td>
+                <td><span class="badge-status badge-${msg.status.toLowerCase()}">${msg.status}</span></td>
+                <td class="small text-muted">${new Date(msg.created_at).toLocaleDateString('en-IN')}</td>
+              </tr>
+            `).join('');
+          } else {
+            msgBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No messages recorded yet.</td></tr>`;
+          }
+
+          // Activity Logs
+          const logBody = document.getElementById('activityLogsTableBody');
+          if (d.recent_logs && d.recent_logs.length > 0) {
+            logBody.innerHTML = d.recent_logs.map(log => `
+              <tr>
+                <td class="fw-bold">${log.admin_name || 'Admin'}</td>
+                <td><span class="badge bg-light text-dark border">${log.action}</span></td>
+                <td>${log.entity_type || '-'}</td>
+                <td class="small text-muted">${log.details || '-'}</td>
+                <td class="small text-muted">${new Date(log.created_at).toLocaleString('en-IN')}</td>
+              </tr>
+            `).join('');
+          } else {
+            logBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No activity logged yet.</td></tr>`;
+          }
+
+          // Render Chart.js
+          if (d.monthly_chart && d.monthly_chart.length > 0) {
+            const ctx = document.getElementById('monthlyDonationChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: d.monthly_chart.map(m => m.label),
+                datasets: [{
+                  label: 'Donation Amount (INR)',
+                  data: d.monthly_chart.map(m => parseFloat(m.amount)),
+                  backgroundColor: '#28563C',
+                  borderColor: '#173B2A',
+                  borderWidth: 1,
+                  borderRadius: 6
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      callback: (value) => '₹' + value.toLocaleString('en-IN')
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Dashboard stats error:', e);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seva Packages | Admin Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-brand">
+        <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+        <div>
+          <div class="fw-bold fs-6">KAMADHENU</div>
+          <small class="text-gold" style="font-size: 0.7rem; letter-spacing: 1px;">GOUSHALA ADMIN</small>
+        </div>
+      </a>
+      <div class="sidebar-heading">DASHBOARD</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      </ul>
+      <div class="sidebar-heading">GOUSHALA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/cows.html" class="sidebar-link"><i class="bi bi-heart"></i> Resident Cows</a></li>
+        <li><a href="/admin/breeds.html" class="sidebar-link"><i class="bi bi-bookmark-star"></i> Indigenous Breeds</a></li>
+        <li><a href="/admin/seva.html" class="sidebar-link active"><i class="bi bi-flower1"></i> Seva Packages</a></li>
+        <li><a href="/admin/testimonials.html" class="sidebar-link"><i class="bi bi-chat-quote"></i> Testimonials</a></li>
+        <li><a href="/admin/timeline.html" class="sidebar-link"><i class="bi bi-hourglass-split"></i> Journey / Timeline</a></li>
+      </ul>
+      <div class="sidebar-heading">DONATIONS & SPONSORS</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/donations.html" class="sidebar-link"><i class="bi bi-cash-stack"></i> All Donations</a></li>
+        <li><a href="/admin/sponsors.html" class="sidebar-link"><i class="bi bi-award"></i> Sponsors & Adoptions</a></li>
+      </ul>
+      <div class="sidebar-heading">COMMERCE</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/products.html" class="sidebar-link"><i class="bi bi-box-seam"></i> Products & Store</a></li>
+        <li><a href="/admin/orders.html" class="sidebar-link"><i class="bi bi-cart-check"></i> Orders Management</a></li>
+      </ul>
+      <div class="sidebar-heading">CONTENT & MEDIA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/blogs.html" class="sidebar-link"><i class="bi bi-journal-text"></i> Vedic Blogs</a></li>
+        <li><a href="/admin/events.html" class="sidebar-link"><i class="bi bi-calendar-event"></i> Events & Festivals</a></li>
+        <li><a href="/admin/gallery.html" class="sidebar-link"><i class="bi bi-images"></i> Photo Gallery</a></li>
+      </ul>
+      <div class="sidebar-heading">COMMUNICATION</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/messages.html" class="sidebar-link"><i class="bi bi-envelope"></i> Contact Messages</a></li>
+        <li><a href="/admin/newsletter.html" class="sidebar-link"><i class="bi bi-send"></i> Newsletter Subscribers</a></li>
+      </ul>
+      <div class="sidebar-heading">SETTINGS</div>
+      <ul class="sidebar-menu mb-4">
+        <li><a href="/admin/settings.html" class="sidebar-link"><i class="bi bi-gear"></i> Website Settings</a></li>
+        <li><a href="/admin/profile.html" class="sidebar-link"><i class="bi bi-person-circle"></i> Admin Profile</a></li>
+        <li><a href="#" class="sidebar-link btn-admin-logout text-danger"><i class="bi bi-box-arrow-right text-danger"></i> Logout</a></li>
+      </ul>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-navbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggleBtn"><i class="bi bi-list fs-5"></i></button>
+          <h4 class="fw-bold mb-0 text-forest">Gau Seva Packages</h4>
+        </div>
+        <button class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#sevaFormModal" onclick="openAddSevaModal()">
+          <i class="bi bi-plus-circle-fill me-1"></i> Add Seva Type
+        </button>
+      </header>
+
+      <main class="p-4">
+        <div class="admin-card">
+          <div class="table-responsive">
+            <table class="table table-custom">
+              <thead>
+                <tr>
+                  <th>Icon</th>
+                  <th>Title</th>
+                  <th>Suggested Amount</th>
+                  <th>Short Description</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="sevaTableBody">
+                <tr><td colspan="6" class="text-center text-muted py-4">Loading seva services...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="sevaFormModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header bg-forest text-white">
+          <h5 class="modal-title fw-bold" id="sevaModalTitle">Add Seva Package</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="sevaForm" enctype="multipart/form-data">
+          <input type="hidden" id="sevaEditId">
+          <div class="modal-body p-4">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Seva Title *</label>
+                <input type="text" id="sevaTitle" class="form-control" placeholder="e.g. Feed a Cow for a Day" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Suggested Donation Amount (₹) *</label>
+                <input type="number" id="sevaAmount" class="form-control" placeholder="501" required min="1">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Bootstrap Icon Class</label>
+                <input type="text" id="sevaIcon" class="form-control" placeholder="bi-heart-fill" value="bi-heart-fill">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Status</label>
+                <select id="sevaStatus" class="form-select">
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Short Description</label>
+                <input type="text" id="sevaShortDesc" class="form-control" placeholder="Brief summary of seva...">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Full Vedic & Care Details</label>
+                <textarea id="sevaFullDesc" class="form-control" rows="3" placeholder="Explain the spiritual merits and feed details..."></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer bg-light border-top">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" id="btnSaveSeva" class="btn btn-gold px-4">Save Seva</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    let allSeva = [];
+    const sevaModal = new bootstrap.Modal(document.getElementById('sevaFormModal'));
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      async function loadSeva() {
+        const tbody = document.getElementById('sevaTableBody');
+        try {
+          const res = await API.get('/admin/seva');
+          if (res && res.data) {
+            allSeva = res.data;
+            tbody.innerHTML = allSeva.map(s => `
+              <tr>
+                <td><i class="bi ${s.icon || 'bi-heart-fill'} fs-4 text-warning"></i></td>
+                <td><div class="fw-bold text-forest">${s.title}</div></td>
+                <td><span class="fw-bold text-success fs-6">₹${parseFloat(s.suggested_amount).toFixed(2)}</span></td>
+                <td><small class="text-muted">${s.short_desc || s.full_desc || '-'}</small></td>
+                <td><span class="badge-status badge-${s.status}">${s.status}</span></td>
+                <td>
+                  <div class="d-flex gap-1">
+                    <button class="btn btn-sm btn-outline-forest" onclick="openEditSevaModal(${s.id})"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteSeva(${s.id}, '${s.title}')"><i class="bi bi-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+            `).join('');
+          }
+        } catch (e) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-danger text-center">Failed to load seva packages.</td></tr>`;
+        }
+      }
+
+      loadSeva();
+
+      document.getElementById('sevaForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const editId = document.getElementById('sevaEditId').value;
+        const btn = document.getElementById('btnSaveSeva');
+
+        const payload = {
+          title: document.getElementById('sevaTitle').value.trim(),
+          suggested_amount: document.getElementById('sevaAmount').value,
+          icon: document.getElementById('sevaIcon').value.trim(),
+          status: document.getElementById('sevaStatus').value,
+          short_desc: document.getElementById('sevaShortDesc').value.trim(),
+          full_desc: document.getElementById('sevaFullDesc').value.trim()
+        };
+
+        try {
+          btn.disabled = true;
+          btn.innerHTML = 'Saving...';
+          let res = editId ? await API.put(`/admin/seva/${editId}`, payload) : await API.post('/admin/seva', payload);
+          if (res && res.success) {
+            showToast(res.message);
+            sevaModal.hide();
+            loadSeva();
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Save Seva';
+        }
+      });
+
+      window.openAddSevaModal = () => {
+        document.getElementById('sevaForm').reset();
+        document.getElementById('sevaEditId').value = '';
+        document.getElementById('sevaModalTitle').textContent = 'Add Seva Package';
+      };
+
+      window.openEditSevaModal = (id) => {
+        const s = allSeva.find(x => x.id === id);
+        if (!s) return;
+        document.getElementById('sevaEditId').value = s.id;
+        document.getElementById('sevaTitle').value = s.title;
+        document.getElementById('sevaAmount').value = s.suggested_amount;
+        document.getElementById('sevaIcon').value = s.icon || 'bi-heart-fill';
+        document.getElementById('sevaStatus').value = s.status || 'active';
+        document.getElementById('sevaShortDesc').value = s.short_desc || '';
+        document.getElementById('sevaFullDesc').value = s.full_desc || '';
+        document.getElementById('sevaModalTitle').textContent = `Edit Seva: ${s.title}`;
+        sevaModal.show();
+      };
+
+      window.deleteSeva = (id, title) => {
+        Admin.confirmDelete('Delete Seva?', `Are you sure you want to delete "${title}"?`, async () => {
+          try {
+            const res = await API.delete(`/admin/seva/${id}`);
+            if (res && res.success) {
+              showToast(res.message);
+              loadSeva();
+            }
+          } catch (err) {
+            showToast(err.message, 'error');
+          }
+        });
+      };
+    });
+  </script>
+</body>
+</html>

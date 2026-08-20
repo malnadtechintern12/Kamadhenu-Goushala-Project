@@ -1,0 +1,272 @@
+/* ==========================================================
+   Admin Panel Stylesheet - Kamadhenu Goushala
+   ========================================================== */
+:root {
+  --admin-sidebar-bg: #173B2A;
+  --admin-sidebar-hover: #22513B;
+  --admin-sidebar-active: #2D654A;
+  --admin-primary: #173B2A;
+  --admin-gold: #D4A72C;
+  --admin-gold-light: #F3D068;
+  --admin-bg: #F4F7F5;
+  --admin-card-bg: #FFFFFF;
+  --admin-text: #1F2937;
+  --admin-muted: #6B7280;
+  --admin-border: #E5E7EB;
+  --sidebar-width: 260px;
+}
+
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--admin-bg);
+  color: var(--admin-text);
+  overflow-x: hidden;
+}
+
+/* 1. Layout Structure */
+.admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--admin-sidebar-bg);
+  color: #E2ECE6;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+
+.admin-main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile Sidebar Collapse */
+@media (max-width: 992px) {
+  .admin-sidebar {
+    margin-left: calc(-1 * var(--sidebar-width));
+  }
+  .admin-sidebar.show {
+    margin-left: 0;
+  }
+  .admin-main {
+    margin-left: 0;
+  }
+}
+
+/* 2. Sidebar Navigation */
+.sidebar-brand {
+  padding: 22px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.sidebar-brand-icon {
+  width: 38px;
+  height: 38px;
+  background: var(--admin-gold);
+  color: var(--admin-primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.sidebar-heading {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #8EAA9B;
+  padding: 18px 20px 6px;
+  font-weight: 700;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0 12px;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  margin-bottom: 4px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #D3E0D8;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link i {
+  font-size: 1.15rem;
+  color: #9DBBB0;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-link:hover {
+  background-color: var(--admin-sidebar-hover);
+  color: #FFFFFF;
+}
+
+.sidebar-link:hover i {
+  color: var(--admin-gold-light);
+}
+
+.sidebar-link.active {
+  background-color: var(--admin-sidebar-active);
+  color: #FFFFFF;
+  font-weight: 600;
+  border-left: 4px solid var(--admin-gold);
+}
+
+.sidebar-link.active i {
+  color: var(--admin-gold);
+}
+
+/* 3. Top Navbar */
+.admin-navbar {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--admin-border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+/* 4. Dashboard KPI Cards */
+.kpi-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid var(--admin-border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+  height: 100%;
+}
+
+.kpi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.kpi-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.kpi-val {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--admin-primary);
+  line-height: 1.1;
+}
+
+/* 5. Custom Data Tables */
+.admin-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid var(--admin-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.admin-card-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--admin-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background-color: #FFFFFF;
+}
+
+.table-custom {
+  margin-bottom: 0;
+}
+
+.table-custom th {
+  background-color: #F8FAF9;
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #4B5563;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.table-custom td {
+  padding: 14px 18px;
+  vertical-align: middle;
+  font-size: 0.92rem;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.table-custom tbody tr:hover {
+  background-color: #F9FBFA;
+}
+
+/* 6. Status Badges */
+.badge-status {
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-active { background: #D1FAE5; color: #065F46; }
+.badge-pending { background: #FEF3C7; color: #92400E; }
+.badge-completed { background: #D1FAE5; color: #065F46; }
+.badge-failed { background: #FEE2E2; color: #991B1B; }
+.badge-shipped { background: #E0E7FF; color: #3730A3; }
+.badge-delivered { background: #D1FAE5; color: #065F46; }
+.badge-new { background: #DBEAFE; color: #1E40AF; }
+.badge-read { background: #F3F4F6; color: #4B5563; }
+.badge-replied { background: #D1FAE5; color: #065F46; }
+
+/* 7. Image Thumbnail */
+.table-img-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--admin-border);
+}

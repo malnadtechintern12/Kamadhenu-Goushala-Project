@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indigenous Cow Breeds of India | Kamadhenu Goushala</title>
+  <meta name="description" content="Explore India's sacred native cow breeds: Gir, Hallikar, Malenadu Gidda, Amrit Mahal, Tharparkar, Ongole, and Kangayam.">
+  <link rel="canonical" href="http://localhost:3000/breeds.html">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-infobar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span><i class="bi bi-telephone-fill"></i> <a href="tel:+919845088990" class="site-phone">+91 98450 88990</a></span>
+        <span><i class="bi bi-envelope-fill"></i> <a href="mailto:info@kamadhenugoushala.org" class="site-email">info@kamadhenugoushala.org</a></span>
+        <span><i class="bi bi-geo-alt-fill"></i> <span class="site-address">Bengaluru, Karnataka, India</span></span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <a href="https://wa.me/919845088990" target="_blank" class="whatsapp-link text-white"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+        <a href="/admin/index.html" class="text-white opacity-75 small"><i class="bi bi-shield-lock"></i> Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">
+          <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+          <div>
+            <div class="fw-bold lh-1" style="font-size: 1.35rem; color: var(--primary-dark);">KAMADHENU</div>
+            <div style="font-size: 0.75rem; letter-spacing: 2px; color: var(--sacred-gold-dark); font-weight: 700;">GOUSHALA</div>
+          </div>
+        </a>
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+          <a href="/donation.html" class="btn btn-gold btn-sm px-3 py-2">DONATE</a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="desktopNav">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+            <li class="nav-item"><a class="nav-link" href="/index.html">HOME</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">ABOUT</a></li>
+            <li class="nav-item"><a class="nav-link" href="/cows.html">OUR COWS</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/breeds.html">BREEDS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/seva.html">GAU SEVA</a></li>
+            <li class="nav-item"><a class="nav-link" href="/gallery.html">GALLERY</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products.html">PRODUCTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">BLOG</a></li>
+            <li class="nav-item"><a class="nav-link" href="/events.html">EVENTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/contact.html">CONTACT</a></li>
+          </ul>
+          <a href="/donation.html" class="btn btn-gold"><i class="bi bi-heart-fill"></i> DONATE NOW</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Banner -->
+  <section class="py-5" style="background: var(--green-gradient); color: white;">
+    <div class="container py-4 text-center">
+      <span class="badge bg-warning text-dark px-3 py-2 fw-bold mb-2">Vedic Bovine Biodiversity</span>
+      <h1 class="display-5 fw-bold text-white mb-2">Indigenous Indian Cow Breeds</h1>
+      <p class="lead text-white-50 mx-auto" style="max-width: 650px;">
+        India's indigenous Bos Indicus cattle represent millennia of conscious natural breeding, high disease resistance, and nourishing medicinal A2 milk.
+      </p>
+    </div>
+  </section>
+
+  <!-- Breeds List -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="row g-5" id="breedsListContainer">
+        <!-- Loaded dynamically via API -->
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-forest" role="status"></div>
+          <p class="mt-2 text-muted">Loading indigenous breeds directory...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+            <span class="fs-4 fw-bold text-white">KAMADHENU GOUSHALA</span>
+          </div>
+          <p class="small text-white-50 mb-3">
+            Dedicated to the protection, preservation, and ethical healthcare of sacred indigenous cows.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-btn social-fb"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="social-btn social-insta"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-btn social-yt"><i class="bi bi-youtube"></i></a>
+            <a href="https://wa.me/919845088990" class="social-btn"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Pages</h5>
+          <ul class="footer-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/cows.html">Our Cows</a></li>
+            <li><a href="/breeds.html">Breeds</a></li>
+            <li><a href="/seva.html">Gau Seva</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Involvement</h5>
+          <ul class="footer-links">
+            <li><a href="/donation.html">Donate</a></li>
+            <li><a href="/adopt.html">Adopt a Cow</a></li>
+            <li><a href="/products.html">Organic Store</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5 class="footer-title">Sanctuary Address</h5>
+          <p class="small text-white-50 mb-2 site-address">Survey No. 48/2, Kanakapura Road, Bengaluru 560082</p>
+          <p class="small text-white-50 mb-3">Phone: <span class="site-phone">+91 98450 88990</span></p>
+        </div>
+      </div>
+      <div class="footer-bottom text-center">
+        <p class="mb-0">© 2026 Kamadhenu Goushala Trust. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await API.get('/breeds');
+        const container = document.getElementById('breedsListContainer');
+
+        if (res && res.data && res.data.length > 0) {
+          container.innerHTML = res.data.map(breed => `
+            <div class="col-lg-12">
+              <div class="p-4 p-lg-5 bg-white rounded-4 shadow-sm border">
+                <div class="row align-items-center g-4">
+                  <div class="col-lg-4">
+                    <img src="${breed.image || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&w=800&q=80'}" alt="${breed.name}" class="rounded-4 shadow w-100" style="height: 280px; object-fit: cover;">
+                  </div>
+                  <div class="col-lg-8">
+                    <span class="badge bg-light text-forest border px-3 py-1 fw-bold mb-2">${breed.origin || 'India'}</span>
+                    <h2 class="fw-bold text-forest mb-2">${breed.name}</h2>
+                    <div class="mb-3 text-gold fw-bold"><i class="bi bi-droplet-fill me-1"></i> Milk Yield: ${breed.milk_yield || 'A2 Pure Medicinal Milk'}</div>
+                    <p class="text-muted mb-3">${breed.description || ''}</p>
+                    
+                    ${breed.characteristics ? `
+                      <div class="p-3 bg-light rounded-3 mb-3 border-start border-3 border-warning small">
+                        <strong>Distinct Characteristics:</strong> ${breed.characteristics}
+                      </div>
+                    ` : ''}
+
+                    <div class="d-flex flex-wrap gap-3 mt-3">
+                      <a href="/cows.html?breed_id=${breed.id}" class="btn btn-forest px-4 py-2">
+                        View ${breed.name} Cows (${breed.cow_count || 0}) <i class="bi bi-arrow-right ms-1"></i>
+                      </a>
+                      <a href="/donation.html" class="btn btn-outline-gold px-4 py-2">
+                        Sponsor Breed Conservation
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        document.getElementById('breedsListContainer').innerHTML = `<div class="col-12 text-center text-danger py-5">Failed to load breed information.</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

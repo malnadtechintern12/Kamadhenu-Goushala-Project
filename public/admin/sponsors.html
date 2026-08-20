@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sponsors & Adoptions | Admin Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-brand">
+        <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+        <div>
+          <div class="fw-bold fs-6">KAMADHENU</div>
+          <small class="text-gold" style="font-size: 0.7rem; letter-spacing: 1px;">GOUSHALA ADMIN</small>
+        </div>
+      </a>
+      <div class="sidebar-heading">DASHBOARD</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      </ul>
+      <div class="sidebar-heading">GOUSHALA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/cows.html" class="sidebar-link"><i class="bi bi-heart"></i> Resident Cows</a></li>
+        <li><a href="/admin/breeds.html" class="sidebar-link"><i class="bi bi-bookmark-star"></i> Indigenous Breeds</a></li>
+        <li><a href="/admin/seva.html" class="sidebar-link"><i class="bi bi-flower1"></i> Seva Packages</a></li>
+        <li><a href="/admin/testimonials.html" class="sidebar-link"><i class="bi bi-chat-quote"></i> Testimonials</a></li>
+        <li><a href="/admin/timeline.html" class="sidebar-link"><i class="bi bi-hourglass-split"></i> Journey / Timeline</a></li>
+      </ul>
+      <div class="sidebar-heading">DONATIONS & SPONSORS</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/donations.html" class="sidebar-link"><i class="bi bi-cash-stack"></i> All Donations</a></li>
+        <li><a href="/admin/sponsors.html" class="sidebar-link active"><i class="bi bi-award"></i> Sponsors & Adoptions</a></li>
+      </ul>
+      <div class="sidebar-heading">COMMERCE</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/products.html" class="sidebar-link"><i class="bi bi-box-seam"></i> Products & Store</a></li>
+        <li><a href="/admin/orders.html" class="sidebar-link"><i class="bi bi-cart-check"></i> Orders Management</a></li>
+      </ul>
+      <div class="sidebar-heading">CONTENT & MEDIA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/blogs.html" class="sidebar-link"><i class="bi bi-journal-text"></i> Vedic Blogs</a></li>
+        <li><a href="/admin/events.html" class="sidebar-link"><i class="bi bi-calendar-event"></i> Events & Festivals</a></li>
+        <li><a href="/admin/gallery.html" class="sidebar-link"><i class="bi bi-images"></i> Photo Gallery</a></li>
+      </ul>
+      <div class="sidebar-heading">COMMUNICATION</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/messages.html" class="sidebar-link"><i class="bi bi-envelope"></i> Contact Messages</a></li>
+        <li><a href="/admin/newsletter.html" class="sidebar-link"><i class="bi bi-send"></i> Newsletter Subscribers</a></li>
+      </ul>
+      <div class="sidebar-heading">SETTINGS</div>
+      <ul class="sidebar-menu mb-4">
+        <li><a href="/admin/settings.html" class="sidebar-link"><i class="bi bi-gear"></i> Website Settings</a></li>
+        <li><a href="/admin/profile.html" class="sidebar-link"><i class="bi bi-person-circle"></i> Admin Profile</a></li>
+        <li><a href="#" class="sidebar-link btn-admin-logout text-danger"><i class="bi bi-box-arrow-right text-danger"></i> Logout</a></li>
+      </ul>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-navbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggleBtn"><i class="bi bi-list fs-5"></i></button>
+          <h4 class="fw-bold mb-0 text-forest">Cow Adoptions & Sponsors</h4>
+        </div>
+      </header>
+
+      <main class="p-4">
+        
+        <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-sponsorships-tab" data-bs-toggle="pill" data-bs-target="#pills-sponsorships" type="button" role="tab">Active Sponsorships</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-sponsors-tab" data-bs-toggle="pill" data-bs-target="#pills-sponsors" type="button" role="tab">Registered Sponsors Directory</button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+          <!-- Sponsorships Tab -->
+          <div class="tab-pane fade show active" id="pills-sponsorships" role="tabpanel">
+            <div class="admin-card">
+              <div class="table-responsive">
+                <table class="table table-custom">
+                  <thead>
+                    <tr>
+                      <th>Sponsor</th>
+                      <th>Adopted Cow</th>
+                      <th>Duration</th>
+                      <th>Amount</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sponsorshipsTableBody">
+                    <tr><td colspan="7" class="text-center text-muted py-4">Loading sponsorships...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sponsors Directory Tab -->
+          <div class="tab-pane fade" id="pills-sponsors" role="tabpanel">
+            <div class="admin-card">
+              <div class="table-responsive">
+                <table class="table table-custom">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>PAN Number</th>
+                      <th>Total Sponsored</th>
+                      <th>Registered Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sponsorsTableBody">
+                    <tr><td colspan="6" class="text-center text-muted py-4">Loading sponsors...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Load Sponsorships
+      try {
+        const spRes = await API.get('/admin/sponsorships');
+        const spBody = document.getElementById('sponsorshipsTableBody');
+        if (spRes && spRes.data && spRes.data.length > 0) {
+          spBody.innerHTML = spRes.data.map(sp => `
+            <tr>
+              <td>
+                <div class="fw-bold">${sp.sponsor_name}</div>
+                <small class="text-muted">${sp.sponsor_email}</small>
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <img src="${sp.cow_image || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&w=100&q=80'}" class="table-img-thumb" style="width: 40px; height: 40px;">
+                  <div>
+                    <div class="fw-bold text-forest">${sp.cow_name}</div>
+                    <small class="text-muted">${sp.cow_tag}</small>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge bg-light text-dark border">${sp.duration_months} Months</span></td>
+              <td><span class="fw-bold text-success fs-6">₹${parseFloat(sp.amount).toFixed(2)}</span></td>
+              <td><small>${new Date(sp.start_date).toLocaleDateString('en-IN')}</small></td>
+              <td><small>${new Date(sp.end_date).toLocaleDateString('en-IN')}</small></td>
+              <td><span class="badge-status badge-${sp.payment_status.toLowerCase()}">${sp.payment_status}</span></td>
+            </tr>
+          `).join('');
+        } else {
+          spBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">No sponsorships recorded yet.</td></tr>`;
+        }
+      } catch (e) {
+        console.warn('Error loading sponsorships:', e);
+      }
+
+      // Load Sponsors Directory
+      try {
+        const sRes = await API.get('/admin/sponsors');
+        const sBody = document.getElementById('sponsorsTableBody');
+        if (sRes && sRes.data && sRes.data.length > 0) {
+          sBody.innerHTML = sRes.data.map(s => `
+            <tr>
+              <td><div class="fw-bold text-forest">${s.name}</div></td>
+              <td>${s.email}</td>
+              <td>${s.phone || '-'}</td>
+              <td><span class="font-monospace">${s.pan_number || '-'}</span></td>
+              <td><span class="fw-bold text-success">₹${parseFloat(s.total_sponsored || 0).toFixed(2)}</span></td>
+              <td><small class="text-muted">${new Date(s.created_at).toLocaleDateString('en-IN')}</small></td>
+            </tr>
+          `).join('');
+        } else {
+          sBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">No sponsors registered yet.</td></tr>`;
+        }
+      } catch (e) {
+        console.warn('Error loading sponsors:', e);
+      }
+    });
+  </script>
+</body>
+</html>

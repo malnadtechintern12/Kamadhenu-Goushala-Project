@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Settings | Admin Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-brand">
+        <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+        <div>
+          <div class="fw-bold fs-6">KAMADHENU</div>
+          <small class="text-gold" style="font-size: 0.7rem; letter-spacing: 1px;">GOUSHALA ADMIN</small>
+        </div>
+      </a>
+      <div class="sidebar-heading">DASHBOARD</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      </ul>
+      <div class="sidebar-heading">GOUSHALA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/cows.html" class="sidebar-link"><i class="bi bi-heart"></i> Resident Cows</a></li>
+        <li><a href="/admin/breeds.html" class="sidebar-link"><i class="bi bi-bookmark-star"></i> Indigenous Breeds</a></li>
+        <li><a href="/admin/seva.html" class="sidebar-link"><i class="bi bi-flower1"></i> Seva Packages</a></li>
+        <li><a href="/admin/testimonials.html" class="sidebar-link"><i class="bi bi-chat-quote"></i> Testimonials</a></li>
+        <li><a href="/admin/timeline.html" class="sidebar-link"><i class="bi bi-hourglass-split"></i> Journey / Timeline</a></li>
+      </ul>
+      <div class="sidebar-heading">DONATIONS & SPONSORS</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/donations.html" class="sidebar-link"><i class="bi bi-cash-stack"></i> All Donations</a></li>
+        <li><a href="/admin/sponsors.html" class="sidebar-link"><i class="bi bi-award"></i> Sponsors & Adoptions</a></li>
+      </ul>
+      <div class="sidebar-heading">COMMERCE</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/products.html" class="sidebar-link"><i class="bi bi-box-seam"></i> Products & Store</a></li>
+        <li><a href="/admin/orders.html" class="sidebar-link"><i class="bi bi-cart-check"></i> Orders Management</a></li>
+      </ul>
+      <div class="sidebar-heading">CONTENT & MEDIA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/blogs.html" class="sidebar-link"><i class="bi bi-journal-text"></i> Vedic Blogs</a></li>
+        <li><a href="/admin/events.html" class="sidebar-link"><i class="bi bi-calendar-event"></i> Events & Festivals</a></li>
+        <li><a href="/admin/gallery.html" class="sidebar-link"><i class="bi bi-images"></i> Photo Gallery</a></li>
+      </ul>
+      <div class="sidebar-heading">COMMUNICATION</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/messages.html" class="sidebar-link"><i class="bi bi-envelope"></i> Contact Messages</a></li>
+        <li><a href="/admin/newsletter.html" class="sidebar-link"><i class="bi bi-send"></i> Newsletter Subscribers</a></li>
+      </ul>
+      <div class="sidebar-heading">SETTINGS</div>
+      <ul class="sidebar-menu mb-4">
+        <li><a href="/admin/settings.html" class="sidebar-link active"><i class="bi bi-gear"></i> Website Settings</a></li>
+        <li><a href="/admin/profile.html" class="sidebar-link"><i class="bi bi-person-circle"></i> Admin Profile</a></li>
+        <li><a href="#" class="sidebar-link btn-admin-logout text-danger"><i class="bi bi-box-arrow-right text-danger"></i> Logout</a></li>
+      </ul>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-navbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggleBtn"><i class="bi bi-list fs-5"></i></button>
+          <h4 class="fw-bold mb-0 text-forest">Global Website Settings</h4>
+        </div>
+      </header>
+
+      <main class="p-4">
+        <div class="admin-card p-4 p-md-5" style="max-width: 900px;">
+          <form id="siteSettingsForm">
+            <h5 class="fw-bold text-forest mb-4 border-bottom pb-2">General & Contact Settings</h5>
+            
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Organization Name</label>
+                <input type="text" name="site_name" class="form-control" placeholder="Kamadhenu Goushala">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Tagline / Mission</label>
+                <input type="text" name="site_tagline" class="form-control" placeholder="Sacred Sanctuary for Indigenous Desi Cows">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Helpline Phone Number</label>
+                <input type="text" name="site_phone" class="form-control" placeholder="+91 98450 88990">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Contact Email</label>
+                <input type="email" name="site_email" class="form-control" placeholder="info@kamadhenugoushala.org">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">WhatsApp Support Number</label>
+                <input type="text" name="whatsapp_number" class="form-control" placeholder="919845088990">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Official UPI ID for Direct Transfer</label>
+                <input type="text" name="upi_id" class="form-control" placeholder="kamadhenu@upi">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Sanctuary Address</label>
+                <input type="text" name="site_address" class="form-control" placeholder="Survey No. 48/2, Kanakapura Road, Bengaluru 560082">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">80G Income Tax Exemption Info Text</label>
+                <textarea name="tax_80g_info" class="form-control" rows="2" placeholder="All donations made to Kamadhenu Goushala Seva Trust are 50% tax exempt under Section 80G..."></textarea>
+              </div>
+            </div>
+
+            <h5 class="fw-bold text-forest mb-4 border-bottom pb-2">Social Media Links</h5>
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Facebook URL</label>
+                <input type="url" name="facebook_url" class="form-control" placeholder="https://facebook.com/kamadhenugoushala">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Instagram URL</label>
+                <input type="url" name="instagram_url" class="form-control" placeholder="https://instagram.com/kamadhenugoushala">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">YouTube URL</label>
+                <input type="url" name="youtube_url" class="form-control" placeholder="https://youtube.com/kamadhenugoushala">
+              </div>
+            </div>
+
+            <h5 class="fw-bold text-forest mb-4 border-bottom pb-2">Footer & Map Configuration</h5>
+            <div class="row g-3 mb-4">
+              <div class="col-12">
+                <label class="form-label fw-semibold">Footer Copyright / Trust Text</label>
+                <input type="text" name="footer_text" class="form-control" placeholder="© 2026 Kamadhenu Goushala Trust. All Rights Reserved.">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Google Map Embed Iframe URL</label>
+                <input type="text" name="google_map_embed" class="form-control" placeholder="https://www.google.com/maps/embed?...">
+              </div>
+            </div>
+
+            <button type="submit" id="btnSaveSettings" class="btn btn-gold py-3 px-5 fs-6">
+              <i class="bi bi-save me-2"></i> Save All Settings
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const form = document.getElementById('siteSettingsForm');
+
+      try {
+        const res = await API.get('/settings');
+        if (res && res.data) {
+          const s = res.data;
+          for (const key in s) {
+            const el = form.elements[key];
+            if (el) el.value = s[key] || '';
+          }
+        }
+      } catch (e) {
+        console.warn('Error loading settings:', e);
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSaveSettings');
+        const formData = new FormData(form);
+        const payload = {};
+        formData.forEach((value, key) => {
+          payload[key] = value;
+        });
+
+        try {
+          btn.disabled = true;
+          btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+
+          const res = await API.put('/admin/settings', payload);
+          if (res && res.success) {
+            showToast(res.message);
+          } else {
+            showToast(res.message || 'Failed to save settings.', 'error');
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-save me-2"></i> Save All Settings';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

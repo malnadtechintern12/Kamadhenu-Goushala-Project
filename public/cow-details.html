@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cow Details | Kamadhenu Goushala</title>
+  <meta name="description" content="View details, story, and sponsorship options for our beloved resident cow at Kamadhenu Goushala.">
+  <link rel="canonical" href="http://localhost:3000/cow-details.html">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-infobar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span><i class="bi bi-telephone-fill"></i> <a href="tel:+919845088990" class="site-phone">+91 98450 88990</a></span>
+        <span><i class="bi bi-envelope-fill"></i> <a href="mailto:info@kamadhenugoushala.org" class="site-email">info@kamadhenugoushala.org</a></span>
+        <span><i class="bi bi-geo-alt-fill"></i> <span class="site-address">Bengaluru, Karnataka, India</span></span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <a href="https://wa.me/919845088990" target="_blank" class="whatsapp-link text-white"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+        <a href="/admin/index.html" class="text-white opacity-75 small"><i class="bi bi-shield-lock"></i> Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">
+          <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+          <div>
+            <div class="fw-bold lh-1" style="font-size: 1.35rem; color: var(--primary-dark);">KAMADHENU</div>
+            <div style="font-size: 0.75rem; letter-spacing: 2px; color: var(--sacred-gold-dark); font-weight: 700;">GOUSHALA</div>
+          </div>
+        </a>
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+          <a href="/donation.html" class="btn btn-gold btn-sm px-3 py-2">DONATE</a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="desktopNav">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+            <li class="nav-item"><a class="nav-link" href="/index.html">HOME</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">ABOUT</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/cows.html">OUR COWS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/breeds.html">BREEDS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/seva.html">GAU SEVA</a></li>
+            <li class="nav-item"><a class="nav-link" href="/gallery.html">GALLERY</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products.html">PRODUCTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">BLOG</a></li>
+            <li class="nav-item"><a class="nav-link" href="/events.html">EVENTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/contact.html">CONTACT</a></li>
+          </ul>
+          <a href="/donation.html" class="btn btn-gold"><i class="bi bi-heart-fill"></i> DONATE NOW</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Cow Profile Section -->
+  <section class="section-padding" id="cowDetailsSection">
+    <div class="container">
+      <div id="cowDetailsLoading" class="text-center py-5">
+        <div class="spinner-border text-forest" role="status"></div>
+        <p class="mt-2 text-muted">Retrieving cow information...</p>
+      </div>
+
+      <div id="cowDetailsContent" style="display: none;">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="/cows.html">Our Cows</a></li>
+            <li class="breadcrumb-item active" id="breadcrumbCowName">Cow Profile</li>
+          </ol>
+        </nav>
+
+        <div class="row g-5">
+          <!-- Left Column: Photo & Tag -->
+          <div class="col-lg-5">
+            <div class="position-relative mb-4">
+              <img id="detailCowImage" src="" alt="" class="rounded-4 shadow-lg w-100" style="height: 440px; object-fit: cover;">
+              <span class="cow-badge badge-healthy fs-6 py-2 px-3 m-3" id="detailCowHealth">Healthy</span>
+              <span class="cow-tag-badge fs-6 py-2 px-3 m-3" id="detailCowTag">KG-001</span>
+            </div>
+
+            <!-- Additional Images Gallery if any -->
+            <div class="row g-2" id="detailCowImagesRow"></div>
+          </div>
+
+          <!-- Right Column: Details, Story & Actions -->
+          <div class="col-lg-7">
+            <span class="badge bg-warning text-dark px-3 py-2 fw-bold mb-2" id="detailCowStatus">Active Resident</span>
+            <h1 class="display-5 fw-bold text-forest mb-2" id="detailCowName">Nandini</h1>
+            <h5 class="text-gold fw-bold mb-4" id="detailCowBreed">Gir Cow • Indigenous Heritage</h5>
+
+            <!-- Meta Quick Table -->
+            <div class="row g-3 mb-4">
+              <div class="col-sm-6">
+                <div class="p-3 bg-white rounded-3 shadow-sm border">
+                  <div class="small text-muted">Gender</div>
+                  <div class="fw-bold fs-6" id="detailCowGender">Female</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="p-3 bg-white rounded-3 shadow-sm border">
+                  <div class="small text-muted">Age / DOB</div>
+                  <div class="fw-bold fs-6" id="detailCowAge">~4 Years</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="p-3 bg-white rounded-3 shadow-sm border">
+                  <div class="small text-muted">Arrival at Sanctuary</div>
+                  <div class="fw-bold fs-6" id="detailCowArrival">15 Feb 2020</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="p-3 bg-white rounded-3 shadow-sm border">
+                  <div class="small text-muted">Breed Origin</div>
+                  <div class="fw-bold fs-6" id="detailCowOrigin">Gujarat</div>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="fw-bold text-forest mb-2">Life Story & Sanctuary Journey</h5>
+            <p class="text-muted fs-6 mb-4" id="detailCowStory" style="line-height: 1.8;">
+              Loading cow biography...
+            </p>
+
+            <div class="p-4 bg-white rounded-4 shadow-sm border mb-4" style="border-left: 5px solid var(--sacred-gold) !important;">
+              <h5 class="fw-bold text-forest mb-2"><i class="bi bi-award-fill text-warning me-2"></i> Monthly Adoption & Sponsorship</h5>
+              <p class="small text-muted mb-3">
+                When you adopt this cow, you cover her complete monthly feed, green fodder, mineral vitamins, and regular veterinary checkups. You will receive regular photos, health reports, and spiritual blessings.
+              </p>
+              <div class="d-flex flex-wrap gap-3">
+                <a id="btnAdoptNow" href="#" class="btn btn-gold py-3 px-4 flex-fill text-center">
+                  <i class="bi bi-heart-fill me-2"></i> ADOPT THIS COW (₹2,501/mo)
+                </a>
+                <a id="btnFeedNow" href="#" class="btn btn-forest py-3 px-4 flex-fill text-center">
+                  <i class="bi bi-flower1 me-2"></i> FEED TODAY (₹501)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cowDetailsNotFound" style="display: none;" class="text-center py-5">
+        <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
+        <h3 class="fw-bold mt-3">Resident Cow Not Found</h3>
+        <p class="text-muted">The requested cow record could not be found or has been transferred.</p>
+        <a href="/cows.html" class="btn btn-forest mt-2">Back to Cow Directory</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+            <span class="fs-4 fw-bold text-white">KAMADHENU GOUSHALA</span>
+          </div>
+          <p class="small text-white-50 mb-3">
+            Dedicated to the protection, preservation, and ethical healthcare of sacred indigenous cows.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-btn social-fb"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="social-btn social-insta"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="social-btn social-yt"><i class="bi bi-youtube"></i></a>
+            <a href="https://wa.me/919845088990" class="social-btn"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Pages</h5>
+          <ul class="footer-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/cows.html">Our Cows</a></li>
+            <li><a href="/breeds.html">Breeds</a></li>
+            <li><a href="/seva.html">Gau Seva</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Involvement</h5>
+          <ul class="footer-links">
+            <li><a href="/donation.html">Donate</a></li>
+            <li><a href="/adopt.html">Adopt a Cow</a></li>
+            <li><a href="/products.html">Organic Store</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5 class="footer-title">Sanctuary Address</h5>
+          <p class="small text-white-50 mb-2 site-address">Survey No. 48/2, Kanakapura Road, Bengaluru 560082</p>
+          <p class="small text-white-50 mb-3">Phone: <span class="site-phone">+91 98450 88990</span></p>
+        </div>
+      </div>
+      <div class="footer-bottom text-center">
+        <p class="mb-0">© 2026 Kamadhenu Goushala Trust. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const cowId = urlParams.get('id');
+
+      if (!cowId) {
+        document.getElementById('cowDetailsLoading').style.display = 'none';
+        document.getElementById('cowDetailsNotFound').style.display = 'block';
+        return;
+      }
+
+      try {
+        const res = await API.get(`/cows/${cowId}`);
+        document.getElementById('cowDetailsLoading').style.display = 'none';
+
+        if (res && res.success && res.data) {
+          const cow = res.data;
+          document.getElementById('cowDetailsContent').style.display = 'block';
+          
+          document.title = `${cow.name} (${cow.tag_number}) | Kamadhenu Goushala`;
+          document.getElementById('breadcrumbCowName').textContent = cow.name;
+          document.getElementById('detailCowName').textContent = cow.name;
+          document.getElementById('detailCowTag').textContent = cow.tag_number;
+          document.getElementById('detailCowBreed').textContent = `${cow.breed_name || 'Desi Breed'} • Indigenous Heritage`;
+          document.getElementById('detailCowGender').textContent = cow.gender;
+          document.getElementById('detailCowHealth').textContent = cow.health_status;
+          document.getElementById('detailCowStatus').textContent = `${cow.status} Sanctuary Resident`;
+          document.getElementById('detailCowOrigin').textContent = cow.breed_origin || 'India';
+          document.getElementById('detailCowStory').textContent = cow.story || 'A cherished resident enjoying peaceful shelter and natural healthcare at Kamadhenu Goushala.';
+
+          const imgEl = document.getElementById('detailCowImage');
+          imgEl.src = cow.image || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&w=800&q=80';
+          imgEl.alt = cow.name;
+
+          // Arrival date & DOB
+          if (cow.arrival_date) {
+            document.getElementById('detailCowArrival').textContent = new Date(cow.arrival_date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+          }
+          if (cow.dob) {
+            const ageYears = Math.floor((new Date() - new Date(cow.dob)) / (365.25 * 24 * 60 * 60 * 1000));
+            document.getElementById('detailCowAge').textContent = `${ageYears > 0 ? ageYears + ' Years' : 'Calf (< 1 yr)'} (DOB: ${new Date(cow.dob).toLocaleDateString('en-IN')})`;
+          }
+
+          // CTAs
+          document.getElementById('btnAdoptNow').href = `/adopt.html?cow_id=${cow.id}`;
+          document.getElementById('btnFeedNow').href = `/donation.html?seva_id=1&amount=501&message=Feed+seva+for+${encodeURIComponent(cow.name)}`;
+
+        } else {
+          document.getElementById('cowDetailsNotFound').style.display = 'block';
+        }
+      } catch (err) {
+        document.getElementById('cowDetailsLoading').style.display = 'none';
+        document.getElementById('cowDetailsNotFound').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

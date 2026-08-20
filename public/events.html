@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events & Festivals | Kamadhenu Goushala</title>
+  <meta name="description" content="Participate in Gopashtami Mahotsav, Gau Puja workshops, and organic farming seminars at Kamadhenu Goushala.">
+  <link rel="canonical" href="http://localhost:3000/events.html">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-infobar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span><i class="bi bi-telephone-fill"></i> <a href="tel:+919845088990" class="site-phone">+91 98450 88990</a></span>
+        <span><i class="bi bi-envelope-fill"></i> <a href="mailto:info@kamadhenugoushala.org" class="site-email">info@kamadhenugoushala.org</a></span>
+        <span><i class="bi bi-geo-alt-fill"></i> <span class="site-address">Bengaluru, Karnataka, India</span></span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <a href="https://wa.me/919845088990" target="_blank" class="whatsapp-link text-white"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+        <a href="/admin/index.html" class="text-white opacity-75 small"><i class="bi bi-shield-lock"></i> Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">
+          <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+          <div>
+            <div class="fw-bold lh-1" style="font-size: 1.35rem; color: var(--primary-dark);">KAMADHENU</div>
+            <div style="font-size: 0.75rem; letter-spacing: 2px; color: var(--sacred-gold-dark); font-weight: 700;">GOUSHALA</div>
+          </div>
+        </a>
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+          <a href="/donation.html" class="btn btn-gold btn-sm px-3 py-2">DONATE</a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="desktopNav">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+            <li class="nav-item"><a class="nav-link" href="/index.html">HOME</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">ABOUT</a></li>
+            <li class="nav-item"><a class="nav-link" href="/cows.html">OUR COWS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/breeds.html">BREEDS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/seva.html">GAU SEVA</a></li>
+            <li class="nav-item"><a class="nav-link" href="/gallery.html">GALLERY</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products.html">PRODUCTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">BLOG</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/events.html">EVENTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/contact.html">CONTACT</a></li>
+          </ul>
+          <a href="/donation.html" class="btn btn-gold"><i class="bi bi-heart-fill"></i> DONATE NOW</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Banner -->
+  <section class="py-5" style="background: var(--green-gradient); color: white;">
+    <div class="container py-4 text-center">
+      <span class="badge bg-warning text-dark px-3 py-2 fw-bold mb-2">Sacred Gatherings</span>
+      <h1 class="display-5 fw-bold text-white mb-2">Sanctuary Events & Celebrations</h1>
+      <p class="lead text-white-50 mx-auto" style="max-width: 650px;">
+        Join us in spiritual celebrations, Gopashtami Mahotsav, and interactive workshops on natural organic farming.
+      </p>
+    </div>
+  </section>
+
+  <!-- Events List Section -->
+  <section class="section-padding">
+    <div class="container">
+      
+      <!-- Upcoming Events -->
+      <div class="mb-5">
+        <h3 class="fw-bold text-forest mb-4 border-bottom pb-2">
+          <i class="bi bi-calendar-check text-warning me-2"></i> Upcoming Events
+        </h3>
+        <div class="row g-4" id="upcomingEventsContainer">
+          <div class="col-12 text-center py-4">
+            <div class="spinner-border text-forest" role="status"></div>
+            <p class="mt-2 text-muted">Loading upcoming events...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Past Events -->
+      <div>
+        <h4 class="fw-bold text-muted mb-4 border-bottom pb-2">
+          <i class="bi bi-clock-history me-2"></i> Past Celebrations
+        </h4>
+        <div class="row g-4" id="pastEventsContainer">
+          <!-- Loaded via API -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+            <span class="fs-4 fw-bold text-white">KAMADHENU GOUSHALA</span>
+          </div>
+          <p class="small text-white-50 mb-3">
+            Dedicated to the protection, preservation, and ethical healthcare of sacred indigenous cows.
+          </p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Pages</h5>
+          <ul class="footer-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/cows.html">Our Cows</a></li>
+            <li><a href="/breeds.html">Breeds</a></li>
+            <li><a href="/seva.html">Gau Seva</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Involvement</h5>
+          <ul class="footer-links">
+            <li><a href="/donation.html">Donate</a></li>
+            <li><a href="/adopt.html">Adopt a Cow</a></li>
+            <li><a href="/products.html">Organic Store</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5 class="footer-title">Sanctuary Address</h5>
+          <p class="small text-white-50 mb-2 site-address">Survey No. 48/2, Kanakapura Road, Bengaluru 560082</p>
+          <p class="small text-white-50 mb-3">Phone: <span class="site-phone">+91 98450 88990</span></p>
+        </div>
+      </div>
+      <div class="footer-bottom text-center">
+        <p class="mb-0">© 2026 Kamadhenu Goushala Trust. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await API.get('/events');
+        const upcomingContainer = document.getElementById('upcomingEventsContainer');
+        const pastContainer = document.getElementById('pastEventsContainer');
+
+        if (res && res.data) {
+          const upcoming = res.data.filter(e => e.status === 'Upcoming');
+          const past = res.data.filter(e => e.status === 'Completed' || e.status === 'Cancelled');
+
+          if (upcoming.length > 0) {
+            upcomingContainer.innerHTML = upcoming.map(e => {
+              const d = new Date(e.event_date);
+              const day = d.getDate();
+              const month = d.toLocaleString('en-IN', { month: 'short' });
+
+              return `
+                <div class="col-lg-6">
+                  <div class="event-card">
+                    <div class="event-date-badge">
+                      <div class="event-day">${day}</div>
+                      <div class="event-month">${month}</div>
+                    </div>
+                    <div style="flex: 1;">
+                      <h5 class="fw-bold text-forest mb-1">${e.title}</h5>
+                      <div class="small text-muted mb-2">
+                        <i class="bi bi-clock me-1 text-warning"></i> ${e.start_time ? e.start_time.slice(0,5) : '09:00'} - ${e.end_time ? e.end_time.slice(0,5) : '13:00'}
+                        • <i class="bi bi-geo-alt me-1 text-danger"></i> ${e.location}
+                      </div>
+                      <p class="small text-muted mb-3">${e.description || ''}</p>
+                      <a href="/contact.html?subject=${encodeURIComponent('Registration for ' + e.title)}" class="btn btn-sm btn-outline-gold">
+                        Register / Volunteer
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          } else {
+            upcomingContainer.innerHTML = `<div class="col-12 text-muted text-center py-4">No upcoming events scheduled at this moment.</div>`;
+          }
+
+          if (past.length > 0) {
+            pastContainer.innerHTML = past.map(e => `
+              <div class="col-md-6 col-lg-4">
+                <div class="p-3 bg-white rounded-3 border h-100 opacity-75">
+                  <span class="badge bg-secondary mb-2">${e.status}</span>
+                  <h6 class="fw-bold mb-1">${e.title}</h6>
+                  <small class="text-muted d-block mb-2"><i class="bi bi-calendar3 me-1"></i> ${new Date(e.event_date).toLocaleDateString('en-IN')}</small>
+                  <p class="small text-muted mb-0">${e.description || ''}</p>
+                </div>
+              </div>
+            `).join('');
+          } else {
+            pastContainer.innerHTML = `<div class="col-12 text-muted">No past events recorded.</div>`;
+          }
+        }
+      } catch (e) {
+        document.getElementById('upcomingEventsContainer').innerHTML = `<div class="col-12 text-center text-danger py-4">Failed to load events.</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

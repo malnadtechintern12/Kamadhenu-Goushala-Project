@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adopt & Sponsor a Cow | Kamadhenu Goushala</title>
+  <meta name="description" content="Sponsor or adopt a sacred indigenous cow at Kamadhenu Goushala. Choose 1, 3, 6, or 12 months sponsorship packages.">
+  <link rel="canonical" href="http://localhost:3000/adopt.html">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-infobar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span><i class="bi bi-telephone-fill"></i> <a href="tel:+919845088990" class="site-phone">+91 98450 88990</a></span>
+        <span><i class="bi bi-envelope-fill"></i> <a href="mailto:info@kamadhenugoushala.org" class="site-email">info@kamadhenugoushala.org</a></span>
+        <span><i class="bi bi-geo-alt-fill"></i> <span class="site-address">Bengaluru, Karnataka, India</span></span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <a href="https://wa.me/919845088990" target="_blank" class="whatsapp-link text-white"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+        <a href="/admin/index.html" class="text-white opacity-75 small"><i class="bi bi-shield-lock"></i> Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">
+          <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+          <div>
+            <div class="fw-bold lh-1" style="font-size: 1.35rem; color: var(--primary-dark);">KAMADHENU</div>
+            <div style="font-size: 0.75rem; letter-spacing: 2px; color: var(--sacred-gold-dark); font-weight: 700;">GOUSHALA</div>
+          </div>
+        </a>
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+          <a href="/donation.html" class="btn btn-gold btn-sm px-3 py-2">DONATE</a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="desktopNav">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+            <li class="nav-item"><a class="nav-link" href="/index.html">HOME</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">ABOUT</a></li>
+            <li class="nav-item"><a class="nav-link" href="/cows.html">OUR COWS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/breeds.html">BREEDS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/seva.html">GAU SEVA</a></li>
+            <li class="nav-item"><a class="nav-link" href="/gallery.html">GALLERY</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products.html">PRODUCTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">BLOG</a></li>
+            <li class="nav-item"><a class="nav-link" href="/events.html">EVENTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/contact.html">CONTACT</a></li>
+          </ul>
+          <a href="/donation.html" class="btn btn-gold"><i class="bi bi-heart-fill"></i> DONATE NOW</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Banner -->
+  <section class="py-5" style="background: var(--green-gradient); color: white;">
+    <div class="container py-4 text-center">
+      <span class="badge bg-warning text-dark px-3 py-2 fw-bold mb-2">Sacred Guardian Program</span>
+      <h1 class="display-5 fw-bold text-white mb-2">Adopt & Sponsor a Gau Mata</h1>
+      <p class="lead text-white-50 mx-auto" style="max-width: 650px;">
+        Become a loving guardian for one of our resident cows. Receive monthly photographs, health updates, and Vedic blessings in your family's name.
+      </p>
+    </div>
+  </section>
+
+  <!-- Adoption Form -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <div class="p-4 p-md-5 bg-white rounded-4 shadow-lg border">
+            
+            <form id="adoptionForm">
+              
+              <!-- 1. Cow Selection -->
+              <div class="mb-4">
+                <label class="form-label fw-bold fs-5 text-forest">1. Choose Cow to Sponsor *</label>
+                <select id="adoptCowSelect" class="form-select form-select-lg" required>
+                  <option value="">Select a Resident Cow...</option>
+                  <!-- Populated dynamically -->
+                </select>
+                <div class="form-text">All cows in our sanctuary receive equal care; your sponsorship directly funds their nutrition and medicine.</div>
+              </div>
+
+              <!-- 2. Sponsorship Duration -->
+              <div class="mb-4">
+                <label class="form-label fw-bold fs-5 text-forest">2. Select Sponsorship Duration *</label>
+                <div class="row g-3" id="durationOptions">
+                  <div class="col-sm-6 col-md-3">
+                    <div class="p-3 bg-light rounded-3 border text-center duration-card cursor-pointer" data-months="1" data-amount="2500" style="cursor: pointer;">
+                      <h6 class="fw-bold mb-1">1 Month</h6>
+                      <div class="fs-5 fw-bold text-forest">₹2,500</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-3">
+                    <div class="p-3 bg-light rounded-3 border text-center duration-card active" data-months="3" data-amount="7500" style="cursor: pointer; border-color: var(--sacred-gold) !important; background: #FAF5E8 !important;">
+                      <h6 class="fw-bold mb-1">3 Months</h6>
+                      <div class="fs-5 fw-bold text-forest">₹7,500</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-3">
+                    <div class="p-3 bg-light rounded-3 border text-center duration-card" data-months="6" data-amount="15000" style="cursor: pointer;">
+                      <h6 class="fw-bold mb-1">6 Months</h6>
+                      <div class="fs-5 fw-bold text-forest">₹15,000</div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-3">
+                    <div class="p-3 bg-light rounded-3 border text-center duration-card" data-months="12" data-amount="30000" style="cursor: pointer;">
+                      <h6 class="fw-bold mb-1">12 Months</h6>
+                      <div class="fs-5 fw-bold text-forest">₹30,000</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Sponsor Details -->
+              <h5 class="fw-bold fs-5 text-forest mt-4 mb-3 border-bottom pb-2">3. Sponsor / Guardian Details</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Guardian Full Name *</label>
+                  <input type="text" id="sponsorName" class="form-control py-2" placeholder="e.g. Priya Venkatesh" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Email Address *</label>
+                  <input type="email" id="sponsorEmail" class="form-control py-2" placeholder="priya@example.com" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Phone / WhatsApp</label>
+                  <input type="tel" id="sponsorPhone" class="form-control py-2" placeholder="+91 98450 12345">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">PAN Number (80G Tax Exemption)</label>
+                  <input type="text" id="sponsorPan" class="form-control py-2" placeholder="ABCDE1234F" style="text-transform: uppercase;">
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Postal Address (For Sending Prasadam / Certificates)</label>
+                  <textarea id="sponsorAddress" class="form-control" rows="2" placeholder="Full postal address with pincode"></textarea>
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Special Prayer / Dedication Notes</label>
+                  <textarea id="sponsorNotes" class="form-control" rows="2" placeholder="Any specific sankalpam or blessings..."></textarea>
+                </div>
+              </div>
+
+              <div class="p-3 bg-light rounded-3 border d-flex justify-content-between align-items-center mb-4">
+                <div>
+                  <span class="text-muted small">Total Sponsorship Contribution:</span>
+                  <div class="fs-4 fw-bold text-forest" id="displayAdoptTotal">₹7,500.00</div>
+                </div>
+                <button type="submit" id="btnSubmitAdopt" class="btn btn-gold py-3 px-5 fs-5">
+                  <i class="bi bi-heart-fill me-2"></i> CONFIRM ADOPTION
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+            <span class="fs-4 fw-bold text-white">KAMADHENU GOUSHALA</span>
+          </div>
+          <p class="small text-white-50 mb-3">
+            Dedicated to the protection, preservation, and ethical healthcare of sacred indigenous cows.
+          </p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Pages</h5>
+          <ul class="footer-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/cows.html">Our Cows</a></li>
+            <li><a href="/breeds.html">Breeds</a></li>
+            <li><a href="/seva.html">Gau Seva</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Involvement</h5>
+          <ul class="footer-links">
+            <li><a href="/donation.html">Donate</a></li>
+            <li><a href="/adopt.html">Adopt a Cow</a></li>
+            <li><a href="/products.html">Organic Store</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5 class="footer-title">Sanctuary Address</h5>
+          <p class="small text-white-50 mb-2 site-address">Survey No. 48/2, Kanakapura Road, Bengaluru 560082</p>
+          <p class="small text-white-50 mb-3">Phone: <span class="site-phone">+91 98450 88990</span></p>
+        </div>
+      </div>
+      <div class="footer-bottom text-center">
+        <p class="mb-0">© 2026 Kamadhenu Goushala Trust. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const preselectedCowId = urlParams.get('cow_id');
+
+      let selectedMonths = 3;
+      let selectedAmount = 7500;
+
+      const cowSelect = document.getElementById('adoptCowSelect');
+      const durationCards = document.querySelectorAll('.duration-card');
+      const totalDisplay = document.getElementById('displayAdoptTotal');
+
+      // 1. Fetch Cows
+      try {
+        const cowRes = await API.get('/cows');
+        if (cowRes && cowRes.data) {
+          cowRes.data.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = `${c.name} (${c.tag_number} - ${c.breed_name || 'Desi Breed'})`;
+            if (preselectedCowId && parseInt(preselectedCowId, 10) === c.id) {
+              opt.selected = true;
+            }
+            cowSelect.appendChild(opt);
+          });
+        }
+      } catch (e) {
+        console.warn('Error fetching cows:', e);
+      }
+
+      // 2. Duration Card click
+      durationCards.forEach(card => {
+        card.addEventListener('click', () => {
+          durationCards.forEach(c => {
+            c.classList.remove('active');
+            c.style.borderColor = '#E8E2D5';
+            c.style.background = '#f8f9fa';
+          });
+          card.classList.add('active');
+          card.style.borderColor = 'var(--sacred-gold)';
+          card.style.background = '#FAF5E8';
+
+          selectedMonths = parseInt(card.dataset.months, 10);
+          selectedAmount = parseFloat(card.dataset.amount);
+          totalDisplay.textContent = `₹${selectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+        });
+      });
+
+      // 3. Form Submit
+      const form = document.getElementById('adoptionForm');
+      const btn = document.getElementById('btnSubmitAdopt');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const cowId = cowSelect.value;
+        const name = document.getElementById('sponsorName').value.trim();
+        const email = document.getElementById('sponsorEmail').value.trim();
+        const phone = document.getElementById('sponsorPhone').value.trim();
+        const pan = document.getElementById('sponsorPan').value.trim();
+        const address = document.getElementById('sponsorAddress').value.trim();
+        const notes = document.getElementById('sponsorNotes').value.trim();
+
+        if (!cowId || !name || !email) {
+          showToast('Please select a cow and provide your name and email.', 'error');
+          return;
+        }
+
+        try {
+          btn.disabled = true;
+          btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Recording Adoption...';
+
+          const res = await API.post('/sponsors', {
+            cow_id: cowId,
+            name: name,
+            email: email,
+            phone: phone,
+            pan_number: pan,
+            address: address,
+            duration_months: selectedMonths,
+            amount: selectedAmount,
+            message: notes
+          });
+
+          showToast(res.message || 'Cow adoption registered successfully!');
+          setTimeout(() => {
+            window.location.href = `/donation.html?amount=${selectedAmount}&message=Sponsorship+for+cow`;
+          }, 1500);
+
+        } catch (err) {
+          showToast(err.message || 'Failed to submit adoption request.', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-heart-fill me-2"></i> CONFIRM ADOPTION';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

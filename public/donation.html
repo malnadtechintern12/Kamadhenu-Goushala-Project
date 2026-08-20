@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate for Gau Seva | Kamadhenu Goushala</title>
+  <meta name="description" content="Support Kamadhenu Goushala with your sacred Gau Seva donation. 80G Tax Exemption available.">
+  <link rel="canonical" href="http://localhost:3000/donation.html">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Razorpay Checkout JS -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-infobar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-4">
+        <span><i class="bi bi-telephone-fill"></i> <a href="tel:+919845088990" class="site-phone">+91 98450 88990</a></span>
+        <span><i class="bi bi-envelope-fill"></i> <a href="mailto:info@kamadhenugoushala.org" class="site-email">info@kamadhenugoushala.org</a></span>
+        <span><i class="bi bi-geo-alt-fill"></i> <span class="site-address">Bengaluru, Karnataka, India</span></span>
+      </div>
+      <div class="d-flex gap-3 align-items-center">
+        <a href="https://wa.me/919845088990" target="_blank" class="whatsapp-link text-white"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+        <a href="/admin/index.html" class="text-white opacity-75 small"><i class="bi bi-shield-lock"></i> Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/index.html">
+          <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+          <div>
+            <div class="fw-bold lh-1" style="font-size: 1.35rem; color: var(--primary-dark);">KAMADHENU</div>
+            <div style="font-size: 0.75rem; letter-spacing: 2px; color: var(--sacred-gold-dark); font-weight: 700;">GOUSHALA</div>
+          </div>
+        </a>
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+          <a href="/donation.html" class="btn btn-gold btn-sm px-3 py-2 active">DONATE</a>
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="desktopNav">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+            <li class="nav-item"><a class="nav-link" href="/index.html">HOME</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">ABOUT</a></li>
+            <li class="nav-item"><a class="nav-link" href="/cows.html">OUR COWS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/breeds.html">BREEDS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/seva.html">GAU SEVA</a></li>
+            <li class="nav-item"><a class="nav-link" href="/gallery.html">GALLERY</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products.html">PRODUCTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">BLOG</a></li>
+            <li class="nav-item"><a class="nav-link" href="/events.html">EVENTS</a></li>
+            <li class="nav-item"><a class="nav-link" href="/contact.html">CONTACT</a></li>
+          </ul>
+          <a href="/donation.html" class="btn btn-gold"><i class="bi bi-heart-fill"></i> DONATE NOW</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Banner -->
+  <section class="py-5" style="background: var(--green-gradient); color: white;">
+    <div class="container py-4 text-center">
+      <span class="badge bg-warning text-dark px-3 py-2 fw-bold mb-2">Sacred Donation Portal</span>
+      <h1 class="display-5 fw-bold text-white mb-2">Support Gau Mata With Your Generosity</h1>
+      <p class="lead text-white-50 mx-auto" style="max-width: 650px;">
+        Every rupee you contribute provides nutritious green fodder, 24x7 veterinary medicine, and secure shelter for 500+ indigenous cows.
+      </p>
+    </div>
+  </section>
+
+  <!-- Donation Form & Trust Details Section -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="row g-5">
+        
+        <!-- Left Column: Interactive Donation Form -->
+        <div class="col-lg-7">
+          <div class="donation-box-card">
+            <h3 class="fw-bold text-forest mb-4">
+              <i class="bi bi-heart-fill text-warning me-2"></i> Choose Your Contribution
+            </h3>
+
+            <form id="donationForm">
+              
+              <!-- 1. Preset Amount Selector -->
+              <div class="mb-4">
+                <label class="form-label fw-bold">Select Donation Amount (₹)</label>
+                <div class="row g-2">
+                  <div class="col-4 col-sm-2">
+                    <button type="button" class="preset-amount-btn" data-amount="501">₹501</button>
+                  </div>
+                  <div class="col-4 col-sm-2">
+                    <button type="button" class="preset-amount-btn active" data-amount="1001">₹1,001</button>
+                  </div>
+                  <div class="col-4 col-sm-2">
+                    <button type="button" class="preset-amount-btn" data-amount="2501">₹2,501</button>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <button type="button" class="preset-amount-btn" data-amount="5001">₹5,001</button>
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <button type="button" class="preset-amount-btn" data-amount="10001">₹10,001</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Custom Amount -->
+              <div class="mb-4">
+                <label class="form-label fw-bold">Or Enter Custom Amount (INR)</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light fw-bold">₹</span>
+                  <input type="number" id="customAmountInput" class="form-control form-control-lg fw-bold" placeholder="1001" min="1" value="1001" required>
+                </div>
+              </div>
+
+              <!-- 2. Seva Type -->
+              <div class="mb-4">
+                <label class="form-label fw-bold">Select Seva Purpose</label>
+                <select id="sevaSelect" class="form-select form-select-lg">
+                  <option value="">General Gau Seva (Where Most Needed)</option>
+                  <!-- Populated from API -->
+                </select>
+              </div>
+
+              <!-- 3. Donor Personal Details -->
+              <h5 class="fw-bold text-forest mt-4 mb-3 border-bottom pb-2">Donor Information</h5>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Full Name *</label>
+                  <input type="text" id="donorName" class="form-control py-2" placeholder="e.g. Ramesh Chandra" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Email Address *</label>
+                  <input type="email" id="donorEmail" class="form-control py-2" placeholder="name@example.com" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Phone / WhatsApp Number</label>
+                  <input type="tel" id="donorPhone" class="form-control py-2" placeholder="+91 98765 43210">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">PAN Number <small class="text-muted">(For 80G Tax Exemption)</small></label>
+                  <input type="text" id="donorPan" class="form-control py-2" placeholder="ABCDE1234F" maxlength="10" style="text-transform: uppercase;">
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Special Prayer / Sankalpam / Dedication</label>
+                  <textarea id="donorMessage" class="form-control" rows="2" placeholder="e.g. On the occasion of my daughter's birthday / In memory of late parents..."></textarea>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="mt-4">
+                <button type="submit" id="btnSubmitDonation" class="btn btn-gold py-3 w-100 fs-5">
+                  <i class="bi bi-shield-lock-fill me-2"></i> PROCEED TO SECURE DONATION
+                </button>
+                <div class="text-center mt-2 small text-muted">
+                  <i class="bi bi-lock-fill text-success"></i> 256-Bit SSL Encrypted & Secure Payment Gateway
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column: Bank Details, UPI & 80G Info -->
+        <div class="col-lg-5">
+          
+          <!-- Direct UPI Card -->
+          <div class="p-4 bg-white rounded-4 shadow-sm border mb-4">
+            <h5 class="fw-bold text-forest mb-3"><i class="bi bi-qr-code text-warning me-2"></i> Direct UPI & QR Code</h5>
+            <p class="small text-muted mb-3">You can also donate directly using Google Pay, PhonePe, Paytm, or any BHIM UPI app.</p>
+            <div class="p-3 rounded-3 bg-light text-center border mb-3">
+              <div class="small text-muted mb-1">Official Trust UPI ID</div>
+              <div class="fs-5 fw-bold text-forest site-upi">kamadhenu@sbi</div>
+            </div>
+            <div class="small text-muted text-center">
+              Account Name: <strong class="text-dark">Kamadhenu Goushala Seva Trust</strong>
+            </div>
+          </div>
+
+          <!-- Direct Bank Transfer -->
+          <div class="p-4 bg-white rounded-4 shadow-sm border mb-4">
+            <h5 class="fw-bold text-forest mb-3"><i class="bi bi-bank2 text-warning me-2"></i> Direct Bank Transfer (NEFT / RTGS)</h5>
+            <ul class="list-unstyled small mb-0 text-muted d-flex flex-column gap-2">
+              <li><strong>Account Name:</strong> Kamadhenu Goushala Seva Trust</li>
+              <li><strong>Bank Name:</strong> State Bank of India</li>
+              <li><strong>Account Number:</strong> 3899010045678</li>
+              <li><strong>IFSC Code:</strong> SBIN0040123</li>
+              <li><strong>Branch:</strong> Kanakapura Road, Bengaluru</li>
+              <li><strong>Account Type:</strong> Current Account</li>
+            </ul>
+          </div>
+
+          <!-- 80G Tax Exemption Card -->
+          <div class="p-4 rounded-4 shadow-sm border" style="background: #FAF5E8; border-color: var(--sacred-gold) !important;">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <i class="bi bi-patch-check-fill text-warning fs-3"></i>
+              <h5 class="fw-bold text-forest mb-0">80G Tax Exemption</h5>
+            </div>
+            <p class="small text-muted mb-0">
+              Kamadhenu Goushala is registered under Section 80G of the Income Tax Act (Reg: AAATK1234PF20214). Indian citizens paying tax in India are entitled to claim 50% deduction of donation amount from taxable income.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instant 80G Receipt Modal -->
+  <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="modal-header bg-forest text-white p-4">
+          <div class="d-flex align-items-center gap-3">
+            <div class="brand-icon"><i class="bi bi-patch-check-fill text-warning"></i></div>
+            <div>
+              <h5 class="modal-title fw-bold mb-0">Official Donation Receipt</h5>
+              <small class="text-white-50">Kamadhenu Goushala Seva Trust (80G Tax Exempt)</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4 p-md-5" id="printableReceiptContent">
+          
+          <div class="text-center border-bottom pb-4 mb-4">
+            <h3 class="fw-bold text-forest mb-1">KAMADHENU GOUSHALA SEVA TRUST</h3>
+            <p class="small text-muted mb-1 site-address">Survey No. 48/2, Kanakapura Road, Bengaluru, Karnataka 560082</p>
+            <p class="small text-muted mb-0">Registered Under Sec 80G (Reg. No: AAATK1234PF20214)</p>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+              <div class="small text-muted">Receipt / Donation No:</div>
+              <div class="fw-bold fs-6 text-forest" id="rcptNumber">DON-2026-001</div>
+            </div>
+            <div class="col-sm-6 text-sm-end">
+              <div class="small text-muted">Date & Time:</div>
+              <div class="fw-bold fs-6" id="rcptDate">20 Aug 2026</div>
+            </div>
+            <div class="col-sm-6">
+              <div class="small text-muted">Received With Thanks From:</div>
+              <div class="fw-bold fs-5 text-dark" id="rcptDonorName">Ramesh Kumar</div>
+              <div class="small text-muted" id="rcptDonorEmail">ramesh@example.com</div>
+            </div>
+            <div class="col-sm-6 text-sm-end">
+              <div class="small text-muted">Seva Purpose:</div>
+              <div class="fw-bold fs-6 text-forest" id="rcptSevaName">Feed a Cow for a Day</div>
+              <div class="small text-muted" id="rcptPaymentId">Payment ID: PAY_12345</div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 border d-flex justify-content-between align-items-center mb-4">
+            <span class="fs-5 fw-bold text-muted">Total Amount Donated:</span>
+            <span class="fs-3 fw-bold text-success" id="rcptAmount">₹1,001.00</span>
+          </div>
+
+          <div class="border-top pt-3 text-center small text-muted">
+            <p class="mb-1">"May Sri Kamadhenu Mata shower peace, health, and prosperity upon your noble family."</p>
+            <small>This is a computer-generated receipt valid for 80G tax claims.</small>
+          </div>
+
+        </div>
+        <div class="modal-footer border-top bg-light d-flex justify-content-between p-3">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-forest px-4" onclick="window.print()">
+            <i class="bi bi-printer-fill me-2"></i> Print / Save PDF Receipt
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+            <span class="fs-4 fw-bold text-white">KAMADHENU GOUSHALA</span>
+          </div>
+          <p class="small text-white-50 mb-3">
+            Dedicated to the protection, preservation, and ethical healthcare of sacred indigenous cows.
+          </p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Pages</h5>
+          <ul class="footer-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/cows.html">Our Cows</a></li>
+            <li><a href="/breeds.html">Breeds</a></li>
+            <li><a href="/seva.html">Gau Seva</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-title">Involvement</h5>
+          <ul class="footer-links">
+            <li><a href="/donation.html">Donate</a></li>
+            <li><a href="/adopt.html">Adopt a Cow</a></li>
+            <li><a href="/products.html">Organic Store</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h5 class="footer-title">Sanctuary Address</h5>
+          <p class="small text-white-50 mb-2 site-address">Survey No. 48/2, Kanakapura Road, Bengaluru 560082</p>
+          <p class="small text-white-50 mb-3">Phone: <span class="site-phone">+91 98450 88990</span></p>
+        </div>
+      </div>
+      <div class="footer-bottom text-center">
+        <p class="mb-0">© 2026 Kamadhenu Goushala Trust. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlSevaId = urlParams.get('seva_id');
+      const urlAmount = urlParams.get('amount');
+      const urlMsg = urlParams.get('message');
+
+      const amountInput = document.getElementById('customAmountInput');
+      const sevaSelect = document.getElementById('sevaSelect');
+      const presetBtns = document.querySelectorAll('.preset-amount-btn');
+
+      // Populate Seva Dropdown
+      try {
+        const sevaRes = await API.get('/seva');
+        if (sevaRes && sevaRes.data) {
+          sevaRes.data.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = `${s.title} (Suggested: ₹${parseFloat(s.suggested_amount).toLocaleString('en-IN')})`;
+            opt.dataset.suggested = s.suggested_amount;
+            if (urlSevaId && parseInt(urlSevaId, 10) === s.id) {
+              opt.selected = true;
+            }
+            sevaSelect.appendChild(opt);
+          });
+        }
+      } catch (e) {
+        console.warn('Error fetching seva types:', e);
+      }
+
+      // Handle Preset amount clicks
+      presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          presetBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          amountInput.value = btn.dataset.amount;
+        });
+      });
+
+      amountInput.addEventListener('input', () => {
+        presetBtns.forEach(b => {
+          if (b.dataset.amount === amountInput.value) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+      });
+
+      if (urlAmount) {
+        amountInput.value = urlAmount;
+        presetBtns.forEach(b => {
+          if (b.dataset.amount === urlAmount) b.classList.add('active');
+          else b.classList.remove('active');
+        });
+      }
+
+      if (urlMsg) {
+        document.getElementById('donorMessage').value = decodeURIComponent(urlMsg);
+      }
+
+      // Handle Seva change to update suggested amount
+      sevaSelect.addEventListener('change', () => {
+        const selectedOpt = sevaSelect.options[sevaSelect.selectedIndex];
+        if (selectedOpt && selectedOpt.dataset.suggested) {
+          amountInput.value = selectedOpt.dataset.suggested;
+          presetBtns.forEach(b => {
+            if (b.dataset.amount === selectedOpt.dataset.suggested) b.classList.add('active');
+            else b.classList.remove('active');
+          });
+        }
+      });
+
+      // Submit Donation Form
+      const donationForm = document.getElementById('donationForm');
+      const submitBtn = document.getElementById('btnSubmitDonation');
+
+      donationForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const amount = parseFloat(amountInput.value);
+        const name = document.getElementById('donorName').value.trim();
+        const email = document.getElementById('donorEmail').value.trim();
+        const phone = document.getElementById('donorPhone').value.trim();
+        const pan = document.getElementById('donorPan').value.trim();
+        const message = document.getElementById('donorMessage').value.trim();
+        const selectedSeva = sevaSelect.options[sevaSelect.selectedIndex];
+        const sevaId = sevaSelect.value || null;
+        const sevaName = selectedSeva ? selectedSeva.text.split('(')[0].trim() : 'General Gau Seva';
+
+        if (!name || !email || isNaN(amount) || amount < 1) {
+          showToast('Please provide your name, email, and valid donation amount.', 'error');
+          return;
+        }
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Initiating Secure Payment...';
+
+          // 1. Create order on backend
+          const orderRes = await API.post('/donations/create-order', {
+            donor_name: name,
+            donor_email: email,
+            donor_phone: phone,
+            pan_number: pan,
+            amount: amount,
+            seva_id: sevaId,
+            seva_name: sevaName,
+            message: message
+          });
+
+          if (!orderRes || !orderRes.success) {
+            throw new Error(orderRes.message || 'Failed to create donation order.');
+          }
+
+          // 2. If Razorpay Key is provided and not in dev simulation mode, launch Razorpay Checkout
+          if (orderRes.razorpay_key_id && !orderRes.is_development) {
+            const options = {
+              key: orderRes.razorpay_key_id,
+              amount: Math.round(amount * 100),
+              currency: 'INR',
+              name: 'Kamadhenu Goushala Trust',
+              description: `Gau Seva - ${sevaName}`,
+              image: 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&w=200&q=80',
+              order_id: orderRes.razorpay_order_id,
+              prefill: {
+                name: name,
+                email: email,
+                contact: phone
+              },
+              theme: {
+                color: '#173B2A'
+              },
+              handler: async function (response) {
+                // Verify payment on backend
+                await verifyAndShowReceipt({
+                  donation_number: orderRes.donation_number,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                });
+              }
+            };
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (resp) {
+              showToast(`Payment failed: ${resp.error.description}`, 'error');
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> PROCEED TO SECURE DONATION';
+            });
+            rzp.open();
+          } else {
+            // Development / Simulation Mode
+            showToast('Simulating secure payment in development mode...', 'info');
+            setTimeout(async () => {
+              await verifyAndShowReceipt({
+                donation_number: orderRes.donation_number,
+                razorpay_order_id: orderRes.razorpay_order_id,
+                razorpay_payment_id: 'PAY_DEV_' + Date.now(),
+                is_dev_simulation: true
+              });
+            }, 1200);
+          }
+
+        } catch (err) {
+          showToast(err.message || 'Donation initialization error.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> PROCEED TO SECURE DONATION';
+        }
+      });
+
+      async function verifyAndShowReceipt(payload) {
+        try {
+          const verifyRes = await API.post('/donations/verify', payload);
+          if (verifyRes && verifyRes.success && verifyRes.receipt) {
+            const r = verifyRes.receipt;
+            document.getElementById('rcptNumber').textContent = r.donation_number;
+            document.getElementById('rcptDate').textContent = new Date(r.date).toLocaleString('en-IN');
+            document.getElementById('rcptDonorName').textContent = r.donor_name;
+            document.getElementById('rcptDonorEmail').textContent = r.donor_email;
+            document.getElementById('rcptSevaName').textContent = r.seva_name;
+            document.getElementById('rcptPaymentId').textContent = `Payment Ref: ${r.payment_id}`;
+            document.getElementById('rcptAmount').textContent = `₹${parseFloat(r.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+
+            // Show Receipt Modal
+            const modalEl = new bootstrap.Modal(document.getElementById('receiptModal'));
+            modalEl.show();
+
+            donationForm.reset();
+            showToast('Donation successful! Official 80G receipt generated.');
+          } else {
+            showToast(verifyRes.message || 'Payment verification error.', 'error');
+          }
+        } catch (err) {
+          showToast(err.message || 'Verification error.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="bi bi-shield-lock-fill me-2"></i> PROCEED TO SECURE DONATION';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

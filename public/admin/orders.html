@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders Management | Admin Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="sidebar-brand">
+        <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+        <div>
+          <div class="fw-bold fs-6">KAMADHENU</div>
+          <small class="text-gold" style="font-size: 0.7rem; letter-spacing: 1px;">GOUSHALA ADMIN</small>
+        </div>
+      </a>
+      <div class="sidebar-heading">DASHBOARD</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      </ul>
+      <div class="sidebar-heading">GOUSHALA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/cows.html" class="sidebar-link"><i class="bi bi-heart"></i> Resident Cows</a></li>
+        <li><a href="/admin/breeds.html" class="sidebar-link"><i class="bi bi-bookmark-star"></i> Indigenous Breeds</a></li>
+        <li><a href="/admin/seva.html" class="sidebar-link"><i class="bi bi-flower1"></i> Seva Packages</a></li>
+        <li><a href="/admin/testimonials.html" class="sidebar-link"><i class="bi bi-chat-quote"></i> Testimonials</a></li>
+        <li><a href="/admin/timeline.html" class="sidebar-link"><i class="bi bi-hourglass-split"></i> Journey / Timeline</a></li>
+      </ul>
+      <div class="sidebar-heading">DONATIONS & SPONSORS</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/donations.html" class="sidebar-link"><i class="bi bi-cash-stack"></i> All Donations</a></li>
+        <li><a href="/admin/sponsors.html" class="sidebar-link"><i class="bi bi-award"></i> Sponsors & Adoptions</a></li>
+      </ul>
+      <div class="sidebar-heading">COMMERCE</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/products.html" class="sidebar-link"><i class="bi bi-box-seam"></i> Products & Store</a></li>
+        <li><a href="/admin/orders.html" class="sidebar-link active"><i class="bi bi-cart-check"></i> Orders Management</a></li>
+      </ul>
+      <div class="sidebar-heading">CONTENT & MEDIA</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/blogs.html" class="sidebar-link"><i class="bi bi-journal-text"></i> Vedic Blogs</a></li>
+        <li><a href="/admin/events.html" class="sidebar-link"><i class="bi bi-calendar-event"></i> Events & Festivals</a></li>
+        <li><a href="/admin/gallery.html" class="sidebar-link"><i class="bi bi-images"></i> Photo Gallery</a></li>
+      </ul>
+      <div class="sidebar-heading">COMMUNICATION</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/messages.html" class="sidebar-link"><i class="bi bi-envelope"></i> Contact Messages</a></li>
+        <li><a href="/admin/newsletter.html" class="sidebar-link"><i class="bi bi-send"></i> Newsletter Subscribers</a></li>
+      </ul>
+      <div class="sidebar-heading">SETTINGS</div>
+      <ul class="sidebar-menu mb-4">
+        <li><a href="/admin/settings.html" class="sidebar-link"><i class="bi bi-gear"></i> Website Settings</a></li>
+        <li><a href="/admin/profile.html" class="sidebar-link"><i class="bi bi-person-circle"></i> Admin Profile</a></li>
+        <li><a href="#" class="sidebar-link btn-admin-logout text-danger"><i class="bi bi-box-arrow-right text-danger"></i> Logout</a></li>
+      </ul>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-navbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggleBtn"><i class="bi bi-list fs-5"></i></button>
+          <h4 class="fw-bold mb-0 text-forest">Organic Products Orders</h4>
+        </div>
+      </header>
+
+      <main class="p-4">
+        <div class="admin-card">
+          <div class="table-responsive">
+            <table class="table table-custom">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Contact</th>
+                  <th>Total Amount</th>
+                  <th>Payment</th>
+                  <th>Order Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr><td colspan="8" class="text-center text-muted py-4">Loading customer orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Order Details & Status Modal -->
+  <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header bg-forest text-white">
+          <h5 class="modal-title fw-bold" id="orderModalTitle">Order Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4" id="orderModalBody">
+          <!-- Loaded dynamically -->
+        </div>
+        <div class="modal-footer bg-light border-top">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/admin/js/admin.js"></script>
+  <script>
+    const orderModal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      async function loadOrders() {
+        const tbody = document.getElementById('ordersTableBody');
+        try {
+          const res = await API.get('/admin/orders');
+          if (res && res.data) {
+            tbody.innerHTML = res.data.map(o => `
+              <tr>
+                <td><span class="fw-bold small">${o.order_number}</span></td>
+                <td><div class="fw-bold">${o.customer_name}</div></td>
+                <td><small>${o.customer_phone}<br>${o.customer_email}</small></td>
+                <td><span class="fw-bold text-forest fs-6">₹${parseFloat(o.total_amount).toFixed(2)}</span></td>
+                <td><span class="badge-status badge-${o.payment_status.toLowerCase()}">${o.payment_status}</span></td>
+                <td><span class="badge-status badge-${o.order_status.toLowerCase()}">${o.order_status}</span></td>
+                <td><small class="text-muted">${new Date(o.created_at).toLocaleDateString('en-IN')}</small></td>
+                <td>
+                  <button class="btn btn-sm btn-outline-forest" onclick="viewOrderDetails(${o.id})">
+                    <i class="bi bi-eye"></i> Manage
+                  </button>
+                </td>
+              </tr>
+            `).join('');
+          }
+        } catch (e) {
+          tbody.innerHTML = `<tr><td colspan="8" class="text-danger text-center">Failed to load orders.</td></tr>`;
+        }
+      }
+
+      loadOrders();
+
+      window.viewOrderDetails = async (id) => {
+        try {
+          const res = await API.get(`/admin/orders/${id}`);
+          if (res && res.data) {
+            const o = res.data;
+            document.getElementById('orderModalTitle').textContent = `Order: ${o.order_number}`;
+            
+            let itemsHtml = '<table class="table table-sm border mt-3"><thead><tr class="bg-light"><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead><tbody>';
+            if (o.items) {
+              o.items.forEach(it => {
+                itemsHtml += `<tr><td>${it.product_name}</td><td>₹${parseFloat(it.unit_price).toFixed(2)}</td><td>${it.quantity}</td><td>₹${parseFloat(it.subtotal).toFixed(2)}</td></tr>`;
+              });
+            }
+            itemsHtml += `</tbody></table>`;
+
+            document.getElementById('orderModalBody').innerHTML = `
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <div class="small text-muted">Customer Name:</div>
+                  <div class="fw-bold">${o.customer_name}</div>
+                  <div class="small text-muted">${o.customer_email} • ${o.customer_phone}</div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="small text-muted">Shipping Address:</div>
+                  <div class="fw-semibold small">${o.shipping_address}</div>
+                </div>
+                <div class="col-12">
+                  <h6 class="fw-bold text-forest mt-2 mb-1">Purchased Products:</h6>
+                  ${itemsHtml}
+                  <div class="text-end fw-bold fs-5 text-forest">Total: ₹${parseFloat(o.total_amount).toFixed(2)}</div>
+                </div>
+                <hr>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small">Update Order Status</label>
+                  <select id="updateOrderStatus" class="form-select">
+                    <option value="Pending" ${o.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
+                    <option value="Confirmed" ${o.order_status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                    <option value="Processing" ${o.order_status === 'Processing' ? 'selected' : ''}>Processing</option>
+                    <option value="Shipped" ${o.order_status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                    <option value="Delivered" ${o.order_status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                    <option value="Cancelled" ${o.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold small">Update Payment Status</label>
+                  <select id="updatePaymentStatus" class="form-select">
+                    <option value="Pending" ${o.payment_status === 'Pending' ? 'selected' : ''}>Pending</option>
+                    <option value="Paid" ${o.payment_status === 'Paid' ? 'selected' : ''}>Paid</option>
+                    <option value="Failed" ${o.payment_status === 'Failed' ? 'selected' : ''}>Failed</option>
+                  </select>
+                </div>
+                <div class="col-12 mt-3 text-end">
+                  <button class="btn btn-gold" onclick="saveOrderStatus(${o.id})">Save Status Updates</button>
+                </div>
+              </div>
+            `;
+            orderModal.show();
+          }
+        } catch (err) {
+          showToast('Failed to retrieve order details.', 'error');
+        }
+      };
+
+      window.saveOrderStatus = async (id) => {
+        const order_status = document.getElementById('updateOrderStatus').value;
+        const payment_status = document.getElementById('updatePaymentStatus').value;
+        try {
+          const res = await API.put(`/admin/orders/${id}/status`, { order_status, payment_status });
+          if (res && res.success) {
+            showToast(res.message);
+            orderModal.hide();
+            loadOrders();
+          }
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      };
+    });
+  </script>
+</body>
+</html>

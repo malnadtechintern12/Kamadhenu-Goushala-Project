@@ -1,0 +1,43 @@
+:root {
+  /* Brand Color Palette */
+  --primary-dark: #173B2A;
+  --forest-green: #28563C;
+  --forest-green-light: #377352;
+  --sacred-gold: #D4A72C;
+  --sacred-gold-light: #F3D068;
+  --sacred-gold-dark: #B3861B;
+  --cream-bg: #FBF7ED;
+  --cream-card: #FFFFFF;
+  --dark-text: #243029;
+  --muted-text: #64746B;
+  --light-border: #E8E2D5;
+  --border-gold: rgba(212, 167, 44, 0.35);
+
+  /* Gradients */
+  --gold-gradient: linear-gradient(135deg, #D4A72C 0%, #F3D068 50%, #D4A72C 100%);
+  --green-gradient: linear-gradient(135deg, #173B2A 0%, #28563C 100%);
+  --hero-overlay: linear-gradient(180deg, rgba(23, 59, 42, 0.75) 0%, rgba(23, 59, 42, 0.9) 100%);
+  --card-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, #FFFFFF 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(23, 59, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(23, 59, 42, 0.08);
+  --shadow-lg: 0 16px 40px rgba(23, 59, 42, 0.12);
+  --shadow-gold: 0 8px 24px rgba(212, 167, 44, 0.25);
+  --shadow-hover: 0 20px 48px rgba(23, 59, 42, 0.15);
+
+  /* Border Radii */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 50px;
+
+  /* Typography */
+  --font-heading: 'Outfit', 'Playfair Display', Georgia, serif;
+  --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Playfair Display', serif;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}

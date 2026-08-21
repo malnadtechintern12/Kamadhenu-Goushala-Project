@@ -135,9 +135,9 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
     // Pass BASE_URL to JavaScript
     const BASE_URL = '<?= $base ?>';
   </script>
-  <script src="<?= $base ?>/assets/js/api.js"></script>
-  <script src="<?= $base ?>/assets/js/cart.js"></script>
-  <script src="<?= $base ?>/assets/js/main.js"></script>
+  <script src="<?= $base ?>/assets/js/api.js?v=<?= time() ?>"></script>
+  <script src="<?= $base ?>/assets/js/cart.js?v=<?= time() ?>"></script>
+  <script src="<?= $base ?>/assets/js/main.js?v=<?= time() ?>"></script>
 
   <!-- Newsletter form handler -->
   <script>

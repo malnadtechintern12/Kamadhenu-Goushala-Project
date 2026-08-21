@@ -18,7 +18,7 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
 ?>
 
   <!-- Footer -->
-  <footer class="site-footer">
+  <footer class="site-footer main-footer">
     <div class="container">
       <div class="row g-4 mb-5">
         <!-- Brand Column -->
@@ -26,15 +26,15 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
           <div class="d-flex align-items-center gap-3 mb-3">
             <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
             <div>
-              <div class="fw-bold fs-5 text-white">KAMADHENU</div>
-              <div style="font-size:.7rem;letter-spacing:3px;color:var(--sacred-gold);">GOUSHALA</div>
+              <div class="fw-bold fs-5 footer-brand-text">KAMADHENU</div>
+              <div class="footer-brand-sub">GOUSHALA</div>
             </div>
           </div>
-          <p class="text-white-50 small mb-3"><?= e($footer_about) ?></p>
+          <p class="footer-text small mb-3"><?= e($footer_about) ?></p>
           <div class="d-flex gap-2 mb-3 flex-wrap">
-            <span class="badge rounded-pill" style="background:rgba(255,255,255,.1);font-size:11px;">🐄 Indigenous Breeds</span>
-            <span class="badge rounded-pill" style="background:rgba(255,255,255,.1);font-size:11px;">🌿 Organic Farm</span>
-            <span class="badge rounded-pill" style="background:rgba(255,255,255,.1);font-size:11px;">🏥 Vet Hospital</span>
+            <span class="badge rounded-pill footer-pill-badge">🐄 Indigenous Breeds</span>
+            <span class="badge rounded-pill footer-pill-badge">🌿 Organic Farm</span>
+            <span class="badge rounded-pill footer-pill-badge">🏥 Vet Hospital</span>
           </div>
           <div class="d-flex gap-2 mb-4">
             <a href="<?= e($fb_url) ?>" target="_blank" rel="noopener" class="social-btn"><i class="bi bi-facebook"></i></a>
@@ -42,9 +42,9 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
             <a href="<?= e($yt_url) ?>" target="_blank" rel="noopener" class="social-btn social-yt"><i class="bi bi-youtube"></i></a>
             <a href="https://wa.me/<?= e($wp_num) ?>" target="_blank" rel="noopener" class="social-btn"><i class="bi bi-whatsapp"></i></a>
           </div>
-          <div class="p-3 rounded-3" style="background:rgba(255,255,255,.05);border:1px dashed var(--sacred-gold);">
-            <div class="fw-bold text-warning small"><i class="bi bi-patch-check-fill me-1"></i> 80G Tax Exemption</div>
-            <div class="small text-white-50 mt-1"><?= e($info_80g) ?></div>
+          <div class="p-3 rounded-3 footer-info-box">
+            <div class="fw-bold footer-box-title small"><i class="bi bi-patch-check-fill me-1"></i> 80G Tax Exemption</div>
+            <div class="small footer-text mt-1"><?= e($info_80g) ?></div>
           </div>
         </div>
 
@@ -77,25 +77,25 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
         <!-- Newsletter & UPI -->
         <div class="col-lg-4">
           <h5 class="footer-title">Newsletter &amp; Direct UPI</h5>
-          <p class="small text-white-50">Subscribe to receive monthly sanctuary updates and Gopashtami festival announcements.</p>
+          <p class="small footer-text">Subscribe to receive monthly sanctuary updates and Gopashtami festival announcements.</p>
           <form class="newsletter-form d-flex gap-2 mb-3" id="footerNewsletterForm">
             <input type="email" class="form-control form-control-sm" id="footerEmail" placeholder="Enter your email" required>
             <button type="submit" class="btn btn-gold btn-sm px-3">Join</button>
           </form>
           <div id="newsletterMsg" class="small mb-3" style="display:none;"></div>
-          <div class="d-flex flex-column gap-2 small text-white-50 mt-3">
-            <div><i class="bi bi-telephone-fill text-warning me-2"></i> <?= e($phone) ?></div>
-            <div><i class="bi bi-envelope-fill text-warning me-2"></i> <?= e($email) ?></div>
+          <div class="d-flex flex-column gap-2 small footer-contact-info mt-3">
+            <div><i class="bi bi-telephone-fill me-2"></i> <?= e($phone) ?></div>
+            <div><i class="bi bi-envelope-fill me-2"></i> <?= e($email) ?></div>
           </div>
-          <div class="p-3 rounded-3 mt-3" style="background:rgba(212,167,44,.1);border:1px solid var(--border-gold);">
-            <div class="fw-bold text-warning small"><i class="bi bi-qr-code me-1"></i> Quick UPI ID</div>
-            <div class="fs-6 fw-bold text-white site-upi"><?= e($upi_id) ?></div>
+          <div class="p-3 rounded-3 mt-3 footer-upi-box">
+            <div class="fw-bold footer-box-title small"><i class="bi bi-qr-code me-1"></i> Quick UPI ID</div>
+            <div class="fs-6 fw-bold site-upi footer-upi-text"><?= e($upi_id) ?></div>
           </div>
         </div>
       </div>
 
       <div class="footer-bottom text-center">
-        <p class="mb-0"><?= e($copyright) ?> Protecting Mother Cow With Pure Devotion.</p>
+        <p class="mb-0 footer-copyright-text"><?= e($copyright) ?> Protecting Mother Cow With Pure Devotion.</p>
       </div>
     </div>
   </footer>

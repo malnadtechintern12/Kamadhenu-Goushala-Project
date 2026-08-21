@@ -1003,17 +1003,94 @@ img {
 }
 
 /* ==========================================================
-   16. FOOTER
+   16. FOOTER (Light Blue Theme)
    ========================================================== */
-.main-footer {
+.main-footer,
+.site-footer {
   background-color: #0E2419;
-  color: #D3E0D8;
+  color: #bfe3f7;
   padding: 70px 0 20px;
-  border-top: 3px solid var(--sacred-gold);
+  border-top: 3px solid #7dd3fc;
+}
+
+.site-footer p,
+.main-footer p,
+.site-footer span,
+.main-footer span,
+.site-footer div,
+.main-footer div {
+  color: inherit;
+}
+
+.site-footer .text-white-50,
+.main-footer .text-white-50 {
+  color: #bfe3f7 !important;
+}
+
+.site-footer .text-white,
+.main-footer .text-white {
+  color: #7dd3fc !important;
+}
+
+.site-footer .text-warning,
+.main-footer .text-warning {
+  color: #7dd3fc !important;
+}
+
+.footer-brand-text {
+  color: #7dd3fc !important;
+}
+
+.footer-brand-sub {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: #bae6fd !important;
+  font-weight: 700;
+}
+
+.footer-text {
+  color: #bfe3f7 !important;
+}
+
+.footer-pill-badge {
+  background: rgba(125, 211, 252, 0.15) !important;
+  color: #bae6fd !important;
+  border: 1px solid rgba(125, 211, 252, 0.3) !important;
+  font-size: 11px;
+}
+
+.footer-info-box {
+  background: rgba(125, 211, 252, 0.06) !important;
+  border: 1px dashed rgba(125, 211, 252, 0.4) !important;
+}
+
+.footer-box-title {
+  color: #7dd3fc !important;
+}
+
+.footer-upi-box {
+  background: rgba(125, 211, 252, 0.08) !important;
+  border: 1px solid rgba(125, 211, 252, 0.35) !important;
+}
+
+.footer-upi-text {
+  color: #7dd3fc !important;
+}
+
+.footer-contact-info {
+  color: #bfe3f7 !important;
+}
+
+.footer-contact-info .bi {
+  color: #7dd3fc !important;
+}
+
+.footer-copyright-text {
+  color: #bfe3f7 !important;
 }
 
 .footer-title {
-  color: #FFFFFF;
+  color: #7dd3fc !important;
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 22px;
@@ -1028,7 +1105,7 @@ img {
   left: 0;
   width: 40px;
   height: 2px;
-  background: var(--sacred-gold);
+  background: #7dd3fc;
 }
 
 .footer-links {
@@ -1041,13 +1118,15 @@ img {
 }
 
 .footer-links a {
-  color: #B5C9BE;
+  color: #bfe3f7 !important;
   font-size: 0.95rem;
+  transition: all var(--transition-fast);
 }
 
 .footer-links a:hover {
-  color: var(--sacred-gold-light);
+  color: #ffffff !important;
   padding-left: 5px;
+  text-shadow: 0 0 8px rgba(125, 211, 252, 0.5);
 }
 
 .social-links {
@@ -1058,18 +1137,19 @@ img {
 .social-btn {
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(125, 211, 252, 0.12);
+  border: 1px solid rgba(125, 211, 252, 0.25);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FFFFFF;
+  color: #7dd3fc;
   font-size: 1.1rem;
   transition: all var(--transition-fast);
 }
 
 .social-btn:hover {
-  background: var(--gold-gradient);
+  background: #7dd3fc;
   color: var(--primary-dark);
   transform: translateY(-3px);
 }
@@ -1077,9 +1157,9 @@ img {
 .footer-bottom {
   margin-top: 50px;
   padding-top: 25px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(125, 211, 252, 0.2);
   font-size: 0.88rem;
-  color: #95ABA0;
+  color: #bfe3f7;
 }
 
 /* ==========================================================

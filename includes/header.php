@@ -11,6 +11,14 @@ $site_name = getSetting('site_name', SITE_NAME);
 $full_title = isset($page_title) ? $page_title . ' | ' . $site_name : $site_name . ' | ' . getSetting('site_tagline', SITE_TAGLINE);
 $meta_desc  = $page_desc ?? getSetting('site_tagline', SITE_TAGLINE);
 $base       = BASE_URL;
+
+// Preload banner image immediately so browser loads it with highest priority
+if (!isset($banner)) {
+    $currPageKey = basename($_SERVER['SCRIPT_NAME'] ?? '', '.php');
+    $currKey = ($currPageKey === 'index' || empty($currPageKey)) ? 'home' : $currPageKey;
+    $banner = getPageBanner($currKey);
+}
+$preloadBannerImage = !empty($banner['banner_image']) ? getImageUrl($banner['banner_image']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +28,15 @@ $base       = BASE_URL;
   <title><?= e($full_title) ?></title>
   <meta name="description" content="<?= e($meta_desc) ?>">
   <link rel="canonical" href="<?= $base . $_SERVER['PHP_SELF'] ?>">
+
+  <!-- High-Priority Instant Image Preload -->
+  <?php if (!empty($preloadBannerImage)): ?>
+    <link rel="preload" as="image" href="<?= e($preloadBannerImage) ?>" fetchpriority="high">
+    <?php if (str_starts_with($preloadBannerImage, 'http')): ?>
+      <link rel="preconnect" href="<?= e(parse_url($preloadBannerImage, PHP_URL_SCHEME) . '://' . parse_url($preloadBannerImage, PHP_URL_HOST)) ?>">
+      <link rel="dns-prefetch" href="<?= e(parse_url($preloadBannerImage, PHP_URL_SCHEME) . '://' . parse_url($preloadBannerImage, PHP_URL_HOST)) ?>">
+    <?php endif; ?>
+  <?php endif; ?>
 
   <!-- Open Graph -->
   <meta property="og:title"       content="<?= e($full_title) ?>">

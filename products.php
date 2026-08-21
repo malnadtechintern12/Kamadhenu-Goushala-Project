@@ -90,11 +90,26 @@ try {
   </script>
 
   <!-- Page Banner -->
+  <?php 
+    $banner = getPageBanner('products');
+    $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
+  ?>
   <section class="page-hero">
-    <div class="container">
-      <div class="hero-badge"><i class="bi bi-bag-check"></i> Natural &amp; Organic</div>
-      <h1 class="hero-title">Organic <span>Products</span></h1>
-      <p class="hero-subtitle">100% natural products crafted from sacred cow resources — vermicompost, Panchagavya, diyas, and herbal formulations.</p>
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Organic Products') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-bag-check"></i> <?= e($banner['badge_text'] ?? 'Natural & Organic') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'Organic <span>Products</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? '100% natural products crafted from sacred cow resources — vermicompost, Panchagavya, diyas, and herbal formulations.') ?></p>
     </div>
   </section>
 

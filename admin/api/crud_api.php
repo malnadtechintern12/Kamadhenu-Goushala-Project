@@ -19,7 +19,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
     $allowedTables = [
         'breeds', 'seva', 'products', 'blogs', 'events', 
         'gallery', 'testimonials', 'timeline', 'sponsors', 
-        'contact_messages', 'newsletter_subscribers', 'orders', 'donations'
+        'contact_messages', 'newsletter_subscribers', 'orders', 'donations', 'page_banners'
     ];
 
     if (!in_array($entity, $allowedTables) || $id <= 0) {
@@ -33,6 +33,22 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
         jsonResponse(true, null, ucfirst($entity) . ' record deleted successfully.');
     } catch (PDOException $e) {
         jsonResponse(false, null, 'Delete failed: ' . $e->getMessage(), 500);
+    }
+}
+
+// 1b. REMOVE BANNER IMAGE ACTION
+if (isset($_GET['action']) && $_GET['action'] === 'remove_banner_image') {
+    $id = intInput($_GET['id'] ?? 0);
+    if ($id <= 0) {
+        jsonResponse(false, null, 'Invalid banner ID.', 400);
+    }
+    try {
+        global $pdo;
+        $stmt = $pdo->prepare("UPDATE page_banners SET banner_image = NULL WHERE id = ?");
+        $stmt->execute([$id]);
+        jsonResponse(true, null, 'Banner image removed successfully. Reset to default background.');
+    } catch (PDOException $e) {
+        jsonResponse(false, null, 'Failed to remove banner image: ' . $e->getMessage(), 500);
     }
 }
 
@@ -304,6 +320,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = $pdo->prepare("INSERT INTO sponsors (name, email, phone, pan_number, address) VALUES (?,?,?,?,?)");
                     $stmt->execute([$name, $email, $phone, $pan_number, $address]);
                     jsonResponse(true, null, "Sponsor '{$name}' added successfully.");
+                }
+                break;
+
+            case 'page_banners':
+            case 'banners':
+                $page_key = trim($input['page_key'] ?? '');
+                $page_name = trim($input['page_name'] ?? '');
+                $banner_image = $uploadedImagePath ?: trim($input['banner_image'] ?? $input['image'] ?? '');
+                $badge_text = trim($input['badge_text'] ?? '');
+                $title = trim($input['title'] ?? '');
+                $subtitle = trim($input['subtitle'] ?? '');
+                $status = $input['status'] ?? 'active';
+
+                if (empty($page_key) || empty($page_name)) {
+                    jsonResponse(false, null, 'Page identifier and name are required.', 400);
+                }
+
+                // Auto-cache external remote image to local storage for instant 0ms load time
+                if (!empty($banner_image) && (str_starts_with($banner_image, 'http://') || str_starts_with($banner_image, 'https://'))) {
+                    $bannerDir = ROOT_DIR . '/assets/uploads/banners/';
+                    if (!file_exists($bannerDir)) {
+                        mkdir($bannerDir, 0777, true);
+                    }
+                    $opts = [
+                        'http' => [
+                            'timeout' => 8,
+                            'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)\r\n"
+                        ]
+                    ];
+                    $context = stream_context_create($opts);
+                    $imgData = @file_get_contents($banner_image, false, $context);
+                    if ($imgData && strlen($imgData) > 100) {
+                        $ext = 'jpg';
+                        $pathInfo = pathinfo(parse_url($banner_image, PHP_URL_PATH));
+                        if (!empty($pathInfo['extension'])) {
+                            $ext = strtolower(explode('?', $pathInfo['extension'])[0]);
+                        }
+                        $filename = 'banner_' . $page_key . '_' . time() . '.' . $ext;
+                        if (file_put_contents($bannerDir . $filename, $imgData)) {
+                            $banner_image = 'assets/uploads/banners/' . $filename;
+                        }
+                    }
+                }
+
+                if ($id > 0) {
+                    $stmt = $pdo->prepare("UPDATE page_banners SET page_key=?, page_name=?, banner_image=?, badge_text=?, title=?, subtitle=?, status=? WHERE id=?");
+                    $stmt->execute([$page_key, $page_name, $banner_image ?: null, $badge_text ?: null, $title ?: null, $subtitle ?: null, $status, $id]);
+                    jsonResponse(true, null, "Banner for '{$page_name}' updated successfully.");
+                } else {
+                    $stmt = $pdo->prepare("INSERT INTO page_banners (page_key, page_name, banner_image, badge_text, title, subtitle, status) VALUES (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE page_name=VALUES(page_name), banner_image=VALUES(banner_image), badge_text=VALUES(badge_text), title=VALUES(title), subtitle=VALUES(subtitle), status=VALUES(status)");
+                    $stmt->execute([$page_key, $page_name, $banner_image ?: null, $badge_text ?: null, $title ?: null, $subtitle ?: null, $status]);
+                    jsonResponse(true, null, "Banner for '{$page_name}' saved successfully.");
                 }
                 break;
 

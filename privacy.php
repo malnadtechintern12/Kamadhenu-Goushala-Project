@@ -1,8 +1,27 @@
 <?php
 $page_title = 'Privacy Policy'; $page_desc = 'Privacy Policy for Kamadhenu Goushala website.'; $active_nav = '';
 include __DIR__ . '/includes/header.php'; include __DIR__ . '/includes/navbar.php'; $base = BASE_URL;
+$banner = getPageBanner('privacy');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
-  <section class="page-hero"><div class="container"><h1 class="hero-title">Privacy <span>Policy</span></h1></div></section>
+  <section class="page-hero">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Privacy Policy') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-shield-check"></i> <?= e($banner['badge_text'] ?? 'Data Privacy') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'Privacy <span>Policy</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? 'How we handle, protect, and respect your personal information.') ?></p>
+    </div>
+  </section>
   <section class="section-padding"><div class="container"><div class="row justify-content-center"><div class="col-lg-8">
     <div class="bg-white p-5 rounded-4 shadow-sm border">
       <h4 class="fw-bold mb-3">Your Privacy Matters</h4>

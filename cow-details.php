@@ -29,9 +29,12 @@ $relStmt->execute([$id]);
 $related = $relStmt->fetchAll();
 
 $age = $cow['dob'] ? (new DateTime($cow['dob']))->diff(new DateTime())->y . ' years' : 'Unknown';
+
+$banner = getPageBanner('cow-details');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
 
-  <section class="page-hero">
+  <section class="page-hero" <?= $bannerBg ? 'style="'.$bannerBg.'"' : '' ?>>
     <div class="container">
       <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2">
         <li class="breadcrumb-item"><a href="<?= $base ?>/index.php" class="text-white-50">Home</a></li>

@@ -13,14 +13,28 @@ try {
     $timeline = $pdo->query("SELECT * FROM timeline WHERE status='active' ORDER BY display_order ASC")->fetchAll();
 } catch (Exception $e) { $timeline = []; }
 $testimonials = getTestimonials(3);
+
+$banner = getPageBanner('about');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
 
   <!-- Page Hero -->
   <section class="page-hero">
-    <div class="container">
-      <div class="hero-badge"><i class="bi bi-info-circle"></i> Our Story</div>
-      <h1 class="hero-title">About <span>Kamadhenu Goushala</span></h1>
-      <p class="hero-subtitle">A Non-Profit Spiritual Sanctuary Dedicated to the Ethical Protection, Preservation, and Natural Healthcare of India's Noble Indigenous Cow Breeds.</p>
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'About Us') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-info-circle"></i> <?= e($banner['badge_text'] ?? 'Our Story') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'About <span>Kamadhenu Goushala</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? 'A Non-Profit Spiritual Sanctuary Dedicated to the Ethical Protection, Preservation, and Natural Healthcare of India\'s Noble Indigenous Cow Breeds.') ?></p>
     </div>
   </section>
 

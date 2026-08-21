@@ -25,6 +25,7 @@ $sidebarItems = [
     'timeline'     => ['icon'=>'bi-clock-history',  'label'=>'Timeline',      'href'=>'timeline.php'],
     'messages'     => ['icon'=>'bi-envelope',       'label'=>'Messages',      'href'=>'messages.php'],
     'newsletter'   => ['icon'=>'bi-megaphone',      'label'=>'Newsletter',    'href'=>'newsletter.php'],
+    'banners'      => ['icon'=>'bi-image',          'label'=>'Page Banners',  'href'=>'banners.php'],
     'settings'     => ['icon'=>'bi-gear',           'label'=>'Settings',      'href'=>'settings.php'],
     'profile'      => ['icon'=>'bi-person-circle',  'label'=>'Profile',       'href'=>'profile.php'],
 ];

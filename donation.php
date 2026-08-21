@@ -12,12 +12,28 @@ $accNo    = getSetting('donation_account_no', '3899010045678');
 $ifsc     = getSetting('donation_ifsc_code', 'SBIN0040123');
 $upiId    = getSetting('donation_upi_id', 'kamadhenu@sbi');
 $info80g  = getSetting('donation_80g_info', 'Donations eligible for 50% tax exemption under Section 80G.');
+
+$banner = getPageBanner('donation');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
-  <section class="page-hero"><div class="container">
-    <div class="hero-badge"><i class="bi bi-heart-fill"></i> Support Gau Seva</div>
-    <h1 class="hero-title">Make a <span>Donation</span></h1>
-    <p class="hero-subtitle">Your generous contribution provides food, shelter, and medical care for rescued indigenous cows. Every rupee counts.</p>
-  </div></section>
+  <section class="page-hero">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Donation') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-heart-fill"></i> <?= e($banner['badge_text'] ?? 'Support Gau Seva') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'Make a <span>Donation</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? 'Your generous contribution provides food, shelter, and medical care for rescued indigenous cows. Every rupee counts.') ?></p>
+    </div>
+  </section>
 
   <section class="section-padding">
     <div class="container">

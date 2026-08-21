@@ -32,21 +32,24 @@ $stat_breeds = getSetting('stat_breeds', $stats['breed_count'].'+');
 $phone       = getSetting('phone_primary', SITE_PHONE);
 $email_addr  = getSetting('email_primary', SITE_EMAIL);
 $address     = getSetting('address', 'Bengaluru, Karnataka');
+
+$banner = getPageBanner('home');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
 
   <!-- Hero Section -->
-  <section class="hero-section">
+  <section class="hero-section" <?= $bannerBg ? 'style="'.$bannerBg.'"' : '' ?>>
     <div class="container">
       <div class="row align-items-center">
         <div class="col-lg-8">
           <div class="hero-badge">
-            <i class="bi bi-stars"></i> ॐ Sri Kamadhenave Namaha
+            <i class="bi bi-stars"></i> <?= e($banner['badge_text'] ?? 'ॐ Sri Kamadhenave Namaha') ?>
           </div>
           <h1 class="hero-title">
-            Serving <span>Gau Mata</span><br>With Pure Devotion
+            <?= $banner['title'] ?? 'Serving <span>Gau Mata</span><br>With Pure Devotion' ?>
           </h1>
           <p class="hero-subtitle">
-            Protect • Preserve • Serve • Nurture — Dedicated to providing lifelong shelter, organic nutrition, and compassionate veterinary healthcare for India's sacred indigenous cows.
+            <?= e($banner['subtitle'] ?? "Protect • Preserve • Serve • Nurture — Dedicated to providing lifelong shelter, organic nutrition, and compassionate veterinary healthcare for India's sacred indigenous cows.") ?>
           </p>
           <div class="d-flex flex-wrap gap-3">
             <a href="<?= $base ?>/donation.php" class="btn btn-gold py-3 px-4 fs-6">

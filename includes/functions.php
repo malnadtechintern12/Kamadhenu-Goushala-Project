@@ -249,3 +249,19 @@ function getImageUrl(?string $path, string $fallback = ''): string {
     return BASE_URL . '/' . $cleanPath;
 }
 
+/**
+ * Return active banner information for a specific page key.
+ */
+function getPageBanner(string $pageKey): ?array {
+    global $pdo;
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM page_banners WHERE page_key = ? AND status = 'active' LIMIT 1");
+        $stmt->execute([$pageKey]);
+        $row = $stmt->fetch();
+        return $row ?: null;
+    } catch (Exception $e) {
+        return null;
+    }
+}
+
+

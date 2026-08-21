@@ -3,12 +3,28 @@ $page_title = 'Blog — Vedic Knowledge'; $page_desc = 'Articles on indigenous c
 include __DIR__ . '/includes/header.php'; include __DIR__ . '/includes/navbar.php';
 $base = BASE_URL; $blogs = getPublishedBlogs();
 try { $blogCats = $pdo->query("SELECT * FROM blog_categories WHERE status='active' ORDER BY name")->fetchAll(); } catch (Exception $e) { $blogCats = []; }
+
+$banner = getPageBanner('blog');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
-  <section class="page-hero"><div class="container">
-    <div class="hero-badge"><i class="bi bi-newspaper"></i> Vedic Knowledge</div>
-    <h1 class="hero-title">Blog &amp; <span>Articles</span></h1>
-    <p class="hero-subtitle">Insights on indigenous cow heritage, A2 milk science, organic agriculture, and inspiring Goushala stories.</p>
-  </div></section>
+  <section class="page-hero">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Vedic Blog') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-newspaper"></i> <?= e($banner['badge_text'] ?? 'Vedic Knowledge') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'Blog &amp; <span>Articles</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? 'Insights on indigenous cow heritage, A2 milk science, organic agriculture, and inspiring Goushala stories.') ?></p>
+    </div>
+  </section>
 
   <section class="section-padding">
     <div class="container">

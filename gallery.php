@@ -4,12 +4,27 @@ include __DIR__ . '/includes/header.php'; include __DIR__ . '/includes/navbar.ph
 $base = BASE_URL;
 try { $categories = $pdo->query("SELECT * FROM gallery_categories ORDER BY name")->fetchAll(); } catch (Exception $e) { $categories = []; }
 $photos = getGalleryPhotos();
+$banner = getPageBanner('gallery');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
-  <section class="page-hero"><div class="container">
-    <div class="hero-badge"><i class="bi bi-images"></i> Sacred Moments</div>
-    <h1 class="hero-title">Photo <span>Gallery</span></h1>
-    <p class="hero-subtitle">Glimpses of daily life, celebrations, and divine moments at our sanctuary.</p>
-  </div></section>
+  <section class="page-hero">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Photo Gallery') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-images"></i> <?= e($banner['badge_text'] ?? 'Sacred Moments') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'Photo <span>Gallery</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? 'Glimpses of daily life, celebrations, and divine moments at our sanctuary.') ?></p>
+    </div>
+  </section>
 
   <section class="section-padding">
     <div class="container">

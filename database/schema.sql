@@ -369,3 +369,20 @@ CREATE TABLE IF NOT EXISTS `admin_activity_logs` (
   INDEX `idx_admin_logs_admin` (`admin_id`),
   INDEX `idx_admin_logs_created` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 24. Page Banners Table (Admin Managed Page Banners)
+CREATE TABLE IF NOT EXISTS `page_banners` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `page_key` VARCHAR(50) NOT NULL UNIQUE,
+  `page_name` VARCHAR(100) NOT NULL,
+  `banner_image` VARCHAR(500) DEFAULT NULL,
+  `badge_text` VARCHAR(150) DEFAULT NULL,
+  `title` VARCHAR(255) DEFAULT NULL,
+  `subtitle` TEXT DEFAULT NULL,
+  `status` ENUM('active', 'inactive') DEFAULT 'active',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `idx_page_key` (`page_key`),
+  INDEX `idx_banner_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

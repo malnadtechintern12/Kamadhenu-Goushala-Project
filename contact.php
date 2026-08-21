@@ -5,12 +5,28 @@ $base = BASE_URL;
 $phone = getSetting('phone_primary', SITE_PHONE); $phone2 = getSetting('phone_secondary', '');
 $email_addr = getSetting('email_primary', SITE_EMAIL); $addr = getSetting('address', 'Bengaluru, Karnataka');
 $mapUrl = getSetting('google_maps_url', '');
+
+$banner = getPageBanner('contact');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
-  <section class="page-hero"><div class="container">
-    <div class="hero-badge"><i class="bi bi-telephone"></i> Reach Us</div>
-    <h1 class="hero-title">Contact <span>Kamadhenu Goushala</span></h1>
-    <p class="hero-subtitle">We warmly welcome visitors, donors, volunteers, and school groups. Reach out to us anytime.</p>
-  </div></section>
+  <section class="page-hero">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Contact Us') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-telephone"></i> <?= e($banner['badge_text'] ?? 'Reach Us') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'Contact <span>Kamadhenu Goushala</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? 'We warmly welcome visitors, donors, volunteers, and school groups. Reach out to us anytime.') ?></p>
+    </div>
+  </section>
 
   <section class="section-padding">
     <div class="container">

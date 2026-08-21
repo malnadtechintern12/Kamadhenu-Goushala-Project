@@ -2,12 +2,27 @@
 $page_title = 'Indigenous Cow Breeds'; $page_desc = 'Explore India\'s sacred indigenous cow breeds preserved at Kamadhenu Goushala.'; $active_nav = 'breeds';
 include __DIR__ . '/includes/header.php'; include __DIR__ . '/includes/navbar.php';
 $base = BASE_URL; $breeds = getActiveBreeds();
+$banner = getPageBanner('breeds');
+$bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
-  <section class="page-hero"><div class="container">
-    <div class="hero-badge"><i class="bi bi-bookmark-star"></i> Heritage Conservation</div>
-    <h1 class="hero-title">Indigenous <span>Desi Cow Breeds</span></h1>
-    <p class="hero-subtitle">Discover the sacred heritage, unique characteristics, and medicinal A2 milk qualities of India's native Zebu cattle.</p>
-  </div></section>
+  <section class="page-hero">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Breeds') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-bookmark-star"></i> <?= e($banner['badge_text'] ?? 'Heritage Conservation') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'Indigenous <span>Desi Cow Breeds</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? "Discover the sacred heritage, unique characteristics, and medicinal A2 milk qualities of India's native Zebu cattle.") ?></p>
+    </div>
+  </section>
 
   <section class="section-padding">
     <div class="container">

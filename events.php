@@ -1,4 +1,8 @@
 <?php
+require_once __DIR__ . '/includes/functions.php';
+$banner = getPageBanner('events');
+$bannerImgUrl = !empty($banner['banner_image']) ? getImageUrl($banner['banner_image']) : '';
+
 $page_title = 'Events';
 $page_desc  = 'Upcoming festivals, workshops, health camps, and celebrations at Kamadhenu Goushala.';
 $active_nav = 'events';
@@ -12,10 +16,21 @@ $past     = array_filter($events, fn($e) => $e['status'] === 'Completed');
 ?>
 
   <section class="page-hero">
-    <div class="container">
-      <div class="hero-badge"><i class="bi bi-calendar-event"></i> Community Events</div>
-      <h1 class="hero-title">Events &amp; <span>Celebrations</span></h1>
-      <p class="hero-subtitle">Join us for sacred festivals, health camps, workshops, and community service events at Kamadhenu Goushala.</p>
+    <?php if (!empty($bannerImgUrl)): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e($bannerImgUrl) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Events') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <div class="hero-badge"><i class="bi bi-calendar-event"></i> <?= e($banner['badge_text'] ?? 'Community Events') ?></div>
+      <h1 class="hero-title"><?= $banner['title'] ?? 'Events &amp; <span>Celebrations</span>' ?></h1>
+      <p class="hero-subtitle"><?= e($banner['subtitle'] ?? 'Join us for sacred festivals, health camps, workshops, and community service events at Kamadhenu Goushala.') ?></p>
     </div>
   </section>
 

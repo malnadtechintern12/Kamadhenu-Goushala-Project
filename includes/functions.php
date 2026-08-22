@@ -4,6 +4,7 @@
 // ============================================================
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/languages.php';
 
 /**
  * Fetch all active website settings from DB as key→value map.

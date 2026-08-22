@@ -18,19 +18,32 @@ $related = $relStmt->fetchAll();
 $banner = getPageBanner('blog-details');
 $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
-  <section class="page-hero" <?= $bannerBg ? 'style="'.$bannerBg.'"' : '' ?>><div class="container">
-    <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2">
-      <li class="breadcrumb-item"><a href="<?= $base ?>/index.php" class="text-white-50">Home</a></li>
-      <li class="breadcrumb-item"><a href="<?= $base ?>/blog.php" class="text-white-50">Blog</a></li>
-      <li class="breadcrumb-item active text-warning"><?= e(truncate($blog['title'], 40)) ?></li>
-    </ol></nav>
-    <h1 class="hero-title" style="font-size:2rem;"><?= e($blog['title']) ?></h1>
-    <div class="d-flex gap-3 mt-3 flex-wrap">
-      <span class="text-white-50"><i class="bi bi-calendar3 me-1"></i> <?= formatDate($blog['published_at'] ?? $blog['created_at']) ?></span>
-      <span class="text-white-50"><i class="bi bi-person me-1"></i> <?= e($blog['author'] ?? 'Kamadhenu Team') ?></span>
-      <?php if ($blog['category_name']): ?><span class="badge bg-warning text-dark"><?= e($blog['category_name']) ?></span><?php endif; ?>
+  <section class="page-hero">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Vedic Blog') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <nav aria-label="breadcrumb"><ol class="breadcrumb mb-3 justify-content-center">
+        <li class="breadcrumb-item"><a href="<?= $base ?>/index.php" class="text-white fw-semibold">Home</a></li>
+        <li class="breadcrumb-item"><a href="<?= $base ?>/blog.php" class="text-white fw-semibold">Blog</a></li>
+        <li class="breadcrumb-item active text-warning fw-bold"><?= e(truncate($blog['title'], 40)) ?></li>
+      </ol></nav>
+      <h1 class="hero-title" style="font-size:2.2rem;"><?= e($blog['title']) ?></h1>
+      <div class="d-flex gap-3 mt-3 flex-wrap justify-content-center">
+        <span class="text-white"><i class="bi bi-calendar3 me-1"></i> <?= formatDate($blog['published_at'] ?? $blog['created_at']) ?></span>
+        <span class="text-white"><i class="bi bi-person me-1"></i> <?= e($blog['author'] ?? 'Kamadhenu Team') ?></span>
+        <?php if ($blog['category_name']): ?><span class="badge bg-warning text-dark"><?= e($blog['category_name']) ?></span><?php endif; ?>
+      </div>
     </div>
-  </div></section>
+  </section>
 
   <section class="section-padding">
     <div class="container">

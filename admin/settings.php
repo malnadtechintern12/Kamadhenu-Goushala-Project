@@ -1,14 +1,103 @@
 <?php
-require_once __DIR__ . '/includes/auth_check.php'; $admin_page = 'settings'; $admin_title = 'Website Settings';
-require_once __DIR__ . '/../includes/functions.php'; include __DIR__ . '/includes/admin_header.php';
+require_once __DIR__ . '/includes/auth_check.php'; 
+$admin_page = 'settings'; 
+$admin_title = 'Website Settings & Logo';
+require_once __DIR__ . '/../includes/functions.php'; 
+include __DIR__ . '/includes/admin_header.php';
+
 $settings = getSettings();
 $success = '';
+$error = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 1. Handle Reset / Remove Logo
+    if (!empty($_POST['remove_logo'])) {
+        $pdo->prepare("UPDATE settings SET setting_value = '' WHERE setting_key = 'site_logo'")->execute();
+        $settings['site_logo'] = '';
+    }
+
+    // 2. Handle Reset / Remove Favicon
+    if (!empty($_POST['remove_favicon'])) {
+        $pdo->prepare("UPDATE settings SET setting_value = '' WHERE setting_key = 'site_favicon'")->execute();
+        $settings['site_favicon'] = '';
+    }
+
+    // 3. Handle Logo File Upload
+    if (isset($_FILES['site_logo_file']) && $_FILES['site_logo_file']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['site_logo_file'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowedExts = ['png', 'jpg', 'jpeg', 'svg', 'webp', 'gif', 'ico'];
+
+        if (in_array($ext, $allowedExts)) {
+            $uploadDir = ROOT_DIR . '/assets/uploads/branding/';
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            $filename = 'logo_' . time() . '_' . rand(100, 999) . '.' . $ext;
+            $targetPath = $uploadDir . $filename;
+
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                $logoPath = 'assets/uploads/branding/' . $filename;
+                $check = $pdo->prepare("SELECT COUNT(*) FROM settings WHERE setting_key = 'site_logo'");
+                $check->execute();
+                if ($check->fetchColumn() > 0) {
+                    $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'site_logo'")->execute([$logoPath]);
+                } else {
+                    $pdo->prepare("INSERT INTO settings (setting_key, setting_value, setting_group) VALUES ('site_logo', ?, 'general')")->execute([$logoPath]);
+                }
+                $settings['site_logo'] = $logoPath;
+            } else {
+                $error = 'Failed to save uploaded logo file to branding directory.';
+            }
+        } else {
+            $error = 'Invalid logo format. Please upload PNG, JPG, JPEG, SVG, WEBP, or GIF.';
+        }
+    }
+
+    // 4. Handle Favicon File Upload
+    if (isset($_FILES['site_favicon_file']) && $_FILES['site_favicon_file']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['site_favicon_file'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowedExts = ['ico', 'png', 'svg', 'webp'];
+
+        if (in_array($ext, $allowedExts)) {
+            $uploadDir = ROOT_DIR . '/assets/uploads/branding/';
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            $filename = 'favicon_' . time() . '.' . $ext;
+            $targetPath = $uploadDir . $filename;
+
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                $favPath = 'assets/uploads/branding/' . $filename;
+                $check = $pdo->prepare("SELECT COUNT(*) FROM settings WHERE setting_key = 'site_favicon'");
+                $check->execute();
+                if ($check->fetchColumn() > 0) {
+                    $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'site_favicon'")->execute([$favPath]);
+                } else {
+                    $pdo->prepare("INSERT INTO settings (setting_key, setting_value, setting_group) VALUES ('site_favicon', ?, 'general')")->execute([$favPath]);
+                }
+                $settings['site_favicon'] = $favPath;
+            }
+        }
+    }
+
+    // 5. Handle Standard Text/Setting Fields
     foreach ($_POST as $key => $value) {
         if (str_starts_with($key, 'setting_')) {
             $skey = substr($key, 8);
             $sval = trim($value);
-            $check = $pdo->prepare("SELECT COUNT(*) FROM settings WHERE setting_key = ?"); $check->execute([$skey]);
+
+            // Skip logo / favicon if new file was uploaded in this request
+            if ($skey === 'site_logo' && !empty($_FILES['site_logo_file']['name'])) {
+                continue;
+            }
+            if ($skey === 'site_favicon' && !empty($_FILES['site_favicon_file']['name'])) {
+                continue;
+            }
+
+            $check = $pdo->prepare("SELECT COUNT(*) FROM settings WHERE setting_key = ?");
+            $check->execute([$skey]);
             if ($check->fetchColumn() > 0) {
                 $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = ?")->execute([$sval, $skey]);
             } else {
@@ -16,19 +105,195 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    $settings = getSettings();
-    $success = 'Settings saved successfully!';
+
+    // Refresh settings cache
+    global $_SETTINGS_CACHE;
+    $_SETTINGS_CACHE = getSettings();
+    $settings = $_SETTINGS_CACHE;
+
+    if (empty($error)) {
+        $success = 'Website settings and logo updated successfully!';
+    }
 }
+
+$currentLogo = $settings['site_logo'] ?? '';
+$currentFavicon = $settings['site_favicon'] ?? '';
+
 $groups = [
-  'General' => ['site_name','site_tagline','footer_about','footer_copyright'],
-  'Contact' => ['phone_primary','phone_secondary','email_primary','email_donations','address','google_maps_url'],
-  'Social Media' => ['whatsapp_number','facebook_url','instagram_url','youtube_url','twitter_url'],
-  'Donation & Bank' => ['donation_upi_id','donation_bank_name','donation_account_name','donation_account_no','donation_ifsc_code','donation_80g_info'],
-  'Stats (Homepage)' => ['stat_cows_served','stat_donors','stat_years_seva','stat_breeds'],
+  'General Information' => ['site_name','site_tagline','footer_about','footer_copyright'],
+  'Contact Details'     => ['phone_primary','phone_secondary','email_primary','email_donations','address','google_maps_url'],
+  'Social Media Links'  => ['whatsapp_number','facebook_url','instagram_url','youtube_url','twitter_url'],
+  'Donation & Bank'     => ['donation_upi_id','donation_bank_name','donation_account_name','donation_account_no','donation_ifsc_code','donation_80g_info'],
+  'Stats (Homepage)'    => ['stat_cows_served','stat_donors','stat_years_seva','stat_breeds'],
 ];
 ?>
-<?php if ($success): ?><div class="alert alert-success"><i class="bi bi-check-circle-fill me-2"></i><?= e($success) ?></div><?php endif; ?>
-<form method="POST">
+
+<?php if ($success): ?>
+  <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+    <i class="bi bi-check-circle-fill fs-5 me-2"></i>
+    <div><strong>Success!</strong> <?= e($success) ?></div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<?php endif; ?>
+
+<?php if ($error): ?>
+  <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+    <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+    <div><strong>Error:</strong> <?= e($error) ?></div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<?php endif; ?>
+
+<form method="POST" enctype="multipart/form-data">
+
+  <!-- 1. Dedicated Website Logo & Branding Section -->
+  <div class="admin-card mb-4 border-2 border-warning">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0 text-dark">
+        <i class="bi bi-palette-fill text-warning me-2"></i> Website Logo &amp; Branding
+      </h5>
+      <span class="badge bg-warning text-dark px-3 py-1 fw-bold">Controlled by Admin</span>
+    </div>
+    <p class="text-muted small mb-4">
+      Upload your official logo image. The logo will automatically appear in the top navbar, mobile navigation menu, footer, and admin panel.
+    </p>
+
+    <div class="row g-4 align-items-stretch">
+      <!-- Left: Current Logo Preview -->
+      <div class="col-lg-5">
+        <div class="p-3 border rounded-3 bg-light h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="fw-bold small text-muted text-uppercase mb-2">
+              <i class="bi bi-eye me-1"></i> Current Logo Preview
+            </div>
+            
+            <!-- Navbar Light Preview Box -->
+            <div class="p-3 mb-2 rounded border bg-white d-flex align-items-center justify-content-center gap-3" style="min-height: 90px;">
+              <div id="logoSlotLight">
+                <?php if (!empty($currentLogo)): ?>
+                  <img src="<?= e(getImageUrl($currentLogo)) ?>" id="liveLogoPreviewLight" alt="Logo" class="img-fluid" style="max-height: 48px; width: auto; object-fit: contain;">
+                <?php else: ?>
+                  <div class="brand-icon" style="width:40px;height:40px;font-size:1.3rem;"><i class="bi bi-heart-fill"></i></div>
+                <?php endif; ?>
+              </div>
+              <div class="text-start">
+                <div class="fw-bold lh-1 text-dark" style="font-size: 1.2rem;"><?= e($settings['site_name'] ?? 'KAMADHENU') ?></div>
+                <div style="font-size: 0.68rem; letter-spacing: 2px; color: var(--sacred-gold-dark); font-weight: 700; margin-top: 2px;"><?= e($settings['site_tagline'] ?? 'GOUSHALA') ?></div>
+              </div>
+            </div>
+            <div class="text-center small text-muted mb-3">Navbar (Light Header Preview)</div>
+
+            <!-- Dark Footer Preview Box -->
+            <div class="p-3 rounded border d-flex align-items-center justify-content-center gap-3" style="min-height: 85px; background: #173B2A;">
+              <div id="logoSlotDark">
+                <?php if (!empty($currentLogo)): ?>
+                  <img src="<?= e(getImageUrl($currentLogo)) ?>" id="liveLogoPreviewDark" alt="Logo" class="img-fluid" style="max-height: 44px; width: auto; object-fit: contain;">
+                <?php else: ?>
+                  <div class="brand-icon" style="width:36px;height:36px;font-size:1.1rem;"><i class="bi bi-heart-fill"></i></div>
+                <?php endif; ?>
+              </div>
+              <div class="text-start">
+                <div class="fw-bold lh-1 text-white" style="font-size: 1.1rem;"><?= e($settings['site_name'] ?? 'KAMADHENU') ?></div>
+                <div style="font-size: 0.68rem; letter-spacing: 2px; color: #FFE082; font-weight: 700; margin-top: 2px;"><?= e($settings['site_tagline'] ?? 'GOUSHALA') ?></div>
+              </div>
+            </div>
+            <div class="text-center small text-muted mt-1">Footer (Dark Background Preview)</div>
+          </div>
+
+          <?php if (!empty($currentLogo)): ?>
+            <div class="mt-3 text-center">
+              <button type="submit" name="remove_logo" value="1" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to remove the custom logo and revert to the default Kamadhenu brand title?')">
+                <i class="bi bi-trash3 me-1"></i> Reset to Default Logo
+              </button>
+            </div>
+          <?php endif; ?>
+        </div>
+      </div>
+
+      <!-- Right: Logo Upload & URL Options -->
+      <div class="col-lg-7">
+        <div class="p-3 border rounded-3 bg-white h-100">
+          <div class="mb-3">
+            <label class="form-label fw-bold small">
+              <i class="bi bi-cloud-arrow-up text-primary me-1"></i> Upload New Logo File
+            </label>
+            <input type="file" name="site_logo_file" id="siteLogoFileInput" class="form-control" accept="image/png, image/jpeg, image/svg+xml, image/webp, image/gif">
+            <div class="form-text small">
+              Supported formats: <strong>PNG, SVG, WEBP, JPG, GIF</strong>. Recommended: Transparent PNG or SVG with 40px–90px height.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Or Provide Logo Image URL / Relative Path</label>
+            <input type="text" name="setting_site_logo" id="siteLogoUrlInput" class="form-control form-control-sm" value="<?= e($currentLogo) ?>" placeholder="e.g. assets/uploads/branding/logo.png or https://...">
+          </div>
+
+          <!-- Logo & Title Sizing & Space Controls -->
+          <div class="p-3 bg-light rounded-3 border mb-3">
+            <div class="fw-bold small text-dark mb-2"><i class="bi bi-sliders text-warning me-1"></i> Logo &amp; Title Size &amp; Space Controls</div>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Display Mode</label>
+                <select name="setting_brand_display" class="form-select form-select-sm">
+                  <option value="both" <?= ($settings['brand_display'] ?? 'both') === 'both' ? 'selected' : '' ?>>Show Both: Logo + Title (Default)</option>
+                  <option value="logo_only" <?= ($settings['brand_display'] ?? '') === 'logo_only' ? 'selected' : '' ?>>Logo Only (Maximum Space Saving)</option>
+                  <option value="text_only" <?= ($settings['brand_display'] ?? '') === 'text_only' ? 'selected' : '' ?>>Title Text Only (With Sacred Icon)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Logo Height (Pixels)</label>
+                <select name="setting_logo_height" class="form-select form-select-sm">
+                  <option value="28" <?= ($settings['logo_height'] ?? '') === '28' ? 'selected' : '' ?>>28px (Ultra Compact)</option>
+                  <option value="32" <?= ($settings['logo_height'] ?? '') === '32' ? 'selected' : '' ?>>32px (Compact)</option>
+                  <option value="36" <?= ($settings['logo_height'] ?? '36') === '36' ? 'selected' : '' ?>>36px (Standard / Recommended)</option>
+                  <option value="42" <?= ($settings['logo_height'] ?? '') === '42' ? 'selected' : '' ?>>42px (Medium)</option>
+                  <option value="48" <?= ($settings['logo_height'] ?? '') === '48' ? 'selected' : '' ?>>48px (Large)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Brand Title Font Size</label>
+                <select name="setting_brand_title_size" class="form-select form-select-sm">
+                  <option value="compact" <?= ($settings['brand_title_size'] ?? 'compact') === 'compact' ? 'selected' : '' ?>>Compact (1.08rem) - Recommended</option>
+                  <option value="small" <?= ($settings['brand_title_size'] ?? '') === 'small' ? 'selected' : '' ?>>Small (1.15rem)</option>
+                  <option value="medium" <?= ($settings['brand_title_size'] ?? '') === 'medium' ? 'selected' : '' ?>>Medium (1.25rem)</option>
+                  <option value="large" <?= ($settings['brand_title_size'] ?? '') === 'large' ? 'selected' : '' ?>>Large (1.35rem)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Navbar Tagline Display</label>
+                <select name="setting_show_nav_tagline" class="form-select form-select-sm">
+                  <option value="yes" <?= ($settings['show_nav_tagline'] ?? 'yes') === 'yes' ? 'selected' : '' ?>>Show Subtitle ("GOUSHALA")</option>
+                  <option value="no" <?= ($settings['show_nav_tagline'] ?? '') === 'no' ? 'selected' : '' ?>>Hide Subtitle (Saves Space)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-3">
+
+          <!-- Favicon Section -->
+          <div>
+            <label class="form-label fw-bold small">
+              <i class="bi bi-browser-chrome text-primary me-1"></i> Website Favicon (Browser Tab Icon)
+            </label>
+            <div class="d-flex gap-3 align-items-center mb-2">
+              <?php if (!empty($currentFavicon)): ?>
+                <img src="<?= e(getImageUrl($currentFavicon)) ?>" alt="Favicon" style="width:32px;height:32px;object-fit:contain;" class="border rounded p-1 bg-white">
+                <button type="submit" name="remove_favicon" value="1" class="btn btn-outline-danger btn-sm py-0 px-2" onclick="return confirm('Remove custom favicon?')"><i class="bi bi-x"></i> Remove</button>
+              <?php else: ?>
+                <div class="border rounded p-1 bg-light text-muted small text-center" style="width:32px;height:32px;"><i class="bi bi-globe"></i></div>
+                <span class="small text-muted">No custom favicon set</span>
+              <?php endif; ?>
+            </div>
+            <input type="file" name="site_favicon_file" class="form-control form-control-sm mb-2" accept=".ico, .png, .svg, .webp">
+            <input type="text" name="setting_site_favicon" class="form-control form-control-sm" value="<?= e($currentFavicon) ?>" placeholder="Favicon URL or path...">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Other Website Settings Groups -->
   <?php foreach ($groups as $group => $keys): ?>
   <div class="admin-card mb-4">
     <h5 class="fw-bold mb-3"><i class="bi bi-gear text-warning me-2"></i><?= e($group) ?></h5>
@@ -50,6 +315,36 @@ $groups = [
     </div>
   </div>
   <?php endforeach; ?>
-  <button type="submit" class="btn btn-gold px-5 py-2"><i class="bi bi-check-lg me-2"></i> Save All Settings</button>
+
+  <div class="sticky-bottom bg-white p-3 border-top rounded-3 shadow-sm d-flex justify-content-between align-items-center">
+    <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Changes will immediately take effect across all pages on the website.</span>
+    <button type="submit" class="btn btn-gold px-5 py-2 fw-bold">
+      <i class="bi bi-check-lg me-2"></i> Save All Settings &amp; Logo
+    </button>
+  </div>
 </form>
+
+<script>
+// Instant client-side preview when an image file is selected
+document.getElementById('siteLogoFileInput')?.addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const src = evt.target.result;
+      const slotLight = document.getElementById('logoSlotLight');
+      if (slotLight) {
+        slotLight.innerHTML = '<img src="' + src + '" id="liveLogoPreviewLight" alt="Logo" class="img-fluid" style="max-height: 48px; width: auto; object-fit: contain;">';
+      }
+
+      const slotDark = document.getElementById('logoSlotDark');
+      if (slotDark) {
+        slotDark.innerHTML = '<img src="' + src + '" id="liveLogoPreviewDark" alt="Logo" class="img-fluid" style="max-height: 44px; width: auto; object-fit: contain;">';
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+});
+</script>
+
 <?php include __DIR__ . '/includes/admin_footer.php'; ?>

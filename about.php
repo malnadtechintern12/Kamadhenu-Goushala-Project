@@ -49,8 +49,8 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
           <span class="section-tag">Our Sanctuary</span>
           <h2 class="section-title">A Sacred Haven for Gau Mata</h2>
           <div class="title-ornament justify-content-start"></div>
-          <p class="text-muted mb-3">Kamadhenu Goushala is an authentic spiritual sanctuary established with the sole mission of protecting, nurturing, and conserving India's noble indigenous cow breeds. We provide a peaceful, loving lifelong haven where abandoned, injured, and aging cows receive dedicated veterinary medical care, clean shelter, and nutritious organic green fodder.</p>
-          <p class="text-muted mb-4">Our sanctuary is spread across 25+ acres of lush green farmland with modern eco-sheds, a dedicated veterinary hospital, organic fodder cultivation, and a Panchagavya production center.</p>
+          <p class="mb-3" style="font-size: 1.05rem; line-height: 1.75;">Kamadhenu Goushala is an authentic spiritual sanctuary established with the sole mission of protecting, nurturing, and conserving India's noble indigenous cow breeds. We provide a peaceful, loving lifelong haven where abandoned, injured, and aging cows receive dedicated veterinary medical care, clean shelter, and nutritious organic green fodder.</p>
+          <p class="mb-4" style="font-size: 1.05rem; line-height: 1.75;">Our sanctuary is spread across 25+ acres of lush green farmland with modern eco-sheds, a dedicated veterinary hospital, organic fodder cultivation, and a Panchagavya production center.</p>
           <div class="row g-3 mb-4">
             <div class="col-sm-6">
               <div class="p-3 bg-white rounded-3 shadow-sm border-start border-4 border-success">

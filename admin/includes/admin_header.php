@@ -40,17 +40,29 @@ $admin_page = $admin_page ?? 'dashboard';
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?= $base ?>/assets/css/variables.css">
-  <link rel="stylesheet" href="<?= $base ?>/assets/css/admin.css">
+  <link rel="stylesheet" href="<?= $base ?>/assets/css/variables.css?v=<?= filemtime(__DIR__ . '/../../assets/css/variables.css') ?>">
+  <link rel="stylesheet" href="<?= $base ?>/assets/css/admin.css?v=<?= filemtime(__DIR__ . '/../../assets/css/admin.css') ?>">
+  <?php 
+  $adminFavicon = getSetting('site_favicon', getSetting('site_logo', ''));
+  if (!empty($adminFavicon)): ?>
+    <link rel="icon" href="<?= e(getImageUrl($adminFavicon)) ?>">
+  <?php endif; ?>
 </head>
 <body class="admin-body">
 
   <!-- Sidebar -->
   <aside class="admin-sidebar" id="adminSidebar">
-    <div class="sidebar-brand">
-      <i class="bi bi-heart-fill text-warning"></i>
-      <span>KAMADHENU</span>
-      <small>ADMIN</small>
+    <div class="sidebar-brand d-flex align-items-center gap-2">
+      <?php $adminLogo = getSetting('site_logo', ''); ?>
+      <?php if (!empty($adminLogo)): ?>
+        <img src="<?= e(getImageUrl($adminLogo)) ?>" alt="Logo" title="<?= e(getSetting('site_name', 'KAMADHENU')) ?>" style="max-height: 34px; max-width: 44px; object-fit: contain;">
+      <?php else: ?>
+        <i class="bi bi-heart-fill text-warning"></i>
+      <?php endif; ?>
+      <div class="lh-1 text-start">
+        <div class="fw-bold text-white" style="font-size: 1rem; letter-spacing: 0.5px;"><?= e(getSetting('site_name', 'KAMADHENU')) ?></div>
+        <small class="text-warning text-uppercase" style="font-size: 0.65rem; letter-spacing: 1.5px; font-weight: 700;">Admin Panel</small>
+      </div>
     </div>
     <nav class="sidebar-nav">
       <?php foreach ($sidebarItems as $key => $item): ?>

@@ -24,17 +24,22 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
         <!-- Brand Column -->
         <div class="col-lg-4">
           <div class="d-flex align-items-center gap-3 mb-3">
-            <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+            <?php $footerLogo = getSetting('site_logo', ''); ?>
+            <?php if (!empty($footerLogo)): ?>
+              <img src="<?= e(getImageUrl($footerLogo)) ?>" alt="<?= e(getSetting('site_name', 'Kamadhenu Goushala')) ?>" title="<?= e(getSetting('site_name', 'Kamadhenu Goushala')) ?>" class="footer-logo-img" style="max-height: 48px; width: auto; object-fit: contain;">
+            <?php else: ?>
+              <div class="brand-icon"><i class="bi bi-heart-fill"></i></div>
+            <?php endif; ?>
             <div>
-              <div class="fw-bold fs-5 footer-brand-text">KAMADHENU</div>
-              <div class="footer-brand-sub">GOUSHALA</div>
+              <div class="fw-bold fs-5 footer-brand-text"><?= e(getSetting('site_name', 'KAMADHENU')) ?></div>
+              <div class="footer-brand-sub"><?= e(getSetting('site_tagline', 'GOUSHALA')) ?></div>
             </div>
           </div>
           <p class="footer-text small mb-3"><?= e($footer_about) ?></p>
           <div class="d-flex gap-2 mb-3 flex-wrap">
-            <span class="badge rounded-pill footer-pill-badge">🐄 Indigenous Breeds</span>
-            <span class="badge rounded-pill footer-pill-badge">🌿 Organic Farm</span>
-            <span class="badge rounded-pill footer-pill-badge">🏥 Vet Hospital</span>
+            <span class="badge rounded-pill footer-pill-badge"><?= __t('badge_breeds', '🐄 Indigenous Breeds') ?></span>
+            <span class="badge rounded-pill footer-pill-badge"><?= __t('badge_farm', '🌿 Organic Farm') ?></span>
+            <span class="badge rounded-pill footer-pill-badge"><?= __t('badge_hospital', '🏥 Vet Hospital') ?></span>
           </div>
           <div class="d-flex gap-2 mb-4">
             <a href="<?= e($fb_url) ?>" target="_blank" rel="noopener" class="social-btn"><i class="bi bi-facebook"></i></a>
@@ -43,44 +48,44 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
             <a href="https://wa.me/<?= e($wp_num) ?>" target="_blank" rel="noopener" class="social-btn"><i class="bi bi-whatsapp"></i></a>
           </div>
           <div class="p-3 rounded-3 footer-info-box">
-            <div class="fw-bold footer-box-title small"><i class="bi bi-patch-check-fill me-1"></i> 80G Tax Exemption</div>
-            <div class="small footer-text mt-1"><?= e($info_80g) ?></div>
+            <div class="fw-bold footer-box-title small"><i class="bi bi-patch-check-fill me-1"></i> <?= __t('badge_80g', '80G Tax Exemption') ?></div>
+            <div class="small footer-text mt-1"><?= ($current_lang === 'kn') ? __t('footer_80g_text', $info_80g) : e($info_80g) ?></div>
           </div>
         </div>
 
         <!-- Quick Links -->
         <div class="col-6 col-lg-2">
-          <h5 class="footer-title">Quick Links</h5>
+          <h5 class="footer-title"><?= __t('footer_quick_links', 'Quick Links') ?></h5>
           <ul class="footer-links">
-            <li><a href="<?= $base ?>/index.php">Home</a></li>
-            <li><a href="<?= $base ?>/about.php">About Us</a></li>
-            <li><a href="<?= $base ?>/cows.php">Our Cows</a></li>
-            <li><a href="<?= $base ?>/breeds.php">Cow Breeds</a></li>
-            <li><a href="<?= $base ?>/seva.php">Gau Seva</a></li>
-            <li><a href="<?= $base ?>/donation.php">Donate</a></li>
+            <li><a href="<?= $base ?>/index.php"><?= __t('page_home', 'Home') ?></a></li>
+            <li><a href="<?= $base ?>/about.php"><?= __t('page_about', 'About Us') ?></a></li>
+            <li><a href="<?= $base ?>/cows.php"><?= __t('page_cows', 'Our Cows') ?></a></li>
+            <li><a href="<?= $base ?>/breeds.php"><?= __t('page_breeds', 'Cow Breeds') ?></a></li>
+            <li><a href="<?= $base ?>/seva.php"><?= __t('page_seva', 'Gau Seva') ?></a></li>
+            <li><a href="<?= $base ?>/donation.php"><?= __t('page_donation', 'Donate') ?></a></li>
           </ul>
         </div>
 
         <!-- Resources -->
         <div class="col-6 col-lg-2">
-          <h5 class="footer-title">Resources</h5>
+          <h5 class="footer-title"><?= __t('footer_resources', 'Resources') ?></h5>
           <ul class="footer-links">
-            <li><a href="<?= $base ?>/products.php">Organic Store</a></li>
-            <li><a href="<?= $base ?>/gallery.php">Photo Gallery</a></li>
-            <li><a href="<?= $base ?>/blog.php">Vedic Articles</a></li>
-            <li><a href="<?= $base ?>/events.php">Upcoming Events</a></li>
-            <li><a href="<?= $base ?>/privacy.php">Privacy Policy</a></li>
-            <li><a href="<?= $base ?>/terms.php">Terms &amp; Conditions</a></li>
+            <li><a href="<?= $base ?>/products.php"><?= __t('page_products', 'Organic Store') ?></a></li>
+            <li><a href="<?= $base ?>/gallery.php"><?= __t('page_gallery', 'Photo Gallery') ?></a></li>
+            <li><a href="<?= $base ?>/blog.php"><?= __t('page_blog', 'Vedic Articles') ?></a></li>
+            <li><a href="<?= $base ?>/events.php"><?= __t('page_events', 'Upcoming Events') ?></a></li>
+            <li><a href="<?= $base ?>/privacy.php"><?= __t('page_privacy', 'Privacy Policy') ?></a></li>
+            <li><a href="<?= $base ?>/terms.php"><?= __t('page_terms', 'Terms & Conditions') ?></a></li>
           </ul>
         </div>
 
         <!-- Newsletter & UPI -->
         <div class="col-lg-4">
-          <h5 class="footer-title">Newsletter &amp; Direct UPI</h5>
-          <p class="small footer-text">Subscribe to receive monthly sanctuary updates and Gopashtami festival announcements.</p>
+          <h5 class="footer-title"><?= __t('footer_newsletter', 'Newsletter & Direct UPI') ?></h5>
+          <p class="small footer-text"><?= __t('footer_subscribe_desc', 'Subscribe to receive monthly sanctuary updates and Gopashtami festival announcements.') ?></p>
           <form class="newsletter-form d-flex gap-2 mb-3" id="footerNewsletterForm">
-            <input type="email" class="form-control form-control-sm" id="footerEmail" placeholder="Enter your email" required>
-            <button type="submit" class="btn btn-gold btn-sm px-3">Join</button>
+            <input type="email" class="form-control form-control-sm" id="footerEmail" placeholder="<?= __t('Enter your email', 'Enter your email') ?>" required>
+            <button type="submit" class="btn btn-gold btn-sm px-3"><?= __t('Join', 'Join') ?></button>
           </form>
           <div id="newsletterMsg" class="small mb-3" style="display:none;"></div>
           <div class="d-flex flex-column gap-2 small footer-contact-info mt-3">
@@ -88,14 +93,14 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
             <div><i class="bi bi-envelope-fill me-2"></i> <?= e($email) ?></div>
           </div>
           <div class="p-3 rounded-3 mt-3 footer-upi-box">
-            <div class="fw-bold footer-box-title small"><i class="bi bi-qr-code me-1"></i> Quick UPI ID</div>
+            <div class="fw-bold footer-box-title small"><i class="bi bi-qr-code me-1"></i> <?= __t('footer_upi_title', 'Quick UPI ID') ?></div>
             <div class="fs-6 fw-bold site-upi footer-upi-text"><?= e($upi_id) ?></div>
           </div>
         </div>
       </div>
 
       <div class="footer-bottom text-center">
-        <p class="mb-0 footer-copyright-text"><?= e($copyright) ?> Protecting Mother Cow With Pure Devotion.</p>
+        <p class="mb-0 footer-copyright-text"><?= ($current_lang === 'kn') ? __t('footer_copyright') : e($copyright) ?></p>
       </div>
     </div>
   </footer>
@@ -111,18 +116,18 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow-lg rounded-4">
         <div class="modal-header bg-forest text-white">
-          <h5 class="modal-title fw-bold"><i class="bi bi-bag-check-fill text-warning me-2"></i> Your Organic Cart</h5>
+          <h5 class="modal-title fw-bold"><i class="bi bi-bag-check-fill text-warning me-2"></i> <?= __t('cart_title', 'Your Organic Cart') ?></h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4" id="cartItemsContainer"></div>
         <div class="modal-footer border-top bg-light d-flex justify-content-between">
           <div>
-            <span class="text-muted small">Subtotal:</span>
+            <span class="text-muted small"><?= __t('cart_subtotal', 'Subtotal:') ?></span>
             <div class="fw-bold fs-5 text-forest" id="cartSubtotalAmount">₹0.00</div>
           </div>
           <button type="button" class="btn btn-gold px-4 py-2" id="cartCheckoutBtn"
                   onclick="window.location.href='<?= $base ?>/products.php#checkoutSection'">
-            Checkout <i class="bi bi-arrow-right ms-1"></i>
+            <?= __t('btn_checkout', 'Checkout') ?> <i class="bi bi-arrow-right ms-1"></i>
           </button>
         </div>
       </div>
@@ -137,6 +142,8 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
   </script>
   <script src="<?= $base ?>/assets/js/api.js?v=<?= time() ?>"></script>
   <script src="<?= $base ?>/assets/js/cart.js?v=<?= time() ?>"></script>
+  <script src="<?= $base ?>/assets/js/theme.js?v=<?= time() ?>"></script>
+  <script src="<?= $base ?>/assets/js/language.js?v=<?= time() ?>"></script>
   <script src="<?= $base ?>/assets/js/main.js?v=<?= time() ?>"></script>
 
   <!-- Newsletter form handler -->

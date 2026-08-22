@@ -34,12 +34,23 @@ $banner = getPageBanner('cow-details');
 $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
 ?>
 
-  <section class="page-hero" <?= $bannerBg ? 'style="'.$bannerBg.'"' : '' ?>>
-    <div class="container">
-      <nav aria-label="breadcrumb"><ol class="breadcrumb mb-2">
-        <li class="breadcrumb-item"><a href="<?= $base ?>/index.php" class="text-white-50">Home</a></li>
-        <li class="breadcrumb-item"><a href="<?= $base ?>/cows.php" class="text-white-50">Our Cows</a></li>
-        <li class="breadcrumb-item active text-warning"><?= e($cow['name']) ?></li>
+  <section class="page-hero">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Cow Profile') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
+      <nav aria-label="breadcrumb"><ol class="breadcrumb mb-3 justify-content-center">
+        <li class="breadcrumb-item"><a href="<?= $base ?>/index.php" class="text-white fw-semibold">Home</a></li>
+        <li class="breadcrumb-item"><a href="<?= $base ?>/cows.php" class="text-white fw-semibold">Our Cows</a></li>
+        <li class="breadcrumb-item active text-warning fw-bold"><?= e($cow['name']) ?></li>
       </ol></nav>
       <h1 class="hero-title"><span><?= e($cow['name']) ?></span></h1>
       <p class="hero-subtitle"><?= e($cow['breed_name'] ?? 'Indigenous Breed') ?> • Tag: <?= e($cow['tag_number']) ?></p>

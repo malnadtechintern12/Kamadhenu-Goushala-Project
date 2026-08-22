@@ -21,13 +21,39 @@ if (!isset($banner)) {
 $preloadBannerImage = !empty($banner['banner_image']) ? getImageUrl($banner['banner_image']) : '';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= getCurrentLang() ?>">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Instant Theme Initializer (Prevents Flash of Light/Dark Theme) -->
+  <script>
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('kamadhenu_theme') || 'light';
+        if (savedTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.classList.add('dark-theme');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.documentElement.classList.remove('dark-theme');
+        }
+      } catch(e) {}
+    })();
+  </script>
+
   <title><?= e($full_title) ?></title>
   <meta name="description" content="<?= e($meta_desc) ?>">
   <link rel="canonical" href="<?= $base . $_SERVER['PHP_SELF'] ?>">
+  <?php 
+  $siteFavicon = getSetting('site_favicon', '');
+  if (empty($siteFavicon)) {
+      $siteFavicon = getSetting('site_logo', '');
+  }
+  ?>
+  <?php if (!empty($siteFavicon)): ?>
+    <link rel="icon" href="<?= e(getImageUrl($siteFavicon)) ?>">
+  <?php endif; ?>
 
   <!-- High-Priority Instant Image Preload -->
   <?php if (!empty($preloadBannerImage)): ?>
@@ -52,10 +78,10 @@ $preloadBannerImage = !empty($banner['banner_image']) ? getImageUrl($banner['ban
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="<?= $base ?>/assets/css/variables.css">
-  <link rel="stylesheet" href="<?= $base ?>/assets/css/style.css">
+  <link rel="stylesheet" href="<?= $base ?>/assets/css/variables.css?v=<?= filemtime(__DIR__ . '/../assets/css/variables.css') ?>">
+  <link rel="stylesheet" href="<?= $base ?>/assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
 
   <?= $extra_css ?? '' ?>
 </head>

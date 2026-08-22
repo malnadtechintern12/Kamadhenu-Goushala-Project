@@ -38,8 +38,19 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
 ?>
 
   <!-- Hero Section -->
-  <section class="hero-section" <?= $bannerBg ? 'style="'.$bannerBg.'"' : '' ?>>
-    <div class="container">
+  <section class="hero-section position-relative overflow-hidden">
+    <?php if (!empty($banner['banner_image'])): ?>
+      <div class="page-hero-bg">
+        <img src="<?= e(getImageUrl($banner['banner_image'])) ?>" 
+             alt="<?= e($banner['page_name'] ?? 'Kamadhenu Goushala') ?>" 
+             class="page-hero-img" 
+             fetchpriority="high" 
+             loading="eager" 
+             decoding="sync">
+        <div class="page-hero-overlay"></div>
+      </div>
+    <?php endif; ?>
+    <div class="container position-relative" style="z-index: 2;">
       <div class="row align-items-center">
         <div class="col-lg-8">
           <div class="hero-badge">

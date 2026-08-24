@@ -297,10 +297,7 @@ function buildCowWhatsAppMessage(array $cow, string $type = 'adopt'): string {
     }
 
     $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    if (!empty($imageUrl)) {
-        $msg .= "🖼️ *Cow Photo:* " . $imageUrl . "\n";
-    }
-    $msg .= "🔗 *Profile Link:* " . $profileUrl . "\n";
+    $msg .= "🔗 *Cow Webpage & Profile:* " . $profileUrl . "\n";
     $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
     if ($type === 'feed') {

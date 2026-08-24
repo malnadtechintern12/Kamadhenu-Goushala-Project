@@ -211,14 +211,11 @@ function orderProductWhatsApp(id, name, price, customWp = '', image = '') {
   msg += "🔢 *Quantity:* " + quantity + "\n";
   msg += "💵 *Unit Price:* ₹" + parseFloat(price).toFixed(2) + " each\n";
   msg += "💰 *Total Amount:* ₹" + lineTotal.toFixed(2) + "\n";
-  if (image) {
-    const fullImg = image.startsWith('http') ? image : (baseUrl + '/' + image.replace(/^\/+/, ''));
-    msg += "🖼️ *Product Image:* " + fullImg + "\n";
-  }
-  msg += "🔗 *Store Link:* " + baseUrl + "/products.php\n";
+  msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+  msg += "🔗 *Store Webpage:* " + baseUrl + "/products.php\n";
   msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
   msg += "Namaste! I would like to order / enquire about this product from Kamadhenu Goushala. Please share availability and payment details. 🙏";
 
-  const url = "https://wa.me/" + targetWp.toString().replace(/[^0-9]/g, '') + "?text=" + encodeURIComponent(msg);
+  const url = "https://api.whatsapp.com/send?phone=" + targetWp.toString().replace(/[^0-9]/g, '') + "&text=" + encodeURIComponent(msg);
   window.open(url, "_blank");
 }

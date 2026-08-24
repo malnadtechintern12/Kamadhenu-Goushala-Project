@@ -16,6 +16,7 @@ $testimonials  = getTestimonials(3);
 $blogs         = getPublishedBlogs(3);
 $galleryPhotos = getGalleryPhotos(6);
 $stats         = getDonationStats();
+$products      = getActiveProducts(3);
 
 // Timeline
 try {
@@ -32,6 +33,7 @@ $stat_breeds = getSetting('stat_breeds', $stats['breed_count'].'+');
 $phone       = getSetting('phone_primary', SITE_PHONE);
 $email_addr  = getSetting('email_primary', SITE_EMAIL);
 $address     = getSetting('address', 'Bengaluru, Karnataka');
+$wp_num      = getSetting('whatsapp_number', '919845088990');
 
 $banner = getPageBanner('home');
 $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
@@ -188,22 +190,61 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
                   <p class="small text-muted mb-4" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                     <?= e($cow['story'] ?: 'A gentle resident cow enjoying healthy green pasture and daily love at Kamadhenu Goushala.') ?>
                   </p>
-                  <div class="mt-auto">
-                    <a href="<?= $base ?>/cow-details.php?id=<?= $cow['id'] ?>" class="btn btn-outline-gold w-100 py-2">
-                      VIEW DETAILS &amp; ADOPT
+                  <?php 
+                  $cowWp = !empty($cow['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $cow['whatsapp_number']) : preg_replace('/[^0-9]/', '', $wp_num);
+                  if (empty($cowWp)) { $cowWp = '919845088990'; }
+                  $cowBreedName = $cow['breed_name'] ?? 'Desi Indigenous Breed';
+                  $cowImgUrl    = !empty($cow['image']) ? getImageUrl($cow['image']) : '';
+                  $cowPageUrl   = $base . '/cow-details.php?id=' . $cow['id'];
+
+                  // 1. Adopt Now Message with Text, Photo, and Link
+                  $adoptMsg = "🐮 *COW ADOPTION ENQUIRY — Kamadhenu Goushala*\n"
+                            . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                            . "🏷️ *Cow Name:* " . $cow['name'] . "\n"
+                            . "🔖 *Tag Number:* " . $cow['tag_number'] . "\n"
+                            . "🐂 *Breed:* " . $cowBreedName . "\n"
+                            . "⚤ *Gender:* " . $cow['gender'] . "\n"
+                            . "🩺 *Health:* " . $cow['health_status'] . "\n";
+                  if (!empty($cowImgUrl)) {
+                      $adoptMsg .= "🖼️ *Photo:* " . $cowImgUrl . "\n";
+                  }
+                  $adoptMsg .= "🔗 *Profile Link:* " . $cowPageUrl . "\n"
+                            . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                            . "Namaste! I would like to adopt / sponsor " . $cow['name'] . " at Kamadhenu Goushala. Please share the adoption procedure and details. 🙏";
+
+                  // 2. Feed Now Message with Text, Photo, and Link
+                  $feedMsg = "🌿 *SPONSOR COW FEED / FODDER — Kamadhenu Goushala*\n"
+                           . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                           . "🏷️ *Cow Name:* " . $cow['name'] . "\n"
+                           . "🔖 *Tag Number:* " . $cow['tag_number'] . "\n"
+                           . "🐂 *Breed:* " . $cowBreedName . "\n"
+                           . "⚤ *Gender:* " . $cow['gender'] . "\n"
+                           . "🩺 *Health:* " . $cow['health_status'] . "\n";
+                  if (!empty($cowImgUrl)) {
+                      $feedMsg .= "🖼️ *Photo:* " . $cowImgUrl . "\n";
+                  }
+                  $feedMsg .= "🔗 *Profile Link:* " . $cowPageUrl . "\n"
+                           . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                           . "Namaste! I would like to sponsor nutritious green fodder & feed for " . $cow['name'] . " at Kamadhenu Goushala. Please guide me on how to contribute. 🙏";
+                  ?>
+                  <div class="mt-auto d-flex flex-column gap-2">
+                    <a href="<?= $cowPageUrl ?>" class="btn btn-outline-forest w-100 py-2 fw-semibold">
+                      <i class="bi bi-eye me-1"></i> View Full Profile
                     </a>
+                    <div class="d-flex gap-2">
+                      <a href="https://wa.me/<?= $cowWp ?>?text=<?= rawurlencode($adoptMsg) ?>" target="_blank" rel="noopener" class="btn btn-gold flex-fill py-2 fw-bold text-nowrap" style="font-size: 0.85rem;">
+                        <i class="bi bi-whatsapp me-1"></i> Adopt Now
+                      </a>
+                      <a href="https://wa.me/<?= $cowWp ?>?text=<?= rawurlencode($feedMsg) ?>" target="_blank" rel="noopener" class="btn btn-forest flex-fill py-2 fw-bold text-nowrap" style="font-size: 0.85rem;">
+                        <i class="bi bi-whatsapp me-1"></i> Feed Now
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           <?php endforeach; ?>
         <?php endif; ?>
-      </div>
-
-      <div class="text-center mt-5">
-        <a href="<?= $base ?>/cows.php" class="btn btn-forest px-4 py-3">
-          VIEW ALL COWS <i class="bi bi-arrow-right ms-2"></i>
-        </a>
       </div>
     </div>
   </section>
@@ -283,6 +324,101 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
       </div>
     </div>
   </section>
+
+  <!-- Sacred Organic Products Showcase -->
+  <?php if (!empty($products)): ?>
+  <section class="section-padding" style="background-color: #F6F2E8;">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-tag">Pure &amp; Vedic</span>
+        <h2 class="section-title">Sacred Goushala Organic Products</h2>
+        <div class="title-ornament"></div>
+        <p class="section-subtitle">100% natural, chemical-free products crafted from our indigenous cow resources. All proceeds directly support cow welfare and nutritious fodder.</p>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <?php foreach ($products as $p): ?>
+          <div class="col-md-6 col-lg-4">
+            <div class="product-card h-100 shadow-sm rounded-4 border overflow-hidden d-flex flex-column bg-white">
+              <div class="product-img-box position-relative" style="height: 220px; overflow: hidden; background: #f8f9fa;">
+                <img src="<?= e($p['image'] ?: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=600&q=80') ?>" 
+                     alt="<?= e($p['name']) ?>" 
+                     style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                <?php if ($p['stock'] > 0): ?>
+                  <span class="badge bg-success position-absolute top-0 end-0 m-3 px-3 py-2 rounded-pill shadow-sm">In Stock (<?= $p['stock'] ?>)</span>
+                <?php else: ?>
+                  <span class="badge bg-danger position-absolute top-0 end-0 m-3 px-3 py-2 rounded-pill shadow-sm">Sold Out</span>
+                <?php endif; ?>
+              </div>
+              <div class="product-body p-4 d-flex flex-column flex-grow-1">
+                <span class="small text-forest fw-bold mb-1 d-inline-block"><?= e($p['category_name'] ?? 'Goushala Organic') ?></span>
+                <h5 class="fw-bold mb-2 text-forest"><?= e($p['name']) ?></h5>
+                <p class="small text-muted mb-4" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px;">
+                  <?= e($p['description'] ?? 'Pure traditional Ayurvedic preparation from indigenous desi cow resources.') ?>
+                </p>
+                <div class="mt-auto pt-3 border-top d-flex flex-column gap-2">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <span class="text-muted small d-block">Price:</span>
+                      <div class="fs-4 fw-bold text-forest">₹<?= number_format((float)$p['price'], 2) ?></div>
+                    </div>
+                    <?php if ($p['stock'] > 0): ?>
+                    <div class="d-flex align-items-center gap-1">
+                      <span class="small text-muted me-1">Qty:</span>
+                      <div class="input-group input-group-sm" style="width: 85px;">
+                        <button class="btn btn-outline-secondary px-2 py-0" type="button" onclick="changeCardQty(<?= $p['id'] ?>, -1)">-</button>
+                        <input type="number" id="qty_<?= $p['id'] ?>" class="form-control text-center px-1 fw-bold" value="1" min="1" max="<?= $p['stock'] ?>">
+                        <button class="btn btn-outline-secondary px-2 py-0" type="button" onclick="changeCardQty(<?= $p['id'] ?>, 1)">+</button>
+                      </div>
+                    </div>
+                    <?php endif; ?>
+                  </div>
+
+                  <?php $prodWp = !empty($p['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $p['whatsapp_number']) : ''; ?>
+                  <?php if ($p['stock'] > 0): ?>
+                  <div class="d-flex gap-2">
+                    <button type="button"
+                            class="btn btn-gold flex-fill py-2 fw-bold small add-to-cart-btn shadow-sm"
+                            data-id="<?= $p['id'] ?>" 
+                            data-name="<?= htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8') ?>"
+                            data-price="<?= $p['price'] ?>" 
+                            data-image="<?= htmlspecialchars($p['image'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                            title="Add to order">
+                      <i class="bi bi-cart-plus-fill me-1"></i> Add to Order
+                    </button>
+                    <button type="button"
+                            class="btn btn-forest flex-fill py-2 fw-bold small shadow-sm"
+                            onclick="orderProductWhatsApp(<?= $p['id'] ?>, '<?= addslashes(htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8')) ?>', <?= (float)$p['price'] ?>, '<?= e($prodWp) ?>', '<?= addslashes(htmlspecialchars($p['image'] ?? '', ENT_QUOTES, 'UTF-8')) ?>')"
+                            title="Order directly via WhatsApp">
+                      <i class="bi bi-whatsapp me-1"></i> WhatsApp
+                    </button>
+                  </div>
+                  <?php else: ?>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-secondary flex-fill py-2 small" disabled>Out of Stock</button>
+                    <button type="button"
+                            class="btn btn-outline-forest flex-fill py-2 fw-bold small"
+                            onclick="orderProductWhatsApp(<?= $p['id'] ?>, '<?= addslashes(htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8')) ?>', <?= (float)$p['price'] ?>, '<?= e($prodWp) ?>', '<?= addslashes(htmlspecialchars($p['image'] ?? '', ENT_QUOTES, 'UTF-8')) ?>')"
+                            title="Enquire on WhatsApp">
+                      <i class="bi bi-whatsapp me-1"></i> Enquire
+                    </button>
+                  </div>
+                  <?php endif; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="<?= $base ?>/products.php" class="btn btn-outline-gold px-4 py-3 fw-bold">
+          EXPLORE ALL PRODUCTS <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+  <?php endif; ?>
 
   <!-- Why Support Us -->
   <section class="section-padding" style="background: #FAF7EF;">

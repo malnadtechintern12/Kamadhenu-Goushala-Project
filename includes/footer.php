@@ -137,8 +137,10 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Pass BASE_URL to JavaScript
+    // Pass BASE_URL and Order Routing config to JavaScript
     const BASE_URL = '<?= $base ?>';
+    const ORDER_ROUTING_MODE = '<?= e(getSetting('order_routing_mode', 'admin_panel')) ?>';
+    const ORDER_WHATSAPP_NUMBER = '<?= e(getSetting('whatsapp_number', '')) ?>';
   </script>
   <script src="<?= $base ?>/assets/js/api.js?v=<?= time() ?>"></script>
   <script src="<?= $base ?>/assets/js/cart.js?v=<?= time() ?>"></script>

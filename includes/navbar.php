@@ -5,13 +5,6 @@
 //                       'gallery','products','blog','events','contact'
 // ============================================================
 $base    = BASE_URL;
-$phone   = getSetting('phone_primary', SITE_PHONE);
-$email   = getSetting('email_primary', SITE_EMAIL);
-$wp_num  = getSetting('whatsapp_number', '919845088990');
-$address = getSetting('address', 'Bengaluru, Karnataka, India');
-$loc     = explode(',', $address);
-$city    = trim($loc[count($loc)-2] ?? 'Karnataka') . ', India';
-
 $current_lang = getCurrentLang();
 
 $navItems = [
@@ -27,35 +20,7 @@ $navItems = [
     'contact'  => ['label' => __t('nav_contact', 'CONTACT'),   'href' => 'contact.php'],
 ];
 $active_nav = $active_nav ?? 'home';
-?>
-<body class="<?= $current_lang === 'kn' ? 'lang-kn' : '' ?>">
 
-  <!-- Top Information Bar -->
-  <div class="top-infobar d-none d-md-block">
-    <div class="container-fluid px-3 px-lg-4 px-xxl-5 d-flex justify-content-between align-items-center">
-      <div class="d-flex gap-4">
-        <span><i class="bi bi-telephone-fill"></i> <a href="tel:<?= e(preg_replace('/[^0-9+]/','',$phone)) ?>" class="site-phone"><?= e($phone) ?></a></span>
-        <span><i class="bi bi-envelope-fill"></i> <a href="mailto:<?= e($email) ?>" class="site-email"><?= e($email) ?></a></span>
-        <span><i class="bi bi-geo-alt-fill"></i> <span class="site-address"><?= e($city) ?></span></span>
-      </div>
-      <div class="d-flex gap-3 align-items-center">
-        <a href="https://wa.me/<?= e($wp_num) ?>" target="_blank" rel="noopener" class="whatsapp-link text-white">
-          <i class="bi bi-whatsapp"></i> <?= __t('nav_whatsapp', 'WhatsApp') ?>
-        </a>
-        <div class="lang-switcher-pill" title="Change Website Language / ಭಾಷೆ ಬದಲಾಯಿಸಿ">
-          <button type="button" class="lang-option-btn <?= $current_lang === 'en' ? 'active' : '' ?>" data-lang="en">
-            <span>English</span>
-          </button>
-          <span class="lang-divider">|</span>
-          <button type="button" class="lang-option-btn <?= $current_lang === 'kn' ? 'active' : '' ?>" data-lang="kn">
-            <span>ಕನ್ನಡ</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<?php
 $site_logo        = getSetting('site_logo', '');
 $site_name        = ($current_lang === 'kn' && (getSetting('site_name') === 'KAMADHENU' || getSetting('site_name') === SITE_NAME)) ? __t('brand_title', 'ಕಾಮಧೇನು') : getSetting('site_name', SITE_NAME);
 $site_tagline     = ($current_lang === 'kn' && (getSetting('site_tagline') === 'GOUSHALA' || getSetting('site_tagline') === SITE_TAGLINE)) ? __t('brand_subtitle', 'ಗೋಶಾಲೆ') : getSetting('site_tagline', SITE_TAGLINE);
@@ -74,6 +39,7 @@ $title_font_size  = match($title_size_key) {
 
 $show_nav_tagline = getSetting('show_nav_tagline', 'yes');
 ?>
+<body class="<?= $current_lang === 'kn' ? 'lang-kn' : '' ?>">
   <!-- Main Header & Navbar -->
   <header class="main-header">
     <nav class="navbar navbar-expand-xl">

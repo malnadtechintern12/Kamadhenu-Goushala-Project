@@ -7,12 +7,16 @@ include __DIR__ . '/includes/admin_header.php';
 
 $products = $pdo->query("SELECT p.*, pc.name AS category_name FROM products p LEFT JOIN product_categories pc ON p.category_id = pc.id ORDER BY p.created_at DESC")->fetchAll();
 $categories = $pdo->query("SELECT * FROM product_categories WHERE status='active' ORDER BY name ASC")->fetchAll();
+
+$wpNumbersRaw = getSetting('whatsapp_numbers', '[]');
+$configuredWpNumbers = json_decode($wpNumbersRaw, true) ?: [];
+$primaryWpNumber = getSetting('whatsapp_number', '919845088990');
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
   <div>
     <h5 class="fw-bold mb-1">Organic Store Products (<?= count($products) ?>)</h5>
-    <p class="text-muted small mb-0">Manage Panchagavya, vermicompost, cow dung diyas, and organic essentials.</p>
+    <p class="text-muted small mb-0">Manage Panchagavya, vermicompost, cow dung diyas, and direct WhatsApp routing.</p>
   </div>
   <button class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#productModal" onclick="resetProductForm()">
     <i class="bi bi-plus-lg me-1"></i> Add Product
@@ -28,6 +32,7 @@ $categories = $pdo->query("SELECT * FROM product_categories WHERE status='active
         <th>Category</th>
         <th>Price</th>
         <th>Stock Units</th>
+        <th>WhatsApp</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
@@ -54,6 +59,15 @@ $categories = $pdo->query("SELECT * FROM product_categories WHERE status='active
           <?php endif; ?>
         </td>
         <td>
+          <?php if (!empty($p['whatsapp_number'])): ?>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-normal">
+              <i class="bi bi-whatsapp me-1"></i><?= e($p['whatsapp_number']) ?>
+            </span>
+          <?php else: ?>
+            <span class="badge bg-light text-muted border">Default (<?= e($primaryWpNumber) ?>)</span>
+          <?php endif; ?>
+        </td>
+        <td>
           <span class="badge <?= $p['status']==='active'?'badge-active':'badge-inactive' ?>">
             <?= ucfirst(e($p['status'])) ?>
           </span>
@@ -71,7 +85,7 @@ $categories = $pdo->query("SELECT * FROM product_categories WHERE status='active
       </tr>
       <?php endforeach; ?>
       <?php if (empty($products)): ?>
-        <tr><td colspan="7" class="text-center py-4 text-muted">No products found. Click "Add Product" to create one.</td></tr>
+        <tr><td colspan="8" class="text-center py-4 text-muted">No products found. Click "Add Product" to create one.</td></tr>
       <?php endif; ?>
     </tbody>
   </table>
@@ -118,6 +132,34 @@ $categories = $pdo->query("SELECT * FROM product_categories WHERE status='active
                 <option value="inactive">Inactive</option>
               </select>
             </div>
+
+            <!-- WhatsApp Number Setting -->
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-whatsapp text-success me-1"></i> WhatsApp Number for Product Orders / Enquiries
+              </label>
+              <div class="input-group">
+                <input type="text" name="whatsapp_number" id="productWhatsapp" class="form-control" placeholder="Leave empty for default (<?= e($primaryWpNumber) ?>) or enter custom">
+                <?php if (!empty($configuredWpNumbers)): ?>
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Select Number
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item small" href="javascript:void(0)" onclick="setProductWp('')"><em>Use Global Default (<?= e($primaryWpNumber) ?>)</em></a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <?php foreach ($configuredWpNumbers as $wp): ?>
+                    <li>
+                      <a class="dropdown-item small" href="javascript:void(0)" onclick="setProductWp('<?= e($wp['number']) ?>')">
+                        <i class="bi bi-telephone me-1"></i> <?= e($wp['number']) ?> <?= !empty($wp['label']) ? '('.e($wp['label']).')' : '' ?> <?= !empty($wp['primary']) ? '★ Primary' : '' ?>
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+              </div>
+              <div class="form-text small text-muted">Controlled by Admin. When customers click "WhatsApp" on this product, enquiries route directly to this WhatsApp number.</div>
+            </div>
+
             <div class="col-12">
               <label class="form-label fw-semibold">Product Image URL</label>
               <input type="url" name="image" id="productImage" class="form-control" placeholder="https://images.unsplash.com/...">
@@ -139,9 +181,14 @@ $categories = $pdo->query("SELECT * FROM product_categories WHERE status='active
 
 <?php
 $admin_extra_js = '<script>
+function setProductWp(num) {
+  document.getElementById("productWhatsapp").value = num;
+}
+
 function resetProductForm() {
   document.getElementById("productForm").reset();
   document.getElementById("productId").value = "";
+  document.getElementById("productWhatsapp").value = "";
   document.getElementById("productModalTitle").textContent = "Add Organic Product";
 }
 
@@ -155,6 +202,7 @@ document.querySelectorAll(".edit-product-btn").forEach(btn => {
     document.getElementById("productPrice").value = p.price || "";
     document.getElementById("productStock").value = p.stock || 0;
     document.getElementById("productStatus").value = p.status || "active";
+    document.getElementById("productWhatsapp").value = p.whatsapp_number || "";
     document.getElementById("productImage").value = p.image || "";
     document.getElementById("productDescription").value = p.description || "";
     new bootstrap.Modal(document.getElementById("productModal")).show();

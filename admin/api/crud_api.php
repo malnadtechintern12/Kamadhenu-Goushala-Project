@@ -52,15 +52,40 @@ if (isset($_GET['action']) && $_GET['action'] === 'remove_banner_image') {
     }
 }
 
+// 1c. GET ORDER DETAILS ACTION (with items)
+if (isset($_GET['action']) && $_GET['action'] === 'get_order') {
+    $id = intInput($_GET['id'] ?? 0);
+    if ($id <= 0) {
+        jsonResponse(false, null, 'Invalid order ID.', 400);
+    }
+    try {
+        global $pdo;
+        $stmt = $pdo->prepare("SELECT * FROM orders WHERE id = ?");
+        $stmt->execute([$id]);
+        $order = $stmt->fetch();
+        if (!$order) {
+            jsonResponse(false, null, 'Order not found.', 404);
+        }
+        $itemStmt = $pdo->prepare("SELECT * FROM order_items WHERE order_id = ?");
+        $itemStmt->execute([$id]);
+        $order['items'] = $itemStmt->fetchAll();
+        jsonResponse(true, $order, 'Order retrieved successfully.');
+    } catch (PDOException $e) {
+        jsonResponse(false, null, 'Failed to fetch order: ' . $e->getMessage(), 500);
+    }
+}
+
 // 2. TOGGLE STATUS ACTION
 if (isset($_GET['action']) && $_GET['action'] === 'toggle_status') {
     $entity = trim($_GET['entity'] ?? '');
     $id     = intInput($_GET['id'] ?? 0);
     $status = trim($_GET['status'] ?? '');
+    $field  = trim($_GET['field'] ?? '');
 
     $allowedTables = [
         'breeds', 'seva', 'products', 'blogs', 'events', 
-        'gallery', 'testimonials', 'timeline', 'newsletter_subscribers', 'contact_messages'
+        'gallery', 'testimonials', 'timeline', 'newsletter_subscribers', 
+        'contact_messages', 'orders', 'donations', 'page_banners'
     ];
 
     if (!in_array($entity, $allowedTables) || $id <= 0 || empty($status)) {
@@ -69,9 +94,26 @@ if (isset($_GET['action']) && $_GET['action'] === 'toggle_status') {
 
     try {
         global $pdo;
-        $stmt = $pdo->prepare("UPDATE `{$entity}` SET status = ? WHERE id = ?");
-        $stmt->execute([$status, $id]);
-        jsonResponse(true, null, 'Status updated to ' . htmlspecialchars($status));
+
+        if ($entity === 'orders') {
+            if ($field === 'payment_status' || in_array($status, ['Completed', 'Paid', 'Pending', 'Failed'])) {
+                $stmt = $pdo->prepare("UPDATE orders SET payment_status = ? WHERE id = ?");
+                $stmt->execute([$status, $id]);
+                jsonResponse(true, null, 'Order payment status updated to ' . htmlspecialchars($status));
+            } else {
+                $stmt = $pdo->prepare("UPDATE orders SET order_status = ? WHERE id = ?");
+                $stmt->execute([$status, $id]);
+                jsonResponse(true, null, 'Order status updated to ' . htmlspecialchars($status));
+            }
+        } elseif ($entity === 'donations') {
+            $stmt = $pdo->prepare("UPDATE donations SET payment_status = ? WHERE id = ?");
+            $stmt->execute([$status, $id]);
+            jsonResponse(true, null, 'Donation payment status updated to ' . htmlspecialchars($status));
+        } else {
+            $stmt = $pdo->prepare("UPDATE `{$entity}` SET status = ? WHERE id = ?");
+            $stmt->execute([$status, $id]);
+            jsonResponse(true, null, 'Status updated to ' . htmlspecialchars($status));
+        }
     } catch (PDOException $e) {
         jsonResponse(false, null, 'Status update failed: ' . $e->getMessage(), 500);
     }
@@ -177,17 +219,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $price = floatval($input['price'] ?? 0);
                 $stock = intInput($input['stock'] ?? 0);
                 $image = $uploadedImagePath ?: trim($input['image'] ?? '');
+                $whatsapp = trim($input['whatsapp_number'] ?? '') ?: null;
                 $status = $input['status'] ?? 'active';
 
                 if (empty($name)) jsonResponse(false, null, 'Product name is required.', 400);
 
                 if ($id > 0) {
-                    $stmt = $pdo->prepare("UPDATE products SET name=?, slug=?, category_id=?, description=?, price=?, stock=?, image=?, status=? WHERE id=?");
-                    $stmt->execute([$name, $slug, $category_id, $description, $price, $stock, $image, $status, $id]);
+                    $stmt = $pdo->prepare("UPDATE products SET name=?, slug=?, category_id=?, description=?, price=?, stock=?, image=?, whatsapp_number=?, status=? WHERE id=?");
+                    $stmt->execute([$name, $slug, $category_id, $description, $price, $stock, $image, $whatsapp, $status, $id]);
                     jsonResponse(true, null, "Product '{$name}' updated successfully.");
                 } else {
-                    $stmt = $pdo->prepare("INSERT INTO products (name, slug, category_id, description, price, stock, image, status) VALUES (?,?,?,?,?,?,?,?)");
-                    $stmt->execute([$name, $slug, $category_id, $description, $price, $stock, $image, $status]);
+                    $stmt = $pdo->prepare("INSERT INTO products (name, slug, category_id, description, price, stock, image, whatsapp_number, status) VALUES (?,?,?,?,?,?,?,?,?)");
+                    $stmt->execute([$name, $slug, $category_id, $description, $price, $stock, $image, $whatsapp, $status]);
                     jsonResponse(true, null, "Product '{$name}' added successfully.");
                 }
                 break;
@@ -372,6 +415,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = $pdo->prepare("INSERT INTO page_banners (page_key, page_name, banner_image, badge_text, title, subtitle, status) VALUES (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE page_name=VALUES(page_name), banner_image=VALUES(banner_image), badge_text=VALUES(badge_text), title=VALUES(title), subtitle=VALUES(subtitle), status=VALUES(status)");
                     $stmt->execute([$page_key, $page_name, $banner_image ?: null, $badge_text ?: null, $title ?: null, $subtitle ?: null, $status]);
                     jsonResponse(true, null, "Banner for '{$page_name}' saved successfully.");
+                }
+                break;
+
+            case 'orders':
+                $customer_name    = trim($input['customer_name'] ?? '');
+                $customer_email   = trim($input['customer_email'] ?? '');
+                $customer_phone   = trim($input['customer_phone'] ?? '');
+                $total_amount     = floatval($input['total_amount'] ?? 0);
+                $shipping_address = trim($input['shipping_address'] ?? '');
+                $payment_status   = trim($input['payment_status'] ?? 'Pending');
+                $order_status     = trim($input['order_status'] ?? 'Processing');
+                $payment_method   = trim($input['payment_method'] ?? 'Direct / Admin Record');
+                $notes            = trim($input['notes'] ?? '');
+
+                if (empty($customer_name) || empty($customer_email) || $total_amount <= 0) {
+                    jsonResponse(false, null, 'Customer name, email, and valid total amount are required.', 400);
+                }
+
+                if ($id > 0) {
+                    $stmt = $pdo->prepare("UPDATE orders SET customer_name=?, customer_email=?, customer_phone=?, total_amount=?, shipping_address=?, payment_status=?, order_status=?, payment_method=?, notes=? WHERE id=?");
+                    $stmt->execute([$customer_name, $customer_email, $customer_phone, $total_amount, $shipping_address, $payment_status, $order_status, $payment_method, $notes, $id]);
+                    jsonResponse(true, null, "Order updated successfully.");
+                } else {
+                    $order_number = 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
+                    $stmt = $pdo->prepare("INSERT INTO orders (order_number, customer_name, customer_email, customer_phone, total_amount, shipping_address, payment_status, order_status, payment_method, notes) VALUES (?,?,?,?,?,?,?,?,?,?)");
+                    $stmt->execute([$order_number, $customer_name, $customer_email, $customer_phone, $total_amount, $shipping_address, $payment_status, $order_status, $payment_method, $notes]);
+                    jsonResponse(true, null, "Order '{$order_number}' recorded successfully.");
                 }
                 break;
 

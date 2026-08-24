@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status   = $input['status'] ?? 'Active';
     $image    = trim($input['image'] ?? '');
     $story    = trim($input['story'] ?? '');
+    $whatsapp = trim($input['whatsapp_number'] ?? '') ?: null;
 
     if (empty($name) || empty($tag)) jsonResponse(false, null, 'Name and tag number are required.', 400);
 
@@ -38,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         global $pdo;
         if ($id > 0) {
             // Update
-            $stmt = $pdo->prepare("UPDATE cows SET name=?, tag_number=?, breed_id=?, gender=?, dob=?, arrival_date=?, health_status=?, status=?, image=?, story=? WHERE id=?");
-            $stmt->execute([$name, $tag, $breedId, $gender, $dob ?: null, $arrival ?: null, $health, $status, $image, $story, $id]);
+            $stmt = $pdo->prepare("UPDATE cows SET name=?, tag_number=?, breed_id=?, gender=?, dob=?, arrival_date=?, health_status=?, status=?, image=?, story=?, whatsapp_number=? WHERE id=?");
+            $stmt->execute([$name, $tag, $breedId, $gender, $dob ?: null, $arrival ?: null, $health, $status, $image, $story, $whatsapp, $id]);
             jsonResponse(true, null, "Cow '$name' updated successfully.");
         } else {
             // Insert
-            $stmt = $pdo->prepare("INSERT INTO cows (name, tag_number, breed_id, gender, dob, arrival_date, health_status, status, image, story) VALUES (?,?,?,?,?,?,?,?,?,?)");
-            $stmt->execute([$name, $tag, $breedId, $gender, $dob ?: null, $arrival ?: null, $health, $status, $image, $story]);
+            $stmt = $pdo->prepare("INSERT INTO cows (name, tag_number, breed_id, gender, dob, arrival_date, health_status, status, image, story, whatsapp_number) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+            $stmt->execute([$name, $tag, $breedId, $gender, $dob ?: null, $arrival ?: null, $health, $status, $image, $story, $whatsapp]);
             jsonResponse(true, null, "Cow '$name' added successfully.");
         }
     } catch (PDOException $e) {

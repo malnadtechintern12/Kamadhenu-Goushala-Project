@@ -82,12 +82,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // 5. Handle Standard Text/Setting Fields
+    // 5. Handle WhatsApp Numbers Manager (JSON array)
+    if (isset($_POST['whatsapp_numbers_json'])) {
+        $wpJson = trim($_POST['whatsapp_numbers_json']);
+        $wpList = json_decode($wpJson, true);
+        if (is_array($wpList)) {
+            // Find primary number and sync to legacy key
+            $primaryNum = '';
+            foreach ($wpList as $wp) {
+                if (!empty($wp['primary'])) {
+                    $primaryNum = preg_replace('/[^0-9]/', '', $wp['number'] ?? '');
+                    break;
+                }
+            }
+            // If no primary selected, use first
+            if (empty($primaryNum) && !empty($wpList[0]['number'])) {
+                $primaryNum = preg_replace('/[^0-9]/', '', $wpList[0]['number']);
+                $wpList[0]['primary'] = true;
+            }
+
+            $saveSetting = function(string $key, string $val, string $group = 'social') use ($pdo) {
+                $chk = $pdo->prepare("SELECT COUNT(*) FROM settings WHERE setting_key = ?");
+                $chk->execute([$key]);
+                if ($chk->fetchColumn() > 0) {
+                    $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = ?")->execute([$val, $key]);
+                } else {
+                    $pdo->prepare("INSERT INTO settings (setting_key, setting_value, setting_group) VALUES (?, ?, ?)")->execute([$key, $val, $group]);
+                }
+            };
+
+            $saveSetting('whatsapp_numbers', json_encode($wpList), 'social');
+            $saveSetting('whatsapp_number', $primaryNum, 'social');
+        }
+    }
+
+    // 6. Handle Order Routing Mode
+    if (isset($_POST['setting_order_routing_mode'])) {
+        $routeMode = in_array($_POST['setting_order_routing_mode'], ['admin_panel', 'whatsapp']) ? $_POST['setting_order_routing_mode'] : 'admin_panel';
+        $chk = $pdo->prepare("SELECT COUNT(*) FROM settings WHERE setting_key = 'order_routing_mode'");
+        $chk->execute();
+        if ($chk->fetchColumn() > 0) {
+            $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'order_routing_mode'")->execute([$routeMode]);
+        } else {
+            $pdo->prepare("INSERT INTO settings (setting_key, setting_value, setting_group) VALUES ('order_routing_mode', ?, 'orders')")->execute([$routeMode]);
+        }
+    }
+
+    // 7. Handle Standard Text/Setting Fields
     foreach ($_POST as $key => $value) {
         if (str_starts_with($key, 'setting_')) {
             $skey = substr($key, 8);
             $sval = trim($value);
 
+            // Skip keys handled by dedicated handlers above
+            if (in_array($skey, ['order_routing_mode'])) {
+                continue;
+            }
             // Skip logo / favicon if new file was uploaded in this request
             if ($skey === 'site_logo' && !empty($_FILES['site_logo_file']['name'])) {
                 continue;
@@ -122,7 +172,7 @@ $currentFavicon = $settings['site_favicon'] ?? '';
 $groups = [
   'General Information' => ['site_name','site_tagline','footer_about','footer_copyright'],
   'Contact Details'     => ['phone_primary','phone_secondary','email_primary','email_donations','address','google_maps_url'],
-  'Social Media Links'  => ['whatsapp_number','facebook_url','instagram_url','youtube_url','twitter_url'],
+  'Social Media Links'  => ['facebook_url','instagram_url','youtube_url','twitter_url'],
   'Donation & Bank'     => ['donation_upi_id','donation_bank_name','donation_account_name','donation_account_no','donation_ifsc_code','donation_80g_info'],
   'Stats (Homepage)'    => ['stat_cows_served','stat_donors','stat_years_seva','stat_breeds'],
 ];
@@ -316,6 +366,99 @@ $groups = [
   </div>
   <?php endforeach; ?>
 
+  <!-- 3. WhatsApp Numbers Manager -->
+  <?php
+    $wpNumbersRaw = $settings['whatsapp_numbers'] ?? '';
+    $wpNumbers = json_decode($wpNumbersRaw, true);
+    if (!is_array($wpNumbers) || empty($wpNumbers)) {
+        // Migrate legacy single number
+        $legacyNum = $settings['whatsapp_number'] ?? '';
+        $wpNumbers = !empty($legacyNum) ? [['number' => $legacyNum, 'label' => 'Primary', 'primary' => true]] : [];
+    }
+  ?>
+  <div class="admin-card mb-4 border-2 border-success">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0 text-dark">
+        <i class="bi bi-whatsapp text-success me-2"></i> WhatsApp Numbers Manager
+      </h5>
+      <span class="badge bg-success px-3 py-1 fw-bold">Multiple Numbers</span>
+    </div>
+    <p class="text-muted small mb-3">
+      Add multiple WhatsApp numbers for your organization (e.g. Sales, Support, Owner). Select one as the <strong>primary number</strong> — it will be used for the website WhatsApp link, floating button, and order routing.
+    </p>
+
+    <!-- Hidden field that stores the JSON -->
+    <input type="hidden" name="whatsapp_numbers_json" id="wpNumbersJsonInput" value='<?= e($wpNumbersRaw ?: '[]') ?>'>
+
+    <div id="wpNumbersList" class="mb-3"></div>
+
+    <button type="button" class="btn btn-outline-success btn-sm" id="wpAddNumberBtn">
+      <i class="bi bi-plus-circle me-1"></i> Add WhatsApp Number
+    </button>
+  </div>
+
+  <!-- 4. Order Routing Configuration -->
+  <?php $orderRoutingMode = $settings['order_routing_mode'] ?? 'admin_panel'; ?>
+  <div class="admin-card mb-4 border-2 border-primary">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0 text-dark">
+        <i class="bi bi-signpost-split-fill text-primary me-2"></i> Order Routing Configuration
+      </h5>
+      <span class="badge <?= $orderRoutingMode === 'whatsapp' ? 'bg-success' : 'bg-primary' ?> px-3 py-1 fw-bold">
+        <?= $orderRoutingMode === 'whatsapp' ? 'WhatsApp Mode' : 'Admin Panel Mode' ?>
+      </span>
+    </div>
+    <p class="text-muted small mb-4">
+      Choose where customer orders from the Organic Store are routed. <strong>Admin Panel</strong> saves orders to the database (viewable in Admin → Orders). <strong>WhatsApp</strong> sends the full order with product details and customer info directly to your primary WhatsApp number.
+    </p>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="d-block">
+          <div class="form-check form-check-inline p-3 border rounded-3 w-100 <?= $orderRoutingMode === 'admin_panel' ? 'border-primary bg-primary bg-opacity-10' : '' ?>" style="cursor: pointer;">
+            <input class="form-check-input" type="radio" name="setting_order_routing_mode" id="routeAdminPanel" value="admin_panel" <?= $orderRoutingMode === 'admin_panel' ? 'checked' : '' ?>>
+            <label class="form-check-label w-100" for="routeAdminPanel" style="cursor: pointer;">
+              <div class="fw-bold fs-6 text-dark">
+                <i class="bi bi-display me-2 text-primary"></i> Admin Panel (Default)
+              </div>
+              <div class="text-muted small mt-1">
+                Orders are saved to the database and appear in <strong>Admin → Orders</strong>. You can manage order status, print invoices, and track everything from the admin panel.
+              </div>
+            </label>
+          </div>
+        </label>
+      </div>
+      <div class="col-md-6">
+        <label class="d-block">
+          <div class="form-check form-check-inline p-3 border rounded-3 w-100 <?= $orderRoutingMode === 'whatsapp' ? 'border-success bg-success bg-opacity-10' : '' ?>" style="cursor: pointer;">
+            <input class="form-check-input" type="radio" name="setting_order_routing_mode" id="routeWhatsapp" value="whatsapp" <?= $orderRoutingMode === 'whatsapp' ? 'checked' : '' ?>>
+            <label class="form-check-label w-100" for="routeWhatsapp" style="cursor: pointer;">
+              <div class="fw-bold fs-6 text-dark">
+                <i class="bi bi-whatsapp me-2 text-success"></i> WhatsApp
+              </div>
+              <div class="text-muted small mt-1">
+                Orders are <strong>also saved to the database</strong>, plus the customer is redirected to WhatsApp with a pre-filled message containing all product details, quantities, total, and delivery information.
+              </div>
+            </label>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="mt-3 p-3 bg-light rounded-3 border" id="routingInfoBox">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-info-circle-fill text-primary"></i>
+        <span class="small" id="routingInfoText">
+          <?php if ($orderRoutingMode === 'whatsapp'): ?>
+            Orders will be saved to admin panel <strong>AND</strong> sent via WhatsApp to your primary number: <strong><?= e($settings['whatsapp_number'] ?? 'Not Set') ?></strong>
+          <?php else: ?>
+            All orders will be saved and managed exclusively through the Admin Panel.
+          <?php endif; ?>
+        </span>
+      </div>
+    </div>
+  </div>
+
   <div class="sticky-bottom bg-white p-3 border-top rounded-3 shadow-sm d-flex justify-content-between align-items-center">
     <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Changes will immediately take effect across all pages on the website.</span>
     <button type="submit" class="btn btn-gold px-5 py-2 fw-bold">
@@ -344,6 +487,109 @@ document.getElementById('siteLogoFileInput')?.addEventListener('change', functio
     };
     reader.readAsDataURL(file);
   }
+});
+
+// ============================================================
+// WhatsApp Numbers Manager
+// ============================================================
+(function() {
+  const jsonInput = document.getElementById('wpNumbersJsonInput');
+  const listEl = document.getElementById('wpNumbersList');
+  const addBtn = document.getElementById('wpAddNumberBtn');
+  if (!jsonInput || !listEl || !addBtn) return;
+
+  let numbers = [];
+  try { numbers = JSON.parse(jsonInput.value); } catch(e) { numbers = []; }
+  if (!Array.isArray(numbers)) numbers = [];
+
+  function render() {
+    if (numbers.length === 0) {
+      listEl.innerHTML = '<div class="text-muted small p-3 bg-light rounded border text-center"><i class="bi bi-info-circle me-1"></i> No WhatsApp numbers added yet. Click "Add WhatsApp Number" below.</div>';
+      syncJson();
+      return;
+    }
+    let html = '';
+    numbers.forEach((wp, idx) => {
+      const isPrimary = !!wp.primary;
+      html += `
+        <div class="d-flex flex-wrap gap-2 align-items-center p-2 mb-2 border rounded-3 ${isPrimary ? 'border-success bg-success bg-opacity-10' : 'bg-white'}">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="wp_primary_radio" id="wpPrimary_${idx}" ${isPrimary ? 'checked' : ''} onchange="WPManager.setPrimary(${idx})">
+            <label class="form-check-label small fw-bold ${isPrimary ? 'text-success' : 'text-muted'}" for="wpPrimary_${idx}">
+              ${isPrimary ? '★ Primary' : 'Set Primary'}
+            </label>
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <input type="text" class="form-control form-control-sm" placeholder="919845088990 (country code + number)" value="${wp.number || ''}" onchange="WPManager.updateNumber(${idx}, this.value)">
+          </div>
+          <div style="flex:0.6;min-width:100px;">
+            <input type="text" class="form-control form-control-sm" placeholder="Label (e.g. Sales)" value="${wp.label || ''}" onchange="WPManager.updateLabel(${idx}, this.value)">
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-danger px-2" onclick="WPManager.remove(${idx})" title="Remove this number">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      `;
+    });
+    listEl.innerHTML = html;
+    syncJson();
+  }
+
+  function syncJson() {
+    jsonInput.value = JSON.stringify(numbers);
+  }
+
+  window.WPManager = {
+    setPrimary(idx) {
+      numbers.forEach((w, i) => { w.primary = (i === idx); });
+      render();
+    },
+    updateNumber(idx, val) {
+      numbers[idx].number = val.replace(/[^0-9+]/g, '');
+      syncJson();
+    },
+    updateLabel(idx, val) {
+      numbers[idx].label = val;
+      syncJson();
+    },
+    remove(idx) {
+      const wasPrimary = numbers[idx].primary;
+      numbers.splice(idx, 1);
+      if (wasPrimary && numbers.length > 0) {
+        numbers[0].primary = true;
+      }
+      render();
+    },
+    add() {
+      numbers.push({ number: '', label: '', primary: numbers.length === 0 });
+      render();
+    }
+  };
+
+  addBtn.addEventListener('click', () => WPManager.add());
+  render();
+})();
+
+// ============================================================
+// Order Routing Toggle — Visual Feedback
+// ============================================================
+document.querySelectorAll('input[name="setting_order_routing_mode"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const mode = this.value;
+    const infoText = document.getElementById('routingInfoText');
+    // Update border highlights
+    this.closest('.row').querySelectorAll('.form-check-inline').forEach(el => {
+      el.classList.remove('border-primary','bg-primary','bg-opacity-10','border-success','bg-success');
+    });
+    const parent = this.closest('.form-check-inline');
+    if (mode === 'whatsapp') {
+      parent.classList.add('border-success','bg-success','bg-opacity-10');
+      if (infoText) infoText.innerHTML = 'Orders will be saved to admin panel <strong>AND</strong> sent via WhatsApp to your primary number.';
+    } else {
+      parent.classList.add('border-primary','bg-primary','bg-opacity-10');
+      if (infoText) infoText.innerHTML = 'All orders will be saved and managed exclusively through the Admin Panel.';
+    }
+  });
 });
 </script>
 

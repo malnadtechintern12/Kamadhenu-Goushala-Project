@@ -23,6 +23,25 @@ try {
       input.value = val;
     }
 
+    function orderProductWhatsApp(id, name, price) {
+      const qtyInput = document.getElementById('qty_' + id);
+      const quantity = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+      const lineTotal = (parseFloat(price) || 0) * quantity;
+      const wpNumber = (typeof ORDER_WHATSAPP_NUMBER !== 'undefined' && ORDER_WHATSAPP_NUMBER) ? ORDER_WHATSAPP_NUMBER : '<?= e(preg_replace('/[^0-9]/', '', getSetting('whatsapp_number', '919845088990'))) ?>';
+      
+      let msg = "🛒 *PRODUCT ORDER ENQUIRY — Kamadhenu Goushala*\n";
+      msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+      msg += "🌿 *Product:* " + name + "\n";
+      msg += "🔢 *Quantity:* " + quantity + "\n";
+      msg += "💵 *Unit Price:* ₹" + parseFloat(price).toFixed(2) + " each\n";
+      msg += "💰 *Total Amount:* ₹" + lineTotal.toFixed(2) + "\n";
+      msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+      msg += "Namaste! I would like to order / enquire about this product from Kamadhenu Goushala. Please share availability and payment details. 🙏";
+
+      const url = "https://wa.me/" + wpNumber.replace(/[^0-9]/g, '') + "?text=" + encodeURIComponent(msg);
+      window.open(url, "_blank");
+    }
+
     function addToOrder(id, name, price, image, btn) {
       const qtyInput = document.getElementById('qty_' + id);
       const quantity = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
@@ -152,20 +171,29 @@ try {
                 <p class="small text-muted mb-4" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px;">
                   <?= e($p['description'] ?? 'Pure traditional Ayurvedic preparation from indigenous desi cow resources.') ?>
                 </p>
-                <div class="d-flex align-items-center justify-content-between mt-auto pt-3 border-top flex-wrap gap-2">
-                  <div>
-                    <span class="text-muted small d-block">Price:</span>
-                    <div class="fs-4 fw-bold text-forest">₹<?= number_format((float)$p['price'], 2) ?></div>
-                  </div>
-                  <?php if ($p['stock'] > 0): ?>
-                  <div class="d-flex align-items-center gap-2">
-                    <div class="input-group input-group-sm" style="width: 90px;">
-                      <button class="btn btn-outline-secondary px-2" type="button" onclick="changeCardQty(<?= $p['id'] ?>, -1)">-</button>
-                      <input type="number" id="qty_<?= $p['id'] ?>" class="form-control text-center px-1 fw-bold" value="1" min="1" max="<?= $p['stock'] ?>">
-                      <button class="btn btn-outline-secondary px-2" type="button" onclick="changeCardQty(<?= $p['id'] ?>, 1)">+</button>
+                <div class="mt-auto pt-3 border-top d-flex flex-column gap-2">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <span class="text-muted small d-block">Price:</span>
+                      <div class="fs-4 fw-bold text-forest">₹<?= number_format((float)$p['price'], 2) ?></div>
                     </div>
+                    <?php if ($p['stock'] > 0): ?>
+                    <div class="d-flex align-items-center gap-1">
+                      <span class="small text-muted me-1">Qty:</span>
+                      <div class="input-group input-group-sm" style="width: 85px;">
+                        <button class="btn btn-outline-secondary px-2 py-0" type="button" onclick="changeCardQty(<?= $p['id'] ?>, -1)">-</button>
+                        <input type="number" id="qty_<?= $p['id'] ?>" class="form-control text-center px-1 fw-bold" value="1" min="1" max="<?= $p['stock'] ?>">
+                        <button class="btn btn-outline-secondary px-2 py-0" type="button" onclick="changeCardQty(<?= $p['id'] ?>, 1)">+</button>
+                      </div>
+                    </div>
+                    <?php endif; ?>
+                  </div>
+
+                  <?php $prodWp = !empty($p['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $p['whatsapp_number']) : ''; ?>
+                  <?php if ($p['stock'] > 0): ?>
+                  <div class="d-flex gap-2">
                     <button type="button"
-                            class="btn btn-gold px-3 py-2 fw-semibold add-to-cart-btn shadow-sm"
+                            class="btn btn-gold flex-fill py-2 fw-bold small add-to-cart-btn shadow-sm"
                             data-id="<?= $p['id'] ?>" 
                             data-name="<?= htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8') ?>"
                             data-price="<?= $p['price'] ?>" 
@@ -174,9 +202,23 @@ try {
                             title="Add to order">
                       <i class="bi bi-cart-plus-fill me-1"></i> Add to Order
                     </button>
+                    <button type="button"
+                            class="btn btn-forest flex-fill py-2 fw-bold small shadow-sm"
+                            onclick="orderProductWhatsApp(<?= $p['id'] ?>, '<?= addslashes(htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8')) ?>', <?= (float)$p['price'] ?>, '<?= e($prodWp) ?>', '<?= addslashes(htmlspecialchars($p['image'] ?? '', ENT_QUOTES, 'UTF-8')) ?>')"
+                            title="Order directly via WhatsApp">
+                      <i class="bi bi-whatsapp me-1"></i> WhatsApp
+                    </button>
                   </div>
                   <?php else: ?>
-                  <button class="btn btn-secondary btn-sm px-3 py-2" disabled>Out of Stock</button>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-secondary flex-fill py-2 small" disabled>Out of Stock</button>
+                    <button type="button"
+                            class="btn btn-outline-forest flex-fill py-2 fw-bold small"
+                            onclick="orderProductWhatsApp(<?= $p['id'] ?>, '<?= addslashes(htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8')) ?>', <?= (float)$p['price'] ?>, '<?= e($prodWp) ?>', '<?= addslashes(htmlspecialchars($p['image'] ?? '', ENT_QUOTES, 'UTF-8')) ?>')"
+                            title="Enquire on WhatsApp">
+                      <i class="bi bi-whatsapp me-1"></i> Enquire
+                    </button>
+                  </div>
                   <?php endif; ?>
                 </div>
               </div>
@@ -370,6 +412,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkoutForm = document.getElementById("checkoutForm");
   const placeOrderBtn = document.getElementById("btnPlaceOrder");
 
+  // Helper: Build WhatsApp message from order data
+  function buildWhatsAppMessage(payload, orderNumber, totalAmount) {
+    let msg = "🛒 *NEW ORDER — Kamadhenu Goushala Organic Store*\n";
+    msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+    msg += "📋 *Order #:* " + orderNumber + "\n";
+    msg += "📅 *Date:* " + new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) + "\n\n";
+
+    msg += "🧺 *ORDER ITEMS:*\n";
+    msg += "────────────────────\n";
+    let itemNo = 1;
+    payload.items.forEach(item => {
+      const lineTotal = (parseFloat(item.price) || 0) * (parseInt(item.quantity, 10) || 1);
+      msg += itemNo + ". " + item.name + "\n";
+      msg += "   Qty: " + item.quantity + " × ₹" + parseFloat(item.price).toFixed(2) + " = ₹" + lineTotal.toFixed(2) + "\n";
+      itemNo++;
+    });
+    msg += "────────────────────\n";
+    msg += "💰 *TOTAL: ₹" + parseFloat(totalAmount).toFixed(2) + "*\n\n";
+
+    msg += "👤 *CUSTOMER DETAILS:*\n";
+    msg += "────────────────────\n";
+    msg += "• *Name:* " + payload.customer_name + "\n";
+    msg += "• *Email:* " + payload.customer_email + "\n";
+    msg += "• *Phone:* " + payload.customer_phone + "\n";
+    msg += "• *Payment:* " + payload.payment_method + "\n\n";
+
+    msg += "📍 *DELIVERY ADDRESS:*\n";
+    msg += payload.shipping_address + "\n";
+
+    if (payload.notes) {
+      msg += "\n📝 *NOTES:* " + payload.notes + "\n";
+    }
+
+    msg += "\n━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    msg += "🙏 _Thank you for supporting Kamadhenu Goushala!_ 🐄🌿";
+
+    return msg;
+  }
+
   if (checkoutForm) {
     checkoutForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -413,6 +494,7 @@ document.addEventListener("DOMContentLoaded", () => {
           placeOrderBtn.innerHTML = \'<span class="spinner-border spinner-border-sm me-2"></span>Placing Order...\';
         }
 
+        // Always save to database first
         const res = await fetch(BASE_URL + "/api/submit_order.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -422,6 +504,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (data && data.success) {
+          const orderNumber = (data.data && data.data.order_number) || "ORD-SUCCESS";
+          const totalAmount = (data.data && data.data.total_amount) || 0;
+
+          // If WhatsApp mode: also open WhatsApp with pre-filled message
+          const routingMode = (typeof ORDER_ROUTING_MODE !== "undefined") ? ORDER_ROUTING_MODE : "admin_panel";
+          const wpNumber = (typeof ORDER_WHATSAPP_NUMBER !== "undefined") ? ORDER_WHATSAPP_NUMBER : "";
+
+          if (routingMode === "whatsapp" && wpNumber) {
+            const waMsg = buildWhatsAppMessage(payload, orderNumber, totalAmount);
+            const waUrl = "https://wa.me/" + wpNumber + "?text=" + encodeURIComponent(waMsg);
+            window.open(waUrl, "_blank");
+          }
+
+          // Clear cart and show success
           if (typeof Cart !== "undefined") {
             Cart.clear();
           } else {
@@ -432,7 +528,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const modalOrderNumber = document.getElementById("modalOrderNumber");
           if (modalOrderNumber) {
-            modalOrderNumber.textContent = (data.data && data.data.order_number) || "ORD-SUCCESS";
+            modalOrderNumber.textContent = orderNumber;
           }
 
           const successModalEl = document.getElementById("orderSuccessModal");

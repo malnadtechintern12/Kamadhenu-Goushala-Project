@@ -183,3 +183,42 @@ function initStatCounters() {
 
   counters.forEach(c => observer.observe(c));
 }
+
+// Global Product Card Quantity & WhatsApp Order Handlers
+function changeCardQty(prodId, delta) {
+  const input = document.getElementById('qty_' + prodId);
+  if (!input) return;
+  let val = parseInt(input.value, 10) || 1;
+  val = Math.max(1, val + delta);
+  input.value = val;
+}
+
+function orderProductWhatsApp(id, name, price, customWp = '', image = '') {
+  const qtyInput = document.getElementById('qty_' + id);
+  const quantity = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+  const lineTotal = (parseFloat(price) || 0) * quantity;
+  let targetWp = customWp;
+  if (!targetWp) {
+    targetWp = (typeof ORDER_WHATSAPP_NUMBER !== 'undefined' && ORDER_WHATSAPP_NUMBER) 
+      ? ORDER_WHATSAPP_NUMBER 
+      : (window.GOUSHALA_SETTINGS?.whatsapp_number || '919845088990');
+  }
+  
+  const baseUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : window.location.origin + '/kamadhenu-goushala';
+  let msg = "🛒 *PRODUCT ORDER ENQUIRY — Kamadhenu Goushala*\n";
+  msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+  msg += "🌿 *Product:* " + name + "\n";
+  msg += "🔢 *Quantity:* " + quantity + "\n";
+  msg += "💵 *Unit Price:* ₹" + parseFloat(price).toFixed(2) + " each\n";
+  msg += "💰 *Total Amount:* ₹" + lineTotal.toFixed(2) + "\n";
+  if (image) {
+    const fullImg = image.startsWith('http') ? image : (baseUrl + '/' + image.replace(/^\/+/, ''));
+    msg += "🖼️ *Product Image:* " + fullImg + "\n";
+  }
+  msg += "🔗 *Store Link:* " + baseUrl + "/products.php\n";
+  msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+  msg += "Namaste! I would like to order / enquire about this product from Kamadhenu Goushala. Please share availability and payment details. 🙏";
+
+  const url = "https://wa.me/" + targetWp.toString().replace(/[^0-9]/g, '') + "?text=" + encodeURIComponent(msg);
+  window.open(url, "_blank");
+}

@@ -29,6 +29,7 @@ $relStmt->execute([$id]);
 $related = $relStmt->fetchAll();
 
 $age = $cow['dob'] ? (new DateTime($cow['dob']))->diff(new DateTime())->y . ' years' : 'Unknown';
+$wp_num = getSetting('whatsapp_number', '919845088990');
 
 $banner = getPageBanner('cow-details');
 $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), url('" . e(getImageUrl($banner['banner_image'])) . "') center/cover no-repeat;" : "";
@@ -94,12 +95,52 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
           </div>
           <?php endif; ?>
 
-          <div class="d-flex gap-3">
-            <a href="<?= $base ?>/donation.php?cow_id=<?= $cow['id'] ?>&cow_name=<?= urlencode($cow['name']) ?>" class="btn btn-gold py-3 px-4">
-              <i class="bi bi-heart-fill me-2"></i> SPONSOR <?= e($cow['name']) ?>
+          <?php 
+          $cowWp = !empty($cow['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $cow['whatsapp_number']) : preg_replace('/[^0-9]/', '', $wp_num);
+          if (empty($cowWp)) { $cowWp = '919845088990'; }
+          $cowBreedName = $cow['breed_name'] ?? 'Desi Indigenous Breed';
+          $cowImgUrl    = !empty($cow['image']) ? getImageUrl($cow['image']) : '';
+          $cowPageUrl   = $base . '/cow-details.php?id=' . $cow['id'];
+
+          // 1. Adopt Now Message with Text, Photo, and Link
+          $adoptMsg = "🐮 *COW ADOPTION ENQUIRY — Kamadhenu Goushala*\n"
+                    . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    . "🏷️ *Cow Name:* " . $cow['name'] . "\n"
+                    . "🔖 *Tag Number:* " . $cow['tag_number'] . "\n"
+                    . "🐂 *Breed:* " . $cowBreedName . "\n"
+                    . "⚤ *Gender:* " . $cow['gender'] . "\n"
+                    . "🩺 *Health:* " . $cow['health_status'] . "\n";
+          if (!empty($cowImgUrl)) {
+              $adoptMsg .= "🖼️ *Photo:* " . $cowImgUrl . "\n";
+          }
+          $adoptMsg .= "🔗 *Profile Link:* " . $cowPageUrl . "\n"
+                    . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    . "Namaste! I would like to adopt / sponsor " . $cow['name'] . " at Kamadhenu Goushala. Please share the adoption procedure and details. 🙏";
+
+          // 2. Feed Now Message with Text, Photo, and Link
+          $feedMsg = "🌿 *SPONSOR COW FEED / FODDER — Kamadhenu Goushala*\n"
+                   . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                   . "🏷️ *Cow Name:* " . $cow['name'] . "\n"
+                   . "🔖 *Tag Number:* " . $cow['tag_number'] . "\n"
+                   . "🐂 *Breed:* " . $cowBreedName . "\n"
+                   . "⚤ *Gender:* " . $cow['gender'] . "\n"
+                   . "🩺 *Health:* " . $cow['health_status'] . "\n";
+          if (!empty($cowImgUrl)) {
+              $feedMsg .= "🖼️ *Photo:* " . $cowImgUrl . "\n";
+          }
+          $feedMsg .= "🔗 *Profile Link:* " . $cowPageUrl . "\n"
+                   . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                   . "Namaste! I would like to sponsor nutritious green fodder & feed for " . $cow['name'] . " at Kamadhenu Goushala. Please guide me on how to contribute. 🙏";
+          ?>
+          <div class="d-flex gap-3 flex-wrap">
+            <a href="https://wa.me/<?= $cowWp ?>?text=<?= rawurlencode($adoptMsg) ?>" target="_blank" rel="noopener" class="btn btn-gold py-3 px-4 fw-bold">
+              <i class="bi bi-whatsapp me-2"></i> ADOPT NOW
             </a>
-            <a href="<?= $base ?>/cows.php" class="btn btn-outline-forest py-3 px-4">
-              <i class="bi bi-arrow-left me-1"></i> All Cows
+            <a href="https://wa.me/<?= $cowWp ?>?text=<?= rawurlencode($feedMsg) ?>" target="_blank" rel="noopener" class="btn btn-forest py-3 px-4 fw-bold">
+              <i class="bi bi-whatsapp me-2"></i> FEED NOW
+            </a>
+            <a href="<?= $base ?>/donation.php?cow_id=<?= $cow['id'] ?>&cow_name=<?= urlencode($cow['name']) ?>" class="btn btn-outline-gold py-3 px-4 fw-bold">
+              <i class="bi bi-heart-fill me-2"></i> SPONSOR <?= e($cow['name']) ?>
             </a>
           </div>
         </div>

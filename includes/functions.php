@@ -251,6 +251,81 @@ function getImageUrl(?string $path, string $fallback = ''): string {
 }
 
 /**
+ * Build rich WhatsApp message containing both complete cow data, photo, and link.
+ * Type: 'adopt' | 'feed'
+ */
+function buildCowWhatsAppMessage(array $cow, string $type = 'adopt'): string {
+    $name   = $cow['name'] ?? 'Sacred Cow';
+    $tag    = $cow['tag_number'] ?? '-';
+    $breed  = $cow['breed_name'] ?? 'Desi Indigenous Breed';
+    $gender = $cow['gender'] ?? 'Female';
+    $health = $cow['health_status'] ?? 'Healthy';
+    $story  = !empty($cow['story']) ? truncate(strip_tags($cow['story']), 120) : '';
+    
+    $profileUrl = BASE_URL . '/cow-details.php?id=' . ($cow['id'] ?? 0);
+    $imageUrl   = !empty($cow['image']) ? getImageUrl($cow['image']) : '';
+    // Clean raw query params on image url if present to prevent WhatsApp query collisions
+    if (!empty($imageUrl) && str_contains($imageUrl, '?')) {
+        $imageUrl = strtok($imageUrl, '?');
+    }
+
+    if ($type === 'feed') {
+        $msg = "🌿 *SPONSOR COW FEED / FODDER — Kamadhenu Goushala*\n";
+    } else {
+        $msg = "🐮 *COW ADOPTION ENQUIRY — Kamadhenu Goushala*\n";
+    }
+
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "🏷️ *Cow Name:* " . $name . "\n";
+    $msg .= "🔖 *Tag Number:* " . $tag . "\n";
+    $msg .= "🐂 *Breed:* " . $breed . "\n";
+    $msg .= "⚤ *Gender:* " . $gender . "\n";
+    $msg .= "🩺 *Health Status:* " . $health . "\n";
+
+    if (!empty($cow['dob'])) {
+        try {
+            $dobDate = new DateTime($cow['dob']);
+            $ageYears = $dobDate->diff(new DateTime())->y;
+            if ($ageYears > 0) {
+                $msg .= "🎂 *Age:* " . $ageYears . " years\n";
+            }
+        } catch (Exception $e) {}
+    }
+
+    if (!empty($story)) {
+        $msg .= "📖 *About:* " . $story . "\n";
+    }
+
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    if (!empty($imageUrl)) {
+        $msg .= "🖼️ *Cow Photo:* " . $imageUrl . "\n";
+    }
+    $msg .= "🔗 *Profile Link:* " . $profileUrl . "\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+
+    if ($type === 'feed') {
+        $msg .= "Namaste! I would like to sponsor nutritious green fodder & feed for " . $name . " (Tag: " . $tag . ") at Kamadhenu Goushala. Please guide me on how to contribute. 🙏";
+    } else {
+        $msg .= "Namaste! I would like to adopt / sponsor " . $name . " (Tag: " . $tag . ") at Kamadhenu Goushala. Please share the adoption procedure and contribution details. 🙏";
+    }
+
+    return $msg;
+}
+
+/**
+ * Generate direct WhatsApp URL for a cow action.
+ */
+function getCowWhatsAppUrl(array $cow, string $type = 'adopt', ?string $fallbackWp = null): string {
+    $wpNum = !empty($cow['whatsapp_number']) ? $cow['whatsapp_number'] : ($fallbackWp ?? getSetting('whatsapp_number', '919845088990'));
+    $cleanNum = preg_replace('/[^0-9]/', '', $wpNum);
+    if (empty($cleanNum)) {
+        $cleanNum = '919845088990';
+    }
+    $msg = buildCowWhatsAppMessage($cow, $type);
+    return 'https://api.whatsapp.com/send?phone=' . $cleanNum . '&text=' . rawurlencode($msg);
+}
+
+/**
  * Return active banner information for a specific page key.
  */
 function getPageBanner(string $pageKey): ?array {

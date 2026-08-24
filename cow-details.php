@@ -12,9 +12,11 @@ $stmt->execute([$id]);
 $cow = $stmt->fetch();
 if (!$cow) { header("Location: $base/cows.php"); exit; }
 
-$page_title = $cow['name'] . ' — ' . ($cow['breed_name'] ?? 'Desi Cow');
-$page_desc  = truncate($cow['story'] ?? 'Meet ' . $cow['name'] . ' at Kamadhenu Goushala.');
-$active_nav = 'cows';
+$page_title    = $cow['name'] . ' (Tag: ' . $cow['tag_number'] . ') — ' . ($cow['breed_name'] ?? 'Desi Cow');
+$page_desc     = truncate($cow['story'] ?? 'Meet ' . $cow['name'] . ' at Kamadhenu Goushala.', 160);
+$page_og_image = !empty($cow['image']) ? getImageUrl($cow['image']) : '';
+$page_og_url   = $base . '/cow-details.php?id=' . $cow['id'];
+$active_nav    = 'cows';
 include __DIR__ . '/includes/header.php';
 include __DIR__ . '/includes/navbar.php';
 
@@ -96,47 +98,14 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
           <?php endif; ?>
 
           <?php 
-          $cowWp = !empty($cow['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $cow['whatsapp_number']) : preg_replace('/[^0-9]/', '', $wp_num);
-          if (empty($cowWp)) { $cowWp = '919845088990'; }
-          $cowBreedName = $cow['breed_name'] ?? 'Desi Indigenous Breed';
-          $cowImgUrl    = !empty($cow['image']) ? getImageUrl($cow['image']) : '';
-          $cowPageUrl   = $base . '/cow-details.php?id=' . $cow['id'];
-
-          // 1. Adopt Now Message with Text, Photo, and Link
-          $adoptMsg = "🐮 *COW ADOPTION ENQUIRY — Kamadhenu Goushala*\n"
-                    . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                    . "🏷️ *Cow Name:* " . $cow['name'] . "\n"
-                    . "🔖 *Tag Number:* " . $cow['tag_number'] . "\n"
-                    . "🐂 *Breed:* " . $cowBreedName . "\n"
-                    . "⚤ *Gender:* " . $cow['gender'] . "\n"
-                    . "🩺 *Health:* " . $cow['health_status'] . "\n";
-          if (!empty($cowImgUrl)) {
-              $adoptMsg .= "🖼️ *Photo:* " . $cowImgUrl . "\n";
-          }
-          $adoptMsg .= "🔗 *Profile Link:* " . $cowPageUrl . "\n"
-                    . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                    . "Namaste! I would like to adopt / sponsor " . $cow['name'] . " at Kamadhenu Goushala. Please share the adoption procedure and details. 🙏";
-
-          // 2. Feed Now Message with Text, Photo, and Link
-          $feedMsg = "🌿 *SPONSOR COW FEED / FODDER — Kamadhenu Goushala*\n"
-                   . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                   . "🏷️ *Cow Name:* " . $cow['name'] . "\n"
-                   . "🔖 *Tag Number:* " . $cow['tag_number'] . "\n"
-                   . "🐂 *Breed:* " . $cowBreedName . "\n"
-                   . "⚤ *Gender:* " . $cow['gender'] . "\n"
-                   . "🩺 *Health:* " . $cow['health_status'] . "\n";
-          if (!empty($cowImgUrl)) {
-              $feedMsg .= "🖼️ *Photo:* " . $cowImgUrl . "\n";
-          }
-          $feedMsg .= "🔗 *Profile Link:* " . $cowPageUrl . "\n"
-                   . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                   . "Namaste! I would like to sponsor nutritious green fodder & feed for " . $cow['name'] . " at Kamadhenu Goushala. Please guide me on how to contribute. 🙏";
+          $adoptWaUrl = getCowWhatsAppUrl($cow, 'adopt', $wp_num);
+          $feedWaUrl  = getCowWhatsAppUrl($cow, 'feed', $wp_num);
           ?>
           <div class="d-flex gap-3 flex-wrap">
-            <a href="https://wa.me/<?= $cowWp ?>?text=<?= rawurlencode($adoptMsg) ?>" target="_blank" rel="noopener" class="btn btn-gold py-3 px-4 fw-bold">
+            <a href="<?= e($adoptWaUrl) ?>" target="_blank" rel="noopener" class="btn btn-gold py-3 px-4 fw-bold">
               <i class="bi bi-whatsapp me-2"></i> ADOPT NOW
             </a>
-            <a href="https://wa.me/<?= $cowWp ?>?text=<?= rawurlencode($feedMsg) ?>" target="_blank" rel="noopener" class="btn btn-forest py-3 px-4 fw-bold">
+            <a href="<?= e($feedWaUrl) ?>" target="_blank" rel="noopener" class="btn btn-forest py-3 px-4 fw-bold">
               <i class="bi bi-whatsapp me-2"></i> FEED NOW
             </a>
             <a href="<?= $base ?>/donation.php?cow_id=<?= $cow['id'] ?>&cow_name=<?= urlencode($cow['name']) ?>" class="btn btn-outline-gold py-3 px-4 fw-bold">

@@ -69,51 +69,19 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
                     <?= e($cow['story'] ?: 'A gentle resident cow at Kamadhenu Goushala.') ?>
                   </p>
                   <?php 
-                  $cowWp = !empty($cow['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $cow['whatsapp_number']) : preg_replace('/[^0-9]/', '', $wp_num);
-                  if (empty($cowWp)) { $cowWp = '919845088990'; }
-                  $cowBreedName = $cow['breed_name'] ?? 'Desi Indigenous Breed';
-                  $cowImgUrl    = !empty($cow['image']) ? getImageUrl($cow['image']) : '';
-                  $cowPageUrl   = $base . '/cow-details.php?id=' . $cow['id'];
-
-                  // 1. Adopt Now Message with Text, Photo, and Link
-                  $adoptMsg = "🐮 *COW ADOPTION ENQUIRY — Kamadhenu Goushala*\n"
-                            . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                            . "🏷️ *Cow Name:* " . $cow['name'] . "\n"
-                            . "🔖 *Tag Number:* " . $cow['tag_number'] . "\n"
-                            . "🐂 *Breed:* " . $cowBreedName . "\n"
-                            . "⚤ *Gender:* " . $cow['gender'] . "\n"
-                            . "🩺 *Health:* " . $cow['health_status'] . "\n";
-                  if (!empty($cowImgUrl)) {
-                      $adoptMsg .= "🖼️ *Photo:* " . $cowImgUrl . "\n";
-                  }
-                  $adoptMsg .= "🔗 *Profile Link:* " . $cowPageUrl . "\n"
-                            . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                            . "Namaste! I would like to adopt / sponsor " . $cow['name'] . " at Kamadhenu Goushala. Please share the adoption procedure and details. 🙏";
-
-                  // 2. Feed Now Message with Text, Photo, and Link
-                  $feedMsg = "🌿 *SPONSOR COW FEED / FODDER — Kamadhenu Goushala*\n"
-                           . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                           . "🏷️ *Cow Name:* " . $cow['name'] . "\n"
-                           . "🔖 *Tag Number:* " . $cow['tag_number'] . "\n"
-                           . "🐂 *Breed:* " . $cowBreedName . "\n"
-                           . "⚤ *Gender:* " . $cow['gender'] . "\n"
-                           . "🩺 *Health:* " . $cow['health_status'] . "\n";
-                  if (!empty($cowImgUrl)) {
-                      $feedMsg .= "🖼️ *Photo:* " . $cowImgUrl . "\n";
-                  }
-                  $feedMsg .= "🔗 *Profile Link:* " . $cowPageUrl . "\n"
-                           . "━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                           . "Namaste! I would like to sponsor nutritious green fodder & feed for " . $cow['name'] . " at Kamadhenu Goushala. Please guide me on how to contribute. 🙏";
+                  $cowPageUrl  = $base . '/cow-details.php?id=' . $cow['id'];
+                  $adoptWaUrl  = getCowWhatsAppUrl($cow, 'adopt', $wp_num);
+                  $feedWaUrl   = getCowWhatsAppUrl($cow, 'feed', $wp_num);
                   ?>
                   <div class="mt-auto d-flex flex-column gap-2">
                     <a href="<?= $cowPageUrl ?>" class="btn btn-outline-forest w-100 py-2 fw-semibold">
                       <i class="bi bi-eye me-1"></i> View Full Profile
                     </a>
                     <div class="d-flex gap-2">
-                      <a href="https://wa.me/<?= $cowWp ?>?text=<?= rawurlencode($adoptMsg) ?>" target="_blank" rel="noopener" class="btn btn-gold flex-fill py-2 fw-bold text-nowrap" style="font-size: 0.85rem;">
+                      <a href="<?= e($adoptWaUrl) ?>" target="_blank" rel="noopener" class="btn btn-gold flex-fill py-2 fw-bold text-nowrap" style="font-size: 0.85rem;">
                         <i class="bi bi-whatsapp me-1"></i> Adopt Now
                       </a>
-                      <a href="https://wa.me/<?= $cowWp ?>?text=<?= rawurlencode($feedMsg) ?>" target="_blank" rel="noopener" class="btn btn-forest flex-fill py-2 fw-bold text-nowrap" style="font-size: 0.85rem;">
+                      <a href="<?= e($feedWaUrl) ?>" target="_blank" rel="noopener" class="btn btn-forest flex-fill py-2 fw-bold text-nowrap" style="font-size: 0.85rem;">
                         <i class="bi bi-whatsapp me-1"></i> Feed Now
                       </a>
                     </div>

@@ -64,12 +64,23 @@ $preloadBannerImage = !empty($banner['banner_image']) ? getImageUrl($banner['ban
     <?php endif; ?>
   <?php endif; ?>
 
-  <!-- Open Graph -->
+  <!-- Open Graph & WhatsApp Link Preview Meta Tags -->
+  <?php 
+  $ogImage = $page_og_image ?? 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&w=1200&q=80';
+  $ogUrl   = $page_og_url ?? ($base . ($_SERVER['REQUEST_URI'] ?? $_SERVER['PHP_SELF']));
+  ?>
+  <meta property="og:site_name"   content="<?= e($site_name) ?>">
   <meta property="og:title"       content="<?= e($full_title) ?>">
   <meta property="og:description" content="<?= e($meta_desc) ?>">
   <meta property="og:type"        content="website">
-  <meta property="og:url"         content="<?= $base . $_SERVER['PHP_SELF'] ?>">
-  <meta property="og:image"       content="https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:url"         content="<?= e($ogUrl) ?>">
+  <meta property="og:image"       content="<?= e($ogImage) ?>">
+  <meta property="og:image:secure_url" content="<?= e($ogImage) ?>">
+  <meta property="og:image:alt"   content="<?= e($full_title) ?>">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:title"      content="<?= e($full_title) ?>">
+  <meta name="twitter:description" content="<?= e($meta_desc) ?>">
+  <meta name="twitter:image"      content="<?= e($ogImage) ?>">
 
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

@@ -65,7 +65,7 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
             <?= e($banner['subtitle'] ?? "Protect • Preserve • Serve • Nurture — Dedicated to providing lifelong shelter, organic nutrition, and compassionate veterinary healthcare for India's sacred indigenous cows.") ?>
           </p>
           <div class="d-flex flex-wrap gap-3">
-            <a href="<?= $base ?>/donation.php" class="btn btn-gold py-3 px-4 fs-6">
+            <a href="<?= $base ?>/seva.php" class="btn btn-gold py-3 px-4 fs-6">
               <i class="bi bi-heart-fill"></i> SUPPORT GAU SEVA
             </a>
             <a href="<?= $base ?>/cows.php" class="btn btn-outline-light rounded-pill py-3 px-4 fs-6 fw-bold">
@@ -282,8 +282,9 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
                 <h4 class="seva-title"><?= e($s['title']) ?></h4>
                 <div class="seva-amount">₹<?= number_format((float)$s['suggested_amount']) ?></div>
                 <p class="seva-desc"><?= e($s['short_desc'] ?: $s['full_desc']) ?></p>
-                <a href="<?= $base ?>/donation.php?seva_id=<?= $s['id'] ?>&amount=<?= $s['suggested_amount'] ?>" class="btn btn-gold w-100 py-2">
-                  OFFER THIS SEVA
+                <?php $sevaWaUrl = getSevaWhatsAppUrl($s, $wp_num); ?>
+                <a href="<?= e($sevaWaUrl) ?>" target="_blank" rel="noopener" class="btn btn-gold w-100 py-2 fw-bold">
+                  <i class="bi bi-whatsapp me-1"></i> FEED NOW
                 </a>
               </div>
             </div>

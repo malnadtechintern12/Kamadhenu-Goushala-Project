@@ -348,6 +348,52 @@ function getGeneralWhatsAppUrl(string $topic = 'General Enquiry', string $custom
 }
 
 /**
+ * Build clean, formatted WhatsApp message for Gau Seva / Feed Seva sponsorship enquiry.
+ */
+function buildSevaWhatsAppMessage(array $seva): string {
+    $siteName = getSetting('site_name', SITE_NAME);
+    $tagline  = getSetting('site_tagline', 'Serving Gau Mata With Pure Devotion');
+    $title    = $seva['title'] ?? 'Gau Seva';
+    $amount   = !empty($seva['suggested_amount']) ? '₹' . number_format((float)$seva['suggested_amount']) : '';
+    $desc     = !empty($seva['short_desc']) ? $seva['short_desc'] : ($seva['full_desc'] ?? '');
+    $sevaUrl  = BASE_URL . '/seva.php';
+    $websiteUrl = BASE_URL . '/index.php';
+
+    $msg = "🌸 *" . strtoupper($siteName) . "*\n";
+    $msg .= "🌿 _" . $tagline . "_\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "🌾 *GAU SEVA & FEED NOW INQUIRY*\n\n";
+    $msg .= "📋 *Seva Package Details:*\n";
+    $msg .= "• *Seva Name:* " . $title . "\n";
+    if ($amount) {
+        $msg .= "• *Suggested Amount:* " . $amount . "\n";
+    }
+    if ($desc) {
+        $msg .= "• *Description:* " . strip_tags($desc) . "\n";
+    }
+    $msg .= "\n💬 *Message:* \n";
+    $msg .= "Namaste! I would like to feed the cows and offer this sacred seva (*" . $title . ($amount ? " - " . $amount : "") . "*) at " . $siteName . ". Please share payment/UPI details and guidance for this seva. 🙏\n\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "🌐 *Gau Seva Packages:* " . $sevaUrl . "\n";
+    $msg .= "🏡 *Sanctuary Website:* " . $websiteUrl;
+
+    return $msg;
+}
+
+/**
+ * Generate direct WhatsApp URL for Gau Seva.
+ */
+function getSevaWhatsAppUrl(array $seva, ?string $fallbackWp = null): string {
+    $wpNum = !empty($seva['whatsapp_number']) ? $seva['whatsapp_number'] : ($fallbackWp ?? getSetting('whatsapp_number', '919845088990'));
+    $cleanNum = preg_replace('/[^0-9]/', '', $wpNum);
+    if (empty($cleanNum)) {
+        $cleanNum = '919845088990';
+    }
+    $msg = buildSevaWhatsAppMessage($seva);
+    return 'https://wa.me/' . $cleanNum . '?text=' . rawurlencode($msg);
+}
+
+/**
  * Build clean WhatsApp message for product enquiry/order.
  */
 function buildProductWhatsAppMessage(array $product, int $quantity = 1): string {

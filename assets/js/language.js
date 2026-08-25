@@ -96,7 +96,9 @@
     'All Products': 'ಎಲ್ಲ ಉತ್ಪನ್ನಗಳು',
     'All Categories': 'ಎಲ್ಲ ವಿಭಾಗಗಳು',
     'Your Organic Cart': 'ನಿಮ್ಮ ಸಾವಯವ ಕಾರ್ಟ್',
-    'Subtotal:': 'ಒಟ್ಟು ಮೊತ್ತ:',
+    'FEED NOW': 'ಈಗಲೇ ಆಹಾರ ನೀಡಿ',
+    'Feed Now': 'ಈಗಲೇ ಆಹಾರ ನೀಡಿ',
+    'OFFER THIS SEVA': 'ಸೇವೆ ಸಲ್ಲಿಸಿ',
     'Your cart is empty.': 'ನಿಮ್ಮ ಕಾರ್ಟ್ ಖಾಲಿಯಾಗಿದೆ.'
   };
 

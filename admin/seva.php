@@ -5,12 +5,16 @@ $admin_title = 'Seva Packages';
 require_once __DIR__ . '/../includes/functions.php';
 include __DIR__ . '/includes/admin_header.php';
 $sevaList = $pdo->query("SELECT * FROM seva ORDER BY display_order ASC, id ASC")->fetchAll();
+
+$wpNumbersRaw = getSetting('whatsapp_numbers', '[]');
+$configuredWpNumbers = json_decode($wpNumbersRaw, true) ?: [];
+$primaryWpNumber = getSetting('whatsapp_number', '919845088990');
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
   <div>
     <h5 class="fw-bold mb-1">Gau Seva Packages (<?= count($sevaList) ?>)</h5>
-    <p class="text-muted small mb-0">Manage donation packages, suggested amounts, icons, and descriptions.</p>
+    <p class="text-muted small mb-0">Manage donation packages, suggested amounts, icons, WhatsApp numbers, and descriptions.</p>
   </div>
   <button class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#sevaModal" onclick="resetSevaForm()">
     <i class="bi bi-plus-lg me-1"></i> Add Seva Package
@@ -25,6 +29,7 @@ $sevaList = $pdo->query("SELECT * FROM seva ORDER BY display_order ASC, id ASC")
         <th>Seva Title</th>
         <th>Suggested Amount</th>
         <th>Display Order</th>
+        <th>WhatsApp</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
@@ -46,6 +51,15 @@ $sevaList = $pdo->query("SELECT * FROM seva ORDER BY display_order ASC, id ASC")
         </td>
         <td><span class="badge bg-light text-dark border"><?= $s['display_order'] ?></span></td>
         <td>
+          <?php if (!empty($s['whatsapp_number'])): ?>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-normal">
+              <i class="bi bi-whatsapp me-1"></i><?= e($s['whatsapp_number']) ?>
+            </span>
+          <?php else: ?>
+            <span class="badge bg-light text-muted border">Default (<?= e($primaryWpNumber) ?>)</span>
+          <?php endif; ?>
+        </td>
+        <td>
           <span class="badge <?= $s['status']==='active'?'badge-active':'badge-inactive' ?>">
             <?= ucfirst(e($s['status'])) ?>
           </span>
@@ -63,7 +77,7 @@ $sevaList = $pdo->query("SELECT * FROM seva ORDER BY display_order ASC, id ASC")
       </tr>
       <?php endforeach; ?>
       <?php if (empty($sevaList)): ?>
-        <tr><td colspan="6" class="text-center py-4 text-muted">No seva packages configured. Click "Add Seva Package" to create one.</td></tr>
+        <tr><td colspan="7" class="text-center py-4 text-muted">No seva packages configured. Click "Add Seva Package" to create one.</td></tr>
       <?php endif; ?>
     </tbody>
   </table>
@@ -105,6 +119,34 @@ $sevaList = $pdo->query("SELECT * FROM seva ORDER BY display_order ASC, id ASC")
                 <option value="inactive">Inactive</option>
               </select>
             </div>
+
+            <!-- WhatsApp Number Setting -->
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-whatsapp text-success me-1"></i> WhatsApp Number for Seva Enquiries / Feeding
+              </label>
+              <div class="input-group">
+                <input type="text" name="whatsapp_number" id="sevaWhatsapp" class="form-control" placeholder="Leave empty for default (<?= e($primaryWpNumber) ?>) or enter custom (e.g. 919845088990)">
+                <?php if (!empty($configuredWpNumbers)): ?>
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Select Number
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item small" href="javascript:void(0)" onclick="setSevaWp('')"><em>Use Global Default (<?= e($primaryWpNumber) ?>)</em></a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <?php foreach ($configuredWpNumbers as $wp): ?>
+                    <li>
+                      <a class="dropdown-item small" href="javascript:void(0)" onclick="setSevaWp('<?= e($wp['number']) ?>')">
+                        <i class="bi bi-telephone me-1"></i> <?= e($wp['number']) ?> <?= !empty($wp['label']) ? '('.e($wp['label']).')' : '' ?> <?= !empty($wp['primary']) ? '★ Primary' : '' ?>
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+              </div>
+              <div class="form-text">Devotee inquiries from the "FEED NOW" button for this seva package will be routed directly to this WhatsApp number.</div>
+            </div>
+
             <div class="col-12">
               <label class="form-label fw-semibold">Banner Image URL</label>
               <input type="url" name="image" id="sevaImage" class="form-control" placeholder="https://images.unsplash.com/...">
@@ -130,9 +172,14 @@ $sevaList = $pdo->query("SELECT * FROM seva ORDER BY display_order ASC, id ASC")
 
 <?php
 $admin_extra_js = '<script>
+function setSevaWp(num) {
+  document.getElementById("sevaWhatsapp").value = num;
+}
+
 function resetSevaForm() {
   document.getElementById("sevaForm").reset();
   document.getElementById("sevaId").value = "";
+  document.getElementById("sevaWhatsapp").value = "";
   document.getElementById("sevaIcon").value = "bi-heart-fill";
   document.getElementById("sevaModalTitle").textContent = "Add Gau Seva Package";
 }
@@ -147,6 +194,7 @@ document.querySelectorAll(".edit-seva-btn").forEach(btn => {
     document.getElementById("sevaIcon").value = s.icon || "bi-heart-fill";
     document.getElementById("sevaOrder").value = s.display_order || 0;
     document.getElementById("sevaStatus").value = s.status || "active";
+    document.getElementById("sevaWhatsapp").value = s.whatsapp_number || "";
     document.getElementById("sevaImage").value = s.image || "";
     document.getElementById("sevaShortDesc").value = s.short_desc || "";
     document.getElementById("sevaFullDesc").value = s.full_desc || "";

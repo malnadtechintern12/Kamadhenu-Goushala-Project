@@ -106,6 +106,19 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
     </div>
   </footer>
 
+  <!-- Floating WhatsApp Helpline Button -->
+  <?php 
+  $floatingWaUrl = getGeneralWhatsAppUrl('Direct Website Inquiry', $base . ($_SERVER['REQUEST_URI'] ?? '/index.php'), $wp_num); 
+  ?>
+  <a href="<?= e($floatingWaUrl) ?>" 
+     target="_blank" 
+     rel="noopener" 
+     class="floating-whatsapp-btn" 
+     id="floatingWhatsAppBtn" 
+     aria-label="WhatsApp Helpline">
+    <i class="bi bi-whatsapp"></i>
+  </a>
+
   <!-- Floating Cart Button -->
   <button class="floating-cart-btn" data-bs-toggle="modal" data-bs-target="#cartModal" title="View Cart">
     <i class="bi bi-bag-heart-fill"></i>

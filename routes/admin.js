@@ -360,7 +360,7 @@ router.get('/seva', async (req, res) => {
 
 router.post('/seva', upload.single('image'), async (req, res) => {
   try {
-    const { title, slug, short_desc, full_desc, suggested_amount, icon, image_url, display_order, status } = req.body;
+    const { title, slug, short_desc, full_desc, suggested_amount, icon, image_url, whatsapp_number, display_order, status } = req.body;
     if (!title) {
       return res.status(400).json({ success: false, message: 'Seva title is required.' });
     }
@@ -369,8 +369,8 @@ router.post('/seva', upload.single('image'), async (req, res) => {
     const finalImage = getUploadedImagePath(req.file, image_url);
 
     const result = await query(
-      `INSERT INTO seva (title, slug, short_desc, full_desc, suggested_amount, icon, image, display_order, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO seva (title, slug, short_desc, full_desc, suggested_amount, icon, image, whatsapp_number, display_order, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         title.trim(),
         cleanSlug,
@@ -379,6 +379,7 @@ router.post('/seva', upload.single('image'), async (req, res) => {
         parseFloat(suggested_amount || 1001),
         icon || 'bi-heart-fill',
         finalImage,
+        whatsapp_number ? whatsapp_number.trim() : null,
         parseInt(display_order || 0, 10),
         status || 'active'
       ]
@@ -394,7 +395,7 @@ router.post('/seva', upload.single('image'), async (req, res) => {
 router.put('/seva/:id', upload.single('image'), async (req, res) => {
   try {
     const sevaId = parseInt(req.params.id, 10);
-    const { title, slug, short_desc, full_desc, suggested_amount, icon, image_url, display_order, status } = req.body;
+    const { title, slug, short_desc, full_desc, suggested_amount, icon, image_url, whatsapp_number, display_order, status } = req.body;
 
     const existing = await query('SELECT * FROM seva WHERE id = ?', [sevaId]);
     if (existing.length === 0) {
@@ -409,7 +410,7 @@ router.put('/seva/:id', upload.single('image'), async (req, res) => {
     }
 
     await query(
-      `UPDATE seva SET title = ?, slug = ?, short_desc = ?, full_desc = ?, suggested_amount = ?, icon = ?, image = ?, display_order = ?, status = ? WHERE id = ?`,
+      `UPDATE seva SET title = ?, slug = ?, short_desc = ?, full_desc = ?, suggested_amount = ?, icon = ?, image = ?, whatsapp_number = ?, display_order = ?, status = ? WHERE id = ?`,
       [
         title ? title.trim() : existing[0].title,
         slug ? slug.trim() : existing[0].slug,
@@ -418,6 +419,7 @@ router.put('/seva/:id', upload.single('image'), async (req, res) => {
         suggested_amount !== undefined ? parseFloat(suggested_amount) : existing[0].suggested_amount,
         icon || existing[0].icon,
         finalImage,
+        whatsapp_number !== undefined ? (whatsapp_number ? whatsapp_number.trim() : null) : existing[0].whatsapp_number,
         display_order !== undefined ? parseInt(display_order, 10) : existing[0].display_order,
         status || existing[0].status,
         sevaId

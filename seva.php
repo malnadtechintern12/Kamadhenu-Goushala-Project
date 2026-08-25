@@ -39,8 +39,10 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
               <div class="seva-icon"><i class="bi <?= e($s['icon'] ?: 'bi-heart-fill') ?>"></i></div>
               <h4 class="seva-title"><?= e($s['title']) ?></h4>
               <div class="seva-amount">₹<?= number_format((float)$s['suggested_amount']) ?></div>
-              <p class="seva-desc"><?= e($s['full_desc'] ?: $s['short_desc']) ?></p>
-              <a href="<?= $base ?>/donation.php?seva_id=<?= $s['id'] ?>&amount=<?= $s['suggested_amount'] ?>" class="btn btn-gold w-100 py-2 mt-auto">OFFER THIS SEVA</a>
+              <?php $sevaWaUrl = getSevaWhatsAppUrl($s); ?>
+              <a href="<?= e($sevaWaUrl) ?>" target="_blank" rel="noopener" class="btn btn-gold w-100 py-2 mt-auto fw-bold">
+                <i class="bi bi-whatsapp me-2"></i> FEED NOW
+              </a>
             </div>
           </div>
           <?php endforeach; ?>

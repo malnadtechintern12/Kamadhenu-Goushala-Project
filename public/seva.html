@@ -171,8 +171,8 @@
                 <div class="seva-amount">₹${parseFloat(seva.suggested_amount).toLocaleString('en-IN')}</div>
                 <p class="seva-desc">${seva.full_desc || seva.short_desc}</p>
                 <div class="mt-auto">
-                  <a href="/donation.html?seva_id=${seva.id}&amount=${seva.suggested_amount}" class="btn btn-gold w-100 py-3">
-                    <i class="bi bi-heart-fill me-2"></i> OFFER THIS SEVA
+                  <a href="${getSevaWhatsAppUrl(seva)}" target="_blank" rel="noopener" class="btn btn-gold w-100 py-3 fw-bold">
+                    <i class="bi bi-whatsapp me-2"></i> FEED NOW
                   </a>
                 </div>
               </div>

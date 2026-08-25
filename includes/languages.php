@@ -81,6 +81,7 @@ function getTranslations(): array {
             'btn_contact_us'  => 'CONTACT US',
             'btn_submit'      => 'Submit',
             'btn_donate'      => 'Donate Now',
+            'btn_feed_now'    => 'FEED NOW',
 
             // Footer
             'footer_quick_links' => 'Quick Links',
@@ -162,6 +163,7 @@ function getTranslations(): array {
             'btn_contact_us'  => 'ಸಂಪರ್ಕಿಸಿ',
             'btn_submit'      => 'ಸಲ್ಲಿಸಿ',
             'btn_donate'      => 'ದೇಣಿಗೆ ನೀಡಿ',
+            'btn_feed_now'    => 'ಈಗಲೇ ಆಹಾರ ನೀಡಿ',
 
             // Footer
             'footer_quick_links' => 'ತ್ವರಿತ ಲಿಂಕ್‌ಗಳು',

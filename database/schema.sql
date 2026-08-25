@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS `seva` (
   `suggested_amount` DECIMAL(10,2) DEFAULT 1001.00,
   `icon` VARCHAR(100) DEFAULT 'bi-heart-fill',
   `image` VARCHAR(255) DEFAULT NULL,
+  `whatsapp_number` VARCHAR(50) DEFAULT NULL,
   `display_order` INT DEFAULT 0,
   `status` ENUM('active', 'inactive') DEFAULT 'active',
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

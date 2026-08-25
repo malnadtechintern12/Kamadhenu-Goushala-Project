@@ -196,18 +196,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $suggested_amount = floatval($input['suggested_amount'] ?? 501);
                 $icon = trim($input['icon'] ?? 'bi-heart-fill');
                 $image = $uploadedImagePath ?: trim($input['image'] ?? '');
+                $whatsapp_number = trim($input['whatsapp_number'] ?? '') ?: null;
                 $display_order = intInput($input['display_order'] ?? 0);
                 $status = $input['status'] ?? 'active';
 
                 if (empty($title)) jsonResponse(false, null, 'Seva title is required.', 400);
 
                 if ($id > 0) {
-                    $stmt = $pdo->prepare("UPDATE seva SET title=?, slug=?, short_desc=?, full_desc=?, suggested_amount=?, icon=?, image=?, display_order=?, status=? WHERE id=?");
-                    $stmt->execute([$title, $slug, $short_desc, $full_desc, $suggested_amount, $icon, $image, $display_order, $status, $id]);
+                    $stmt = $pdo->prepare("UPDATE seva SET title=?, slug=?, short_desc=?, full_desc=?, suggested_amount=?, icon=?, image=?, whatsapp_number=?, display_order=?, status=? WHERE id=?");
+                    $stmt->execute([$title, $slug, $short_desc, $full_desc, $suggested_amount, $icon, $image, $whatsapp_number, $display_order, $status, $id]);
                     jsonResponse(true, null, "Seva '{$title}' updated successfully.");
                 } else {
-                    $stmt = $pdo->prepare("INSERT INTO seva (title, slug, short_desc, full_desc, suggested_amount, icon, image, display_order, status) VALUES (?,?,?,?,?,?,?,?,?)");
-                    $stmt->execute([$title, $slug, $short_desc, $full_desc, $suggested_amount, $icon, $image, $display_order, $status]);
+                    $stmt = $pdo->prepare("INSERT INTO seva (title, slug, short_desc, full_desc, suggested_amount, icon, image, whatsapp_number, display_order, status) VALUES (?,?,?,?,?,?,?,?,?,?)");
+                    $stmt->execute([$title, $slug, $short_desc, $full_desc, $suggested_amount, $icon, $image, $whatsapp_number, $display_order, $status]);
                     jsonResponse(true, null, "Seva '{$title}' created successfully.");
                 }
                 break;

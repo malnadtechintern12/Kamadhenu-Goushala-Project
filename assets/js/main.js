@@ -7,13 +7,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 2. Fetch and apply global website settings
   await loadGlobalSettings();
 
-  // 3. Setup Newsletter Subscription
+  // 3. Ensure Floating WhatsApp Button is present on every page
+  ensureFloatingWhatsAppButton();
+
+  // 4. Setup Newsletter Subscription
   setupNewsletterForm();
 
-  // 4. Setup Global Contact Form if present
+  // 5. Setup Global Contact Form if present
   setupContactForm();
 
-  // 5. Initialize Live Counters Animation
+  // 6. Initialize Live Counters Animation
   initStatCounters();
 });
 
@@ -241,3 +244,73 @@ function orderProductWhatsApp(id, name, price, customWp = '', image = '') {
   const url = "https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(msg);
   window.open(url, "_blank");
 }
+
+function getSevaWhatsAppUrl(seva, customWp = '') {
+  let targetWp = customWp || (seva && seva.whatsapp_number) || '';
+  if (!targetWp) {
+    targetWp = (window.GOUSHALA_SETTINGS?.whatsapp_number || '919845088990');
+  }
+  const cleanNumber = targetWp.toString().replace(/[^0-9]/g, '') || '919845088990';
+  const siteName = (typeof SITE_NAME !== 'undefined' && SITE_NAME) ? SITE_NAME : (window.GOUSHALA_SETTINGS?.site_name || 'Kamadhenu Goushala');
+  const title = (seva && seva.title) || 'Gau Seva';
+  const amount = (seva && seva.suggested_amount) ? '₹' + parseFloat(seva.suggested_amount).toLocaleString('en-IN') : '';
+  const desc = (seva && (seva.short_desc || seva.full_desc)) || '';
+  const baseUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : (window.location.origin + (window.location.pathname.startsWith('/kamadhenu-goushala') ? '/kamadhenu-goushala' : ''));
+
+  let msg = "🌸 *" + siteName.toUpperCase() + "*\n";
+  msg += "🌿 _Dedicated to Gau Seva & Cow Protection_\n";
+  msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+  msg += "🌾 *GAU SEVA & FEED NOW INQUIRY*\n\n";
+  msg += "📋 *Seva Package Details:*\n";
+  msg += "• *Seva Name:* " + title + "\n";
+  if (amount) msg += "• *Suggested Amount:* " + amount + "\n";
+  if (desc) msg += "• *Description:* " + desc.replace(/<[^>]*>?/gm, '') + "\n";
+  msg += "\n💬 *Message:*\n";
+  msg += "Namaste! I would like to feed the cows and offer this sacred seva (*" + title + (amount ? " - " + amount : "") + "*) at " + siteName + ". Please share payment/UPI details and guidance for this seva. 🙏\n\n";
+  msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+  msg += "🌐 *Gau Seva Packages:* " + baseUrl + "/seva.php\n";
+  msg += "🏡 *Sanctuary Website:* " + baseUrl + "/index.php";
+
+  return "https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(msg);
+}
+
+function feedSevaWhatsApp(title, amount, desc, customWp = '') {
+  const url = getSevaWhatsAppUrl({ title, suggested_amount: amount, short_desc: desc }, customWp);
+  window.open(url, "_blank");
+}
+
+function ensureFloatingWhatsAppButton() {
+  const existing = document.getElementById('floatingWhatsAppBtn');
+  const wpNum = (window.GOUSHALA_SETTINGS?.whatsapp_number || (typeof ORDER_WHATSAPP_NUMBER !== 'undefined' && ORDER_WHATSAPP_NUMBER ? ORDER_WHATSAPP_NUMBER : '919845088990')).toString().replace(/[^0-9]/g, '') || '919845088990';
+  const siteName = (window.GOUSHALA_SETTINGS?.site_name || (typeof SITE_NAME !== 'undefined' ? SITE_NAME : 'Kamadhenu Goushala'));
+  const siteTag = (window.GOUSHALA_SETTINGS?.site_tagline || (typeof SITE_TAGLINE !== 'undefined' ? SITE_TAGLINE : 'Serving Gau Mata With Pure Devotion'));
+  const baseUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : (window.location.origin + (window.location.pathname.startsWith('/kamadhenu-goushala') ? '/kamadhenu-goushala' : ''));
+
+  let msg = "🌸 *" + siteName.toUpperCase() + "*\n";
+  msg += "🌿 _" + siteTag + "_\n";
+  msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+  msg += "ℹ️ *About Us:* Dedicated to ethical protection, Vedic healthcare & preservation of indigenous Desi cows.\n\n";
+  msg += "💬 *Message:* \n";
+  msg += "Namaste Admin! I am reaching out through your official website. I would like to know more about Gau Seva, cow adoption, sanctuary visits, and daily activities. 🙏\n\n";
+  msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+  msg += "🌐 *Official Website:* " + baseUrl + "/index.php";
+
+  const targetUrl = `https://wa.me/${wpNum}?text=${encodeURIComponent(msg)}`;
+
+  if (existing) {
+    existing.href = targetUrl;
+    return;
+  }
+
+  const btn = document.createElement('a');
+  btn.id = 'floatingWhatsAppBtn';
+  btn.className = 'floating-whatsapp-btn';
+  btn.href = targetUrl;
+  btn.target = '_blank';
+  btn.rel = 'noopener';
+  btn.setAttribute('aria-label', 'WhatsApp Helpline');
+  btn.innerHTML = '<i class="bi bi-whatsapp"></i>';
+  document.body.appendChild(btn);
+}
+
+

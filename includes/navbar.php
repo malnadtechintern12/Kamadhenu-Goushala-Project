@@ -162,7 +162,7 @@ $show_nav_tagline = getSetting('show_nav_tagline', 'yes');
           </li>
         <?php endforeach; ?>
       </ul>
-      <a href="<?= $base ?>/donation.php" class="btn btn-gold w-100 py-3 mb-2">
+      <a href="<?= $base ?>/seva.php" class="btn btn-gold w-100 py-3 mb-2">
         <i class="bi bi-heart-fill me-2"></i> <?= __t('btn_sponsor', 'SUPPORT GAU SEVA') ?>
       </a>
     </div>

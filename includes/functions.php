@@ -391,6 +391,47 @@ function getProductWhatsAppUrl(array $product, int $quantity = 1, ?string $fallb
 }
 
 /**
+ * Build clean, formatted WhatsApp message for breed enquiry.
+ */
+function buildBreedWhatsAppMessage(array $breed): string {
+    $siteName = getSetting('site_name', SITE_NAME);
+    $name     = $breed['name'] ?? 'Desi Breed';
+    $origin   = $breed['origin'] ?? 'India';
+    $yield    = $breed['milk_yield'] ?? '';
+    $websiteUrl = BASE_URL . '/breeds.php';
+
+    $msg = "🌸 *" . strtoupper($siteName) . "*\n";
+    $msg .= "🌿 _Indigenous Desi Cow Breeds Heritage_\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "🐄 *BREED ENQUIRY: " . strtoupper($name) . "*\n\n";
+    $msg .= "📋 *Breed Information:*\n";
+    $msg .= "• *Breed Name:* " . $name . "\n";
+    $msg .= "• *Origin / Region:* " . $origin . "\n";
+    if ($yield) {
+        $msg .= "• *Milk Yield:* " . $yield . "\n";
+    }
+    $msg .= "\n💬 *Enquiry:* \n";
+    $msg .= "Namaste Admin! I would like to know more about the " . $name . " breed preserved at " . $siteName . " (cows available for adoption, lineage, and sanctuary visits). 🙏\n\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "🌐 *Breeds Showcase:* " . $websiteUrl;
+
+    return $msg;
+}
+
+/**
+ * Generate direct WhatsApp URL for breed enquiry.
+ */
+function getBreedWhatsAppUrl(array $breed, ?string $fallbackWp = null): string {
+    $wpNum = !empty($breed['whatsapp_number']) ? $breed['whatsapp_number'] : ($fallbackWp ?? getSetting('whatsapp_number', '919845088990'));
+    $cleanNum = preg_replace('/[^0-9]/', '', $wpNum);
+    if (empty($cleanNum)) {
+        $cleanNum = '919845088990';
+    }
+    $msg = buildBreedWhatsAppMessage($breed);
+    return 'https://wa.me/' . $cleanNum . '?text=' . rawurlencode($msg);
+}
+
+/**
  * Return active banner information for a specific page key.
  */
 function getPageBanner(string $pageKey): ?array {

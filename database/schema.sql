@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `breeds` (
   `description` TEXT DEFAULT NULL,
   `milk_yield` VARCHAR(100) DEFAULT NULL,
   `characteristics` TEXT DEFAULT NULL,
+  `whatsapp_number` VARCHAR(50) DEFAULT NULL,
   `image` VARCHAR(255) DEFAULT NULL,
   `status` ENUM('active', 'inactive') DEFAULT 'active',
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

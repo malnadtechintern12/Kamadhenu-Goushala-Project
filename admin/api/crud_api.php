@@ -171,18 +171,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $description = trim($input['description'] ?? '');
                 $milk_yield = trim($input['milk_yield'] ?? '');
                 $characteristics = trim($input['characteristics'] ?? '');
+                $whatsapp_number = trim($input['whatsapp_number'] ?? '');
                 $image = $uploadedImagePath ?: trim($input['image'] ?? '');
                 $status = $input['status'] ?? 'active';
 
                 if (empty($name)) jsonResponse(false, null, 'Breed name is required.', 400);
 
                 if ($id > 0) {
-                    $stmt = $pdo->prepare("UPDATE breeds SET name=?, origin=?, description=?, milk_yield=?, characteristics=?, image=?, status=? WHERE id=?");
-                    $stmt->execute([$name, $origin, $description, $milk_yield, $characteristics, $image, $status, $id]);
+                    $stmt = $pdo->prepare("UPDATE breeds SET name=?, origin=?, description=?, milk_yield=?, characteristics=?, whatsapp_number=?, image=?, status=? WHERE id=?");
+                    $stmt->execute([$name, $origin, $description, $milk_yield, $characteristics, $whatsapp_number, $image, $status, $id]);
                     jsonResponse(true, null, "Breed '{$name}' updated successfully.");
                 } else {
-                    $stmt = $pdo->prepare("INSERT INTO breeds (name, origin, description, milk_yield, characteristics, image, status) VALUES (?,?,?,?,?,?,?)");
-                    $stmt->execute([$name, $origin, $description, $milk_yield, $characteristics, $image, $status]);
+                    $stmt = $pdo->prepare("INSERT INTO breeds (name, origin, description, milk_yield, characteristics, whatsapp_number, image, status) VALUES (?,?,?,?,?,?,?,?)");
+                    $stmt->execute([$name, $origin, $description, $milk_yield, $characteristics, $whatsapp_number, $image, $status]);
                     jsonResponse(true, null, "Breed '{$name}' created successfully.");
                 }
                 break;

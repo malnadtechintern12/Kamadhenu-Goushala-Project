@@ -5,12 +5,16 @@ $admin_title = 'Manage Breeds';
 require_once __DIR__ . '/../includes/functions.php';
 include __DIR__ . '/includes/admin_header.php';
 $breeds = $pdo->query("SELECT * FROM breeds ORDER BY name ASC")->fetchAll();
+
+$wpNumbersRaw = getSetting('whatsapp_numbers', '[]');
+$configuredWpNumbers = json_decode($wpNumbersRaw, true) ?: [];
+$primaryWpNumber = getSetting('whatsapp_number', '919845088990');
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
   <div>
     <h5 class="fw-bold mb-1">Indigenous Cow Breeds (<?= count($breeds) ?>)</h5>
-    <p class="text-muted small mb-0">Manage heritage breeds catalog, descriptions, and characteristics.</p>
+    <p class="text-muted small mb-0">Manage heritage breeds catalog, descriptions, characteristics, and WhatsApp routing.</p>
   </div>
   <button class="btn btn-gold" data-bs-toggle="modal" data-bs-target="#breedModal" onclick="resetBreedForm()">
     <i class="bi bi-plus-lg me-1"></i> Add Breed
@@ -25,6 +29,7 @@ $breeds = $pdo->query("SELECT * FROM breeds ORDER BY name ASC")->fetchAll();
         <th>Breed Name</th>
         <th>Origin / Region</th>
         <th>Milk Yield</th>
+        <th>WhatsApp</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
@@ -41,6 +46,15 @@ $breeds = $pdo->query("SELECT * FROM breeds ORDER BY name ASC")->fetchAll();
         </td>
         <td><span class="badge bg-light text-dark border"><?= e($b['origin'] ?: 'India') ?></span></td>
         <td><small class="text-forest fw-semibold"><?= e($b['milk_yield'] ?: '—') ?></small></td>
+        <td>
+          <?php if (!empty($b['whatsapp_number'])): ?>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-normal">
+              <i class="bi bi-whatsapp me-1"></i><?= e($b['whatsapp_number']) ?>
+            </span>
+          <?php else: ?>
+            <span class="badge bg-light text-muted border">Default (<?= e($primaryWpNumber) ?>)</span>
+          <?php endif; ?>
+        </td>
         <td>
           <span class="badge <?= $b['status']==='active'?'badge-active':'badge-inactive' ?>">
             <?= ucfirst(e($b['status'])) ?>
@@ -59,7 +73,7 @@ $breeds = $pdo->query("SELECT * FROM breeds ORDER BY name ASC")->fetchAll();
       </tr>
       <?php endforeach; ?>
       <?php if (empty($breeds)): ?>
-        <tr><td colspan="6" class="text-center py-4 text-muted">No breeds found. Click "Add Breed" to create one.</td></tr>
+        <tr><td colspan="7" class="text-center py-4 text-muted">No breeds found. Click "Add Breed" to create one.</td></tr>
       <?php endif; ?>
     </tbody>
   </table>
@@ -97,6 +111,34 @@ $breeds = $pdo->query("SELECT * FROM breeds ORDER BY name ASC")->fetchAll();
                 <option value="inactive">Inactive</option>
               </select>
             </div>
+            
+            <!-- WhatsApp Number Setting -->
+            <div class="col-md-12">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-whatsapp text-success me-1"></i> WhatsApp Number for Breed Enquiries
+              </label>
+              <div class="input-group">
+                <input type="text" name="whatsapp_number" id="breedWhatsapp" class="form-control" placeholder="Leave empty for default (<?= e($primaryWpNumber) ?>) or enter custom">
+                <?php if (!empty($configuredWpNumbers)): ?>
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Select Number
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item small" href="javascript:void(0)" onclick="setBreedWp('')"><em>Use Global Default (<?= e($primaryWpNumber) ?>)</em></a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <?php foreach ($configuredWpNumbers as $wp): ?>
+                    <li>
+                      <a class="dropdown-item small" href="javascript:void(0)" onclick="setBreedWp('<?= e($wp['number']) ?>')">
+                        <i class="bi bi-telephone me-1"></i> <?= e($wp['number']) ?> <?= !empty($wp['label']) ? '('.e($wp['label']).')' : '' ?> <?= !empty($wp['primary']) ? '★ Primary' : '' ?>
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+              </div>
+              <div class="form-text">Direct WhatsApp enquiries for this breed will route to this admin number.</div>
+            </div>
+
             <div class="col-12">
               <label class="form-label fw-semibold">Image URL</label>
               <input type="url" name="image" id="breedImage" class="form-control" placeholder="https://images.unsplash.com/...">
@@ -122,9 +164,14 @@ $breeds = $pdo->query("SELECT * FROM breeds ORDER BY name ASC")->fetchAll();
 
 <?php
 $admin_extra_js = '<script>
+function setBreedWp(val) {
+  document.getElementById("breedWhatsapp").value = val;
+}
+
 function resetBreedForm() {
   document.getElementById("breedForm").reset();
   document.getElementById("breedId").value = "";
+  document.getElementById("breedWhatsapp").value = "";
   document.getElementById("breedModalTitle").textContent = "Add Indigenous Breed";
 }
 
@@ -137,6 +184,7 @@ document.querySelectorAll(".edit-breed-btn").forEach(btn => {
     document.getElementById("breedOrigin").value = b.origin || "";
     document.getElementById("breedYield").value = b.milk_yield || "";
     document.getElementById("breedStatus").value = b.status || "active";
+    document.getElementById("breedWhatsapp").value = b.whatsapp_number || "";
     document.getElementById("breedImage").value = b.image || "";
     document.getElementById("breedCharacteristics").value = b.characteristics || "";
     document.getElementById("breedDescription").value = b.description || "";

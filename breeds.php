@@ -44,7 +44,15 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
             <?php if ($b['characteristics']): ?>
             <div class="p-3 bg-light rounded-3 border mb-3"><div class="small text-muted">Characteristics</div><div class="fw-bold"><?= e($b['characteristics']) ?></div></div>
             <?php endif; ?>
-            <a href="<?= $base ?>/cows.php" class="btn btn-outline-gold px-4 py-2">See <?= e($b['name']) ?> Cows</a>
+            <div class="d-flex gap-2 flex-wrap mt-3">
+              <a href="<?= $base ?>/cows.php?breed=<?= $b['id'] ?>" class="btn btn-outline-forest px-4 py-2">
+                <i class="bi bi-eye me-1"></i> See <?= e($b['name']) ?> Cows
+              </a>
+              <?php $breedWaUrl = getBreedWhatsAppUrl($b); ?>
+              <a href="<?= e($breedWaUrl) ?>" target="_blank" rel="noopener" class="btn btn-gold px-4 py-2 fw-semibold">
+                <i class="bi bi-whatsapp me-1"></i> Enquire on WhatsApp
+              </a>
+            </div>
           </div>
         </div>
         <?php endforeach; ?>

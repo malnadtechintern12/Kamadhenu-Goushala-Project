@@ -61,9 +61,23 @@ async function loadGlobalSettings() {
       });
 
       // Update WhatsApp links
-      document.querySelectorAll('.whatsapp-link').forEach(el => {
-        const num = s.whatsapp_number || '919845088990';
-        el.href = `https://wa.me/${num}?text=Namaste,%20I%20would%20like%20to%20know%20more%20about%20Kamadhenu%20Goushala`;
+      document.querySelectorAll('.whatsapp-link, a[href*="wa.me"], a[href*="whatsapp.com"]').forEach(el => {
+        if (el.getAttribute('onclick') || el.classList.contains('no-auto-wa') || el.closest('#shareWa')) return;
+        const num = (s.whatsapp_number || '919845088990').replace(/[^0-9]/g, '');
+        const sName = s.site_name || (typeof SITE_NAME !== 'undefined' ? SITE_NAME : 'Kamadhenu Goushala');
+        const sTag = s.site_tagline || (typeof SITE_TAGLINE !== 'undefined' ? SITE_TAGLINE : 'Serving Gau Mata With Pure Devotion');
+        const bUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : window.location.origin + '/kamadhenu-goushala';
+        
+        let msg = "🌸 *" + sName.toUpperCase() + "*\n";
+        msg += "🌿 _" + sTag + "_\n";
+        msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        msg += "ℹ️ *About Us:* Dedicated to ethical protection, Vedic healthcare & preservation of indigenous Desi cows.\n\n";
+        msg += "💬 *Message:* \n";
+        msg += "Namaste Admin! I am reaching out through your official website. I would like to know more about Gau Seva, cow adoption, sanctuary visits, and daily activities. 🙏\n\n";
+        msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        msg += "🌐 *Website:* " + bUrl + "/index.php";
+
+        el.href = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
       });
 
       // Update Social Media Links
@@ -204,18 +218,26 @@ function orderProductWhatsApp(id, name, price, customWp = '', image = '') {
       : (window.GOUSHALA_SETTINGS?.whatsapp_number || '919845088990');
   }
   
+  const siteName = (typeof SITE_NAME !== 'undefined' && SITE_NAME) ? SITE_NAME : (window.GOUSHALA_SETTINGS?.site_name || 'Kamadhenu Goushala');
   const baseUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : window.location.origin + '/kamadhenu-goushala';
-  let msg = "🛒 *PRODUCT ORDER ENQUIRY — Kamadhenu Goushala*\n";
+  
+  let msg = "🌸 *" + siteName.toUpperCase() + "*\n";
+  msg += "🌿 _Vedic Organic Store & Cow Sanctuary_\n";
   msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
-  msg += "🌿 *Product:* " + name + "\n";
-  msg += "🔢 *Quantity:* " + quantity + "\n";
-  msg += "💵 *Unit Price:* ₹" + parseFloat(price).toFixed(2) + " each\n";
-  msg += "💰 *Total Amount:* ₹" + lineTotal.toFixed(2) + "\n";
+  msg += "🛒 *PRODUCT ORDER ENQUIRY*\n\n";
+  msg += "📦 *Product Details:*\n";
+  msg += "• *Product:* " + name + "\n";
+  msg += "• *Quantity:* " + quantity + "\n";
+  msg += "• *Unit Price:* ₹" + parseFloat(price).toFixed(2) + " each\n";
+  msg += "• *Total Amount:* ₹" + lineTotal.toFixed(2) + "\n\n";
+  msg += "💬 *Message:*\n";
+  msg += "Namaste! I would like to order / enquire about this organic product from " + siteName + ". Please share availability, delivery options, and payment details. 🙏\n\n";
+  msg += "🛍️ *Store Page:*\n";
+  msg += baseUrl + "/products.php\n";
   msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
-  msg += "🔗 *Store Webpage:* " + baseUrl + "/products.php\n";
-  msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
-  msg += "Namaste! I would like to order / enquire about this product from Kamadhenu Goushala. Please share availability and payment details. 🙏";
+  msg += "🌐 *Official Website:* " + baseUrl + "/index.php";
 
-  const url = "https://api.whatsapp.com/send?phone=" + targetWp.toString().replace(/[^0-9]/g, '') + "&text=" + encodeURIComponent(msg);
+  const cleanNumber = targetWp.toString().replace(/[^0-9]/g, '');
+  const url = "https://wa.me/" + cleanNumber + "?text=" + encodeURIComponent(msg);
   window.open(url, "_blank");
 }

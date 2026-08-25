@@ -44,14 +44,6 @@ $show_nav_tagline = getSetting('show_nav_tagline', 'yes');
   <header class="main-header">
     <nav class="navbar navbar-expand-xl">
       <div class="container-fluid px-3 px-lg-4 px-xxl-5">
-        <!-- Dark / Light Theme Toggle Button (Left of Brand Logo) -->
-        <div class="d-flex align-items-center me-1 me-lg-2 flex-shrink-0">
-          <button type="button" class="btn theme-toggle-btn" id="themeToggleBtn" title="Switch Dark / Light Theme" aria-label="Toggle Theme">
-            <i class="bi bi-moon-stars-fill theme-icon-moon"></i>
-            <i class="bi bi-sun-fill theme-icon-sun d-none"></i>
-          </button>
-        </div>
-
         <a class="navbar-brand d-flex align-items-center gap-2 me-1 me-xxl-3 flex-shrink-0" href="<?= $base ?>/index.php">
           <?php if (!empty($site_logo) && $brand_display !== 'text_only'): ?>
             <img src="<?= e(getImageUrl($site_logo)) ?>" 
@@ -74,14 +66,14 @@ $show_nav_tagline = getSetting('show_nav_tagline', 'yes');
         </a>
 
         <div class="d-flex align-items-center gap-2 d-xl-none">
-          <button type="button" class="btn theme-toggle-btn theme-mobile-btn p-1" title="Switch Theme" aria-label="Toggle Theme">
-            <i class="bi bi-moon-stars-fill theme-icon-moon"></i>
-            <i class="bi bi-sun-fill theme-icon-sun d-none"></i>
-          </button>
           <button class="btn btn-outline-forest btn-sm py-1 px-2 fw-bold lang-quick-toggle-btn" type="button" title="Switch Language / ಭಾಷೆ">
             <i class="bi bi-translate text-gold me-1"></i><span class="lang-quick-label"><?= $current_lang === 'kn' ? 'English' : 'ಕನ್ನಡ' ?></span>
           </button>
           <a href="<?= $base ?>/donation.php" class="btn btn-gold btn-sm px-3 py-2"><?= __t('nav_donate', 'DONATE') ?></a>
+          <button type="button" class="btn theme-toggle-btn theme-mobile-btn p-1" title="Switch Theme" aria-label="Toggle Theme">
+            <i class="bi bi-moon-stars-fill theme-icon-moon"></i>
+            <i class="bi bi-sun-fill theme-icon-sun d-none"></i>
+          </button>
           <button class="navbar-toggler border-0 shadow-none" type="button"
                   data-bs-toggle="offcanvas" data-bs-target="#mobileNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -112,6 +104,11 @@ $show_nav_tagline = getSetting('show_nav_tagline', 'yes');
             <a href="<?= $base ?>/donation.php" class="btn btn-gold text-nowrap px-2 px-xxl-3 py-2">
               <i class="bi bi-heart-fill"></i> <?= __t('nav_donate_now', 'DONATE NOW') ?>
             </a>
+            <!-- Dark / Light Theme Toggle Button (Right side, after Donate Now) -->
+            <button type="button" class="btn theme-toggle-btn" id="themeToggleBtn" title="Switch Dark / Light Theme" aria-label="Toggle Theme">
+              <i class="bi bi-moon-stars-fill theme-icon-moon"></i>
+              <i class="bi bi-sun-fill theme-icon-sun d-none"></i>
+            </button>
           </div>
         </div>
       </div>

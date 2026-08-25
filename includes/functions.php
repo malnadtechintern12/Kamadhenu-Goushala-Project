@@ -251,60 +251,48 @@ function getImageUrl(?string $path, string $fallback = ''): string {
 }
 
 /**
- * Build rich WhatsApp message containing both complete cow data, photo, and link.
+ * Build clean, formatted WhatsApp message for cow action with sanctuary branding and clickable link.
  * Type: 'adopt' | 'feed'
  */
 function buildCowWhatsAppMessage(array $cow, string $type = 'adopt'): string {
-    $name   = $cow['name'] ?? 'Sacred Cow';
-    $tag    = $cow['tag_number'] ?? '-';
-    $breed  = $cow['breed_name'] ?? 'Desi Indigenous Breed';
-    $gender = $cow['gender'] ?? 'Female';
-    $health = $cow['health_status'] ?? 'Healthy';
-    $story  = !empty($cow['story']) ? truncate(strip_tags($cow['story']), 120) : '';
-    
+    $siteName = getSetting('site_name', SITE_NAME);
+    $name     = $cow['name'] ?? 'Sacred Cow';
+    $tag      = $cow['tag_number'] ?? '';
+    $breed    = $cow['breed_name'] ?? 'Desi Breed';
+    $gender   = $cow['gender'] ?? 'Female';
+    $status   = $cow['status'] ?? 'Active';
     $profileUrl = BASE_URL . '/cow-details.php?id=' . ($cow['id'] ?? 0);
-    $imageUrl   = !empty($cow['image']) ? getImageUrl($cow['image']) : '';
-    // Clean raw query params on image url if present to prevent WhatsApp query collisions
-    if (!empty($imageUrl) && str_contains($imageUrl, '?')) {
-        $imageUrl = strtok($imageUrl, '?');
-    }
+    $websiteUrl = BASE_URL . '/index.php';
 
-    if ($type === 'feed') {
-        $msg = "🌿 *SPONSOR COW FEED / FODDER — Kamadhenu Goushala*\n";
-    } else {
-        $msg = "🐮 *COW ADOPTION ENQUIRY — Kamadhenu Goushala*\n";
-    }
-
-    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    $msg .= "🏷️ *Cow Name:* " . $name . "\n";
-    $msg .= "🔖 *Tag Number:* " . $tag . "\n";
-    $msg .= "🐂 *Breed:* " . $breed . "\n";
-    $msg .= "⚤ *Gender:* " . $gender . "\n";
-    $msg .= "🩺 *Health Status:* " . $health . "\n";
-
-    if (!empty($cow['dob'])) {
-        try {
-            $dobDate = new DateTime($cow['dob']);
-            $ageYears = $dobDate->diff(new DateTime())->y;
-            if ($ageYears > 0) {
-                $msg .= "🎂 *Age:* " . $ageYears . " years\n";
-            }
-        } catch (Exception $e) {}
-    }
-
-    if (!empty($story)) {
-        $msg .= "📖 *About:* " . $story . "\n";
-    }
-
-    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    $msg .= "🔗 *Cow Webpage & Profile:* " . $profileUrl . "\n";
+    $msg = "🌸 *" . strtoupper($siteName) . "*\n";
+    $msg .= "🌿 _Sacred Cow Sanctuary & Vedic Care_\n";
     $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
     if ($type === 'feed') {
-        $msg .= "Namaste! I would like to sponsor nutritious green fodder & feed for " . $name . " (Tag: " . $tag . ") at Kamadhenu Goushala. Please guide me on how to contribute. 🙏";
+        $msg .= "🌾 *COW FEED & FODDER SEVA ENQUIRY*\n\n";
+        $msg .= "📋 *Cow Details:*\n";
+        $msg .= "• *Name:* " . $name . "\n";
+        if ($tag) $msg .= "• *Tag Number:* " . $tag . "\n";
+        $msg .= "• *Breed:* " . $breed . "\n";
+        $msg .= "• *Gender:* " . $gender . "\n\n";
+        $msg .= "💬 *Enquiry:* \n";
+        $msg .= "Namaste! I would like to sponsor daily fresh green fodder and nutritious feed for " . $name . ". Please share the seva details and blessings. 🙏\n\n";
     } else {
-        $msg .= "Namaste! I would like to adopt / sponsor " . $name . " (Tag: " . $tag . ") at Kamadhenu Goushala. Please share the adoption procedure and contribution details. 🙏";
+        $msg .= "🐮 *COW ADOPTION & SPONSORSHIP ENQUIRY*\n\n";
+        $msg .= "📋 *Cow Details:*\n";
+        $msg .= "• *Name:* " . $name . "\n";
+        if ($tag) $msg .= "• *Tag Number:* " . $tag . "\n";
+        $msg .= "• *Breed:* " . $breed . "\n";
+        $msg .= "• *Gender:* " . $gender . "\n";
+        $msg .= "• *Status:* " . $status . "\n\n";
+        $msg .= "💬 *Enquiry:* \n";
+        $msg .= "Namaste! I am interested in adopting/sponsoring " . $name . ". Please share the adoption procedure, certificate, and monthly seva details. 🙏\n\n";
     }
+
+    $msg .= "🖼️ *View Cow Photos & Profile:*\n";
+    $msg .= $profileUrl . "\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "🌐 *Website:* " . $websiteUrl;
 
     return $msg;
 }
@@ -319,7 +307,87 @@ function getCowWhatsAppUrl(array $cow, string $type = 'adopt', ?string $fallback
         $cleanNum = '919845088990';
     }
     $msg = buildCowWhatsAppMessage($cow, $type);
-    return 'https://api.whatsapp.com/send?phone=' . $cleanNum . '&text=' . rawurlencode($msg);
+    return 'https://wa.me/' . $cleanNum . '?text=' . rawurlencode($msg);
+}
+
+/**
+ * Build general WhatsApp message with website branding, about information, and website link.
+ */
+function buildGeneralWhatsAppMessage(string $topic = 'General Enquiry', string $customUrl = ''): string {
+    $siteName = getSetting('site_name', SITE_NAME);
+    $tagline  = getSetting('site_tagline', 'Serving Gau Mata With Pure Devotion');
+    $websiteUrl = !empty($customUrl) ? $customUrl : BASE_URL . '/index.php';
+
+    $msg = "🌸 *" . strtoupper($siteName) . "*\n";
+    $msg .= "🌿 _" . $tagline . "_\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "ℹ️ *About Us:* Dedicated to ethical protection, healthcare, and preservation of indigenous Desi cows.\n\n";
+    if ($topic && $topic !== 'General Enquiry') {
+        $msg .= "📌 *Subject:* " . $topic . "\n\n";
+    }
+    $msg .= "💬 *Message:* \n";
+    $msg .= "Namaste Admin! I am reaching out through your website. I would like to know more about Gau Seva, cow adoption, sanctuary visits, and daily activities.\n\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "🌐 *Official Website & Details:*\n";
+    $msg .= $websiteUrl;
+
+    return $msg;
+}
+
+/**
+ * Generate direct WhatsApp URL for general helpline/contact.
+ */
+function getGeneralWhatsAppUrl(string $topic = 'General Enquiry', string $customUrl = '', ?string $fallbackWp = null): string {
+    $wpNum = $fallbackWp ?? getSetting('whatsapp_number', '919845088990');
+    $cleanNum = preg_replace('/[^0-9]/', '', $wpNum);
+    if (empty($cleanNum)) {
+        $cleanNum = '919845088990';
+    }
+    $msg = buildGeneralWhatsAppMessage($topic, $customUrl);
+    return 'https://wa.me/' . $cleanNum . '?text=' . rawurlencode($msg);
+}
+
+/**
+ * Build clean WhatsApp message for product enquiry/order.
+ */
+function buildProductWhatsAppMessage(array $product, int $quantity = 1): string {
+    $siteName = getSetting('site_name', SITE_NAME);
+    $prodName = $product['name'] ?? 'Organic Product';
+    $price    = (float)($product['price'] ?? 0);
+    $quantity = max(1, $quantity);
+    $total    = $price * $quantity;
+    $storeUrl = BASE_URL . '/products.php';
+    $websiteUrl = BASE_URL . '/index.php';
+
+    $msg = "🛒 *PRODUCT ENQUIRY — " . strtoupper($siteName) . "*\n";
+    $msg .= "🌿 _100% Pure, Natural & Vedic Goushala Products_\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+    $msg .= "📦 *Product Details:*\n";
+    $msg .= "• *Product:* " . $prodName . "\n";
+    $msg .= "• *Quantity:* " . $quantity . "\n";
+    $msg .= "• *Unit Price:* ₹" . number_format($price, 2) . "\n";
+    $msg .= "• *Total Amount:* ₹" . number_format($total, 2) . "\n\n";
+    $msg .= "💬 *Enquiry:* \n";
+    $msg .= "Namaste! I would like to order / enquire about this organic product from Kamadhenu Goushala. Please confirm availability and delivery/payment details. 🙏\n\n";
+    $msg .= "🛍️ *Organic Store Webpage:*\n";
+    $msg .= $storeUrl . "\n";
+    $msg .= "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $msg .= "🌐 *Website:* " . $websiteUrl;
+
+    return $msg;
+}
+
+/**
+ * Generate direct WhatsApp URL for product enquiry/order.
+ */
+function getProductWhatsAppUrl(array $product, int $quantity = 1, ?string $fallbackWp = null): string {
+    $wpNum = !empty($product['whatsapp_number']) ? $product['whatsapp_number'] : ($fallbackWp ?? getSetting('whatsapp_number', '919845088990'));
+    $cleanNum = preg_replace('/[^0-9]/', '', $wpNum);
+    if (empty($cleanNum)) {
+        $cleanNum = '919845088990';
+    }
+    $msg = buildProductWhatsAppMessage($product, $quantity);
+    return 'https://wa.me/' . $cleanNum . '?text=' . rawurlencode($msg);
 }
 
 /**

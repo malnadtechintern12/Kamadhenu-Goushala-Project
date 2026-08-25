@@ -53,6 +53,12 @@ $bannerBg = !empty($banner['banner_image']) ? "background: var(--hero-overlay), 
               <div><h6 class="fw-bold mb-0">Visiting Hours</h6><p class="small text-muted mb-0">Daily: 07:00 AM – 12:30 PM &amp; 03:30 PM – 06:30 PM</p></div>
             </div>
           </div>
+          <?php 
+          $contactWaUrl = getGeneralWhatsAppUrl('Direct Contact Inquiry', $base . '/contact.php');
+          ?>
+          <a href="<?= e($contactWaUrl) ?>" target="_blank" rel="noopener" class="btn btn-success w-100 py-3 rounded-pill fs-6 fw-bold mb-4 shadow-sm">
+            <i class="bi bi-whatsapp me-2 fs-5"></i> Chat with Us on WhatsApp
+          </a>
           <?php if ($mapUrl): ?>
           <div class="rounded-4 overflow-hidden shadow-sm border mt-3" style="height:250px;">
             <iframe src="<?= e($mapUrl) ?>" width="100%" height="250" style="border:0;" allowfullscreen loading="lazy"></iframe>

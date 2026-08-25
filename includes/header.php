@@ -66,7 +66,9 @@ $preloadBannerImage = !empty($banner['banner_image']) ? getImageUrl($banner['ban
 
   <!-- Open Graph & WhatsApp Link Preview Meta Tags -->
   <?php 
-  $ogImage = $page_og_image ?? 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&w=1200&q=80';
+  $siteLogo = getSetting('site_logo', '');
+  $defaultOgImage = !empty($siteLogo) ? getImageUrl($siteLogo) : (!empty($preloadBannerImage) ? $preloadBannerImage : 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&w=1200&q=80');
+  $ogImage = !empty($page_og_image) ? getImageUrl($page_og_image) : $defaultOgImage;
   $ogUrl   = $page_og_url ?? ($base . ($_SERVER['REQUEST_URI'] ?? $_SERVER['PHP_SELF']));
   ?>
   <meta property="og:site_name"   content="<?= e($site_name) ?>">
@@ -77,6 +79,9 @@ $preloadBannerImage = !empty($banner['banner_image']) ? getImageUrl($banner['ban
   <meta property="og:image"       content="<?= e($ogImage) ?>">
   <meta property="og:image:secure_url" content="<?= e($ogImage) ?>">
   <meta property="og:image:alt"   content="<?= e($full_title) ?>">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale"      content="<?= getCurrentLang() === 'kn' ? 'kn_IN' : 'en_US' ?>">
   <meta name="twitter:card"       content="summary_large_image">
   <meta name="twitter:title"      content="<?= e($full_title) ?>">
   <meta name="twitter:description" content="<?= e($meta_desc) ?>">

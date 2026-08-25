@@ -28,15 +28,24 @@ try {
       const quantity = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
       const lineTotal = (parseFloat(price) || 0) * quantity;
       const wpNumber = (typeof ORDER_WHATSAPP_NUMBER !== 'undefined' && ORDER_WHATSAPP_NUMBER) ? ORDER_WHATSAPP_NUMBER : '<?= e(preg_replace('/[^0-9]/', '', getSetting('whatsapp_number', '919845088990'))) ?>';
+      const siteName = '<?= addslashes(getSetting('site_name', SITE_NAME)) ?>';
+      const baseUrl = '<?= $base ?>';
       
-      let msg = "🛒 *PRODUCT ORDER ENQUIRY — Kamadhenu Goushala*\n";
+      let msg = "🌸 *" + siteName.toUpperCase() + "*\n";
+      msg += "🌿 _Vedic Organic Store & Cow Sanctuary_\n";
       msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
-      msg += "🌿 *Product:* " + name + "\n";
-      msg += "🔢 *Quantity:* " + quantity + "\n";
-      msg += "💵 *Unit Price:* ₹" + parseFloat(price).toFixed(2) + " each\n";
-      msg += "💰 *Total Amount:* ₹" + lineTotal.toFixed(2) + "\n";
+      msg += "🛒 *PRODUCT ORDER ENQUIRY*\n\n";
+      msg += "📦 *Product Details:*\n";
+      msg += "• *Product:* " + name + "\n";
+      msg += "• *Quantity:* " + quantity + "\n";
+      msg += "• *Unit Price:* ₹" + parseFloat(price).toFixed(2) + " each\n";
+      msg += "• *Total Amount:* ₹" + lineTotal.toFixed(2) + "\n\n";
+      msg += "💬 *Message:*\n";
+      msg += "Namaste! I would like to order / enquire about this organic product from " + siteName + ". Please share availability, delivery options, and payment details. 🙏\n\n";
+      msg += "🛍️ *Store Page:*\n";
+      msg += baseUrl + "/products.php\n";
       msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
-      msg += "Namaste! I would like to order / enquire about this product from Kamadhenu Goushala. Please share availability and payment details. 🙏";
+      msg += "🌐 *Official Website:* " + baseUrl + "/index.php";
 
       const url = "https://wa.me/" + wpNumber.replace(/[^0-9]/g, '') + "?text=" + encodeURIComponent(msg);
       window.open(url, "_blank");
@@ -414,8 +423,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Helper: Build WhatsApp message from order data
   function buildWhatsAppMessage(payload, orderNumber, totalAmount) {
-    let msg = "🛒 *NEW ORDER — Kamadhenu Goushala Organic Store*\n";
-    msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+    const siteName = (typeof SITE_NAME !== "undefined" && SITE_NAME) ? SITE_NAME : "Kamadhenu Goushala";
+    const baseUrl = (typeof BASE_URL !== "undefined") ? BASE_URL : window.location.origin + "/kamadhenu-goushala";
+
+    let msg = "🌸 *" + siteName.toUpperCase() + "*\n";
+    msg += "🌿 _Vedic Organic Store & Cow Sanctuary_\n";
+    msg += "━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    msg += "🛒 *NEW ORDER RECEIVED*\n\n";
     msg += "📋 *Order #:* " + orderNumber + "\n";
     msg += "📅 *Date:* " + new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) + "\n\n";
 
@@ -429,7 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
       itemNo++;
     });
     msg += "────────────────────\n";
-    msg += "💰 *TOTAL: ₹" + parseFloat(totalAmount).toFixed(2) + "*\n\n";
+    msg += "💰 *TOTAL AMOUNT: ₹" + parseFloat(totalAmount).toFixed(2) + "*\n\n";
 
     msg += "👤 *CUSTOMER DETAILS:*\n";
     msg += "────────────────────\n";
@@ -446,7 +460,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     msg += "\n━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    msg += "🙏 _Thank you for supporting Kamadhenu Goushala!_ 🐄🌿";
+    msg += "🛍️ *Store Webpage:* " + baseUrl + "/products.php\n";
+    msg += "🌐 *Website:* " + baseUrl + "/index.php\n";
+    msg += "🙏 _Thank you for supporting " + siteName + "!_ 🐄🌿";
 
     return msg;
   }

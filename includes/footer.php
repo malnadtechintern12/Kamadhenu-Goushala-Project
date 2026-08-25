@@ -45,7 +45,8 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
             <a href="<?= e($fb_url) ?>" target="_blank" rel="noopener" class="social-btn"><i class="bi bi-facebook"></i></a>
             <a href="<?= e($ig_url) ?>" target="_blank" rel="noopener" class="social-btn social-insta"><i class="bi bi-instagram"></i></a>
             <a href="<?= e($yt_url) ?>" target="_blank" rel="noopener" class="social-btn social-yt"><i class="bi bi-youtube"></i></a>
-            <a href="https://wa.me/<?= e($wp_num) ?>" target="_blank" rel="noopener" class="social-btn"><i class="bi bi-whatsapp"></i></a>
+            <?php $footerWaUrl = getGeneralWhatsAppUrl('Website Helpline Inquiry', $base . '/index.php', $wp_num); ?>
+            <a href="<?= e($footerWaUrl) ?>" target="_blank" rel="noopener" class="social-btn" title="Chat with Admin on WhatsApp"><i class="bi bi-whatsapp"></i></a>
           </div>
           <div class="p-3 rounded-3 footer-info-box">
             <div class="fw-bold footer-box-title small"><i class="bi bi-patch-check-fill me-1"></i> <?= __t('badge_80g', '80G Tax Exemption') ?></div>
@@ -141,6 +142,9 @@ $info_80g    = getSetting('donation_80g_info', 'Donations are eligible for 50% t
     const BASE_URL = '<?= $base ?>';
     const ORDER_ROUTING_MODE = '<?= e(getSetting('order_routing_mode', 'admin_panel')) ?>';
     const ORDER_WHATSAPP_NUMBER = '<?= e(getSetting('whatsapp_number', '')) ?>';
+    const SITE_NAME = '<?= addslashes(getSetting('site_name', SITE_NAME)) ?>';
+    const SITE_TAGLINE = '<?= addslashes(getSetting('site_tagline', SITE_TAGLINE)) ?>';
+    const SITE_LOGO_URL = '<?= e(!empty(getSetting('site_logo')) ? getImageUrl(getSetting('site_logo')) : '') ?>';
   </script>
   <script src="<?= $base ?>/assets/js/api.js?v=<?= time() ?>"></script>
   <script src="<?= $base ?>/assets/js/cart.js?v=<?= time() ?>"></script>

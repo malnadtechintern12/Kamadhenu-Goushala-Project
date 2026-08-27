@@ -25,7 +25,7 @@ php_flag log_errors On
 # Block direct access to Node.js / config folders
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /kamadhenu-goushala/
+  RewriteBase /
 
   # Block access to sensitive directories
   RewriteRule ^(config|middleware|scripts|routes|node_modules)/ - [F,L]

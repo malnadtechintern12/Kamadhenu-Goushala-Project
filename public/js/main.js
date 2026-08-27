@@ -69,7 +69,7 @@ async function loadGlobalSettings() {
         const num = (s.whatsapp_number || '919845088990').replace(/[^0-9]/g, '');
         const sName = s.site_name || (typeof SITE_NAME !== 'undefined' ? SITE_NAME : 'Kamadhenu Goushala');
         const sTag = s.site_tagline || (typeof SITE_TAGLINE !== 'undefined' ? SITE_TAGLINE : 'Serving Gau Mata With Pure Devotion');
-        const bUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : window.location.origin + '/kamadhenu-goushala';
+        const bUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : (window.location.origin + (window.location.pathname.startsWith('/kamadhenu-goushala') ? '/kamadhenu-goushala' : ''));
         
         let msg = "🌸 *" + sName.toUpperCase() + "*\n";
         msg += "🌿 _" + sTag + "_\n";
@@ -222,7 +222,7 @@ function orderProductWhatsApp(id, name, price, customWp = '', image = '') {
   }
   
   const siteName = (typeof SITE_NAME !== 'undefined' && SITE_NAME) ? SITE_NAME : (window.GOUSHALA_SETTINGS?.site_name || 'Kamadhenu Goushala');
-  const baseUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : window.location.origin + '/kamadhenu-goushala';
+  const baseUrl = (typeof BASE_URL !== 'undefined') ? BASE_URL : (window.location.origin + (window.location.pathname.startsWith('/kamadhenu-goushala') ? '/kamadhenu-goushala' : ''));
   
   let msg = "🌸 *" + siteName.toUpperCase() + "*\n";
   msg += "🌿 _Vedic Organic Store & Cow Sanctuary_\n";

@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__ . '/../config/config.php';
 session_start();
 $_SESSION = [];
 session_destroy();
-header('Location: ' . '/kamadhenu-goushala/admin/index.php');
+header('Location: ' . ADMIN_URL . '/index.php');
 exit;
+

@@ -424,7 +424,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Helper: Build WhatsApp message from order data
   function buildWhatsAppMessage(payload, orderNumber, totalAmount) {
     const siteName = (typeof SITE_NAME !== "undefined" && SITE_NAME) ? SITE_NAME : "Kamadhenu Goushala";
-    const baseUrl = (typeof BASE_URL !== "undefined") ? BASE_URL : window.location.origin + "/kamadhenu-goushala";
+    const baseUrl = (typeof BASE_URL !== "undefined") ? BASE_URL : (window.location.origin + (window.location.pathname.startsWith("/kamadhenu-goushala") ? "/kamadhenu-goushala" : ""));
 
     let msg = "🌸 *" + siteName.toUpperCase() + "*\n";
     msg += "🌿 _Vedic Organic Store & Cow Sanctuary_\n";

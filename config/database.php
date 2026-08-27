@@ -24,12 +24,22 @@ function loadEnv(string $path): void {
 
 loadEnv(ROOT_DIR . '/.env');
 
+//locolhost
+
 // DB credentials — fall back to XAMPP defaults
 $db_host = $_ENV['DB_HOST']     ?? 'localhost';
 $db_port = $_ENV['DB_PORT']     ?? '3306';
 $db_name = $_ENV['DB_NAME']     ?? 'kamadhenu_goushala';
 $db_user = $_ENV['DB_USER']     ?? 'root';
 $db_pass = $_ENV['DB_PASSWORD'] ?? '';
+
+//server
+
+// $db_host = $_ENV['DB_HOST']     ?? 'sql103.infinityfree.com';
+// $db_port = $_ENV['DB_PORT']     ?? '3306';
+// $db_name = $_ENV['DB_NAME']     ?? 'if0_42762199_Kamadenu_db';
+// $db_user = $_ENV['DB_USER']     ?? 'if0_42762199';
+// $db_pass = $_ENV['DB_PASSWORD'] ?? 'mqLCCM08Fx';
 
 $dsn = "mysql:host={$db_host};port={$db_port};dbname={$db_name};charset=utf8mb4";
 
